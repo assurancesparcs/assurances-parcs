@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TYPES, PRIORITIES, MONTHS, DAYS, sameDay, today } from '../constants';
 
-export default function CalendarView({ items, onEdit }) {
+export default function CalendarView({ items, onEdit, userName }) {
   const [cal, setCal] = useState(new Date());
   const year = cal.getFullYear(), month = cal.getMonth();
   const firstDay = new Date(year, month, 1);
@@ -13,7 +13,13 @@ export default function CalendarView({ items, onEdit }) {
   for (let d = 1; d <= lastDay.getDate(); d++) cells.push(new Date(year, month, d));
 
   const td = today();
-  const itemsForDay = (date) => items.filter(i => i.date && sameDay(i.date, date));
+
+  const myItems = items.filter(i => {
+    if (i.assignedTo) return i.assignedTo === userName;
+    return i.createdBy === userName;
+  });
+
+  const itemsForDay = (date) => myItems.filter(i => i.date && sameDay(i.date, date));
 
   return (
     <div className="calendar-view">
@@ -22,6 +28,9 @@ export default function CalendarView({ items, onEdit }) {
         <h2 className="cal-title">{MONTHS[month]} {year}</h2>
         <button className="cal-nav" onClick={() => setCal(new Date(year, month + 1, 1))}>›</button>
         <button className="cal-today" onClick={() => setCal(new Date())}>Aujourd'hui</button>
+        <span style={{ fontSize: 12, color: 'var(--text-dim)', marginLeft: 12 }}>
+          📅 Agenda personnel — {userName}
+        </span>
       </div>
       <div className="cal-grid">
         {DAYS.map(d => <div key={d} className="cal-day-header">{d}</div>)}

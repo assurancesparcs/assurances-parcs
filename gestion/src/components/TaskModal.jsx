@@ -1,15 +1,17 @@
 import { useState } from 'react';
-import { TYPES, PRIORITIES, STATUSES } from '../constants';
+import { TYPES, PRIORITIES, STATUSES, USERS } from '../constants';
 
-export default function TaskModal({ item, clients, onSave, onClose }) {
+export default function TaskModal({ item, clients, onSave, onClose, userName }) {
   const isEdit = !!item?.id;
   const initialDate = item?.date
     ? (item.date.toDate ? item.date.toDate() : new Date(item.date)).toISOString().split('T')[0]
     : '';
   const [form, setForm] = useState({
     title: '', type: 'tache', priority: 'normal', status: 'a_faire',
-    clientId: '', clientName: '', date: '', time: '', description: '', notes: '',
-    ...item, date: initialDate,
+    clientId: '', clientName: '', time: '', description: '', notes: '',
+    assignedTo: userName || '',
+    ...item,
+    date: initialDate,
   });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -61,12 +63,19 @@ export default function TaskModal({ item, clients, onSave, onClose }) {
               </select>
             </div>
             <div className="form-group">
-              <label>Client</label>
-              <select className="form-control" value={form.clientId} onChange={e => handleClient(e.target.value)}>
-                <option value="">— Aucun —</option>
-                {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              <label>Assigné à</label>
+              <select className="form-control" value={form.assignedTo} onChange={e => set('assignedTo', e.target.value)}>
+                <option value="">— Non assigné —</option>
+                {USERS.map(u => <option key={u} value={u}>{u}</option>)}
               </select>
             </div>
+          </div>
+          <div className="form-group">
+            <label>Client</label>
+            <select className="form-control" value={form.clientId} onChange={e => handleClient(e.target.value)}>
+              <option value="">— Aucun —</option>
+              {clients.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+            </select>
           </div>
           <div className="form-row">
             <div className="form-group">

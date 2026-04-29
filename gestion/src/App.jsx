@@ -33,6 +33,7 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ type: '', priority: '', status: '', clientId: '' });
   const [loading, setLoading] = useState(true);
+  const [globalView, setGlobalView] = useState(false);
 
   useEffect(() => {
     if (!isConfigured) { setLoading(false); return; }
@@ -58,7 +59,12 @@ export default function App() {
   };
 
   const deleteItem = async (id) => { if (confirm('Supprimer ?')) await deleteDoc(doc(db, 'items', id)); };
-  const updateStatus = async (id, status) => updateDoc(doc(db, 'items', id), { status, updatedAt: serverTimestamp() });
+
+  const updateStatus = async (id, status) => {
+    const payload = { status, updatedAt: serverTimestamp() };
+    if (status === 'termine') payload.termineAt = serverTimestamp();
+    await updateDoc(doc(db, 'items', id), payload);
+  };
 
   const saveClient = async (data) => {
     const { id, ...rest } = data;
@@ -90,6 +96,10 @@ export default function App() {
   };
 
   const filtered = useMemo(() => items.filter(i => {
+    if (!globalView) {
+      const mine = i.assignedTo ? i.assignedTo === userName : i.createdBy === userName;
+      if (!mine) return false;
+    }
     if (search) {
       const s = search.toLowerCase();
       if (!i.title?.toLowerCase().includes(s) && !i.description?.toLowerCase().includes(s) &&
@@ -100,7 +110,7 @@ export default function App() {
     if (filters.status && i.status !== filters.status) return false;
     if (filters.clientId && i.clientId !== filters.clientId) return false;
     return true;
-  }), [items, search, filters]);
+  }), [items, search, filters, globalView, userName]);
 
   if (!isConfigured) return <ConfigScreen />;
   if (!unlocked) return <PinScreen onUnlock={() => setUnlocked(true)} />;
@@ -119,8 +129,9 @@ export default function App() {
       )}
       <main className="main-content">
         {view === 'liste' && <ListView items={filtered} onEdit={setTaskModal}
-          onDelete={deleteItem} onStatusChange={updateStatus} onAdd={() => setTaskModal({})} />}
-        {view === 'calendrier' && <CalendarView items={items} onEdit={setTaskModal} />}
+          onDelete={deleteItem} onStatusChange={updateStatus} onAdd={() => setTaskModal({})}
+          userName={userName} globalView={globalView} setGlobalView={setGlobalView} />}
+        {view === 'calendrier' && <CalendarView items={items} onEdit={setTaskModal} userName={userName} />}
         {view === 'clients' && <ClientsView clients={clients} items={items}
           onAddClient={() => setClientModal({})} onEditClient={setClientModal}
           onDeleteClient={deleteClient} />}
@@ -129,7 +140,7 @@ export default function App() {
           onDelete={deleteContract} onTogglePaid={togglePaid} onImport={() => setImportModal(true)} />}
         {view === 'stats' && <StatsView items={items} clients={clients} />}
       </main>
-      {taskModal && <TaskModal item={taskModal} clients={clients}
+      {taskModal && <TaskModal item={taskModal} clients={clients} userName={userName}
         onSave={saveItem} onClose={() => setTaskModal(null)} />}
       {clientModal && <ClientModal client={clientModal}
         onSave={saveClient} onClose={() => setClientModal(null)} />}

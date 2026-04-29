@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react';
-import { db, auth, isConfigured, signInAnon, onAuthStateChanged } from './firebase';
+import { db, isConfigured } from './firebase';
 import {
   collection, onSnapshot, addDoc, updateDoc, deleteDoc,
-  doc, serverTimestamp, query, orderBy,
+  doc, serverTimestamp,
 } from 'firebase/firestore';
 import { TYPES, PRIORITIES, STATUSES } from './constants';
 import AlertBanner from './components/AlertBanner';
@@ -11,20 +11,23 @@ import SearchFilters from './components/SearchFilters';
 import ListView from './components/ListView';
 import CalendarView from './components/CalendarView';
 import ClientsView from './components/ClientsView';
+import ContractsView from './components/ContractsView';
 import StatsView from './components/StatsView';
 import TaskModal from './components/TaskModal';
 import ClientModal from './components/ClientModal';
+import ContractModal from './components/ContractModal';
 import { LoadingScreen, UserNameScreen, ConfigScreen, PinScreen } from './components/Screens';
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('unlocked') === '1');
-  const [user, setUser] = useState(null);
   const [userName, setUserName] = useState(() => localStorage.getItem('userName'));
   const [items, setItems] = useState([]);
   const [clients, setClients] = useState([]);
+  const [contracts, setContracts] = useState([]);
   const [view, setView] = useState('liste');
   const [taskModal, setTaskModal] = useState(null);
   const [clientModal, setClientModal] = useState(null);
+  const [contractModal, setContractModal] = useState(null);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ type: '', priority: '', status: '', clientId: '' });
   const [loading, setLoading] = useState(true);
@@ -35,9 +38,10 @@ export default function App() {
       s => { setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))); setLoading(false); },
       e => { alert('Erreur Firestore items: ' + e.message); setLoading(false); });
     const u2 = onSnapshot(collection(db, 'clients'),
-      s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))),
-      e => alert('Erreur Firestore clients: ' + e.message));
-    return () => { u1(); u2(); };
+      s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+    const u3 = onSnapshot(collection(db, 'contrats'),
+      s => setContracts(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+    return () => { u1(); u2(); u3(); };
   }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
@@ -48,12 +52,12 @@ export default function App() {
     try {
       if (id) await updateDoc(doc(db, 'items', id), payload);
       else await addDoc(collection(db, 'items'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
-    } catch (e) {
-      alert('Erreur sauvegarde : ' + e.message);
-    }
+    } catch (e) { alert('Erreur : ' + e.message); }
   };
+
   const deleteItem = async (id) => { if (confirm('Supprimer ?')) await deleteDoc(doc(db, 'items', id)); };
   const updateStatus = async (id, status) => updateDoc(doc(db, 'items', id), { status, updatedAt: serverTimestamp() });
+
   const saveClient = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
@@ -61,6 +65,17 @@ export default function App() {
     else await addDoc(collection(db, 'clients'), { ...payload, createdAt: serverTimestamp() });
   };
   const deleteClient = async (id) => { if (confirm('Supprimer ce client ?')) await deleteDoc(doc(db, 'clients', id)); };
+
+  const saveContract = async (data) => {
+    const { id, ...rest } = data;
+    const payload = { ...rest, updatedAt: serverTimestamp() };
+    try {
+      if (id) await updateDoc(doc(db, 'contrats', id), payload);
+      else await addDoc(collection(db, 'contrats'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+    } catch (e) { alert('Erreur : ' + e.message); }
+  };
+  const deleteContract = async (id) => { if (confirm('Supprimer ce contrat ?')) await deleteDoc(doc(db, 'contrats', id)); };
+  const togglePaid = async (id, primePayee) => updateDoc(doc(db, 'contrats', id), { primePayee, updatedAt: serverTimestamp() });
 
   const filtered = useMemo(() => items.filter(i => {
     if (search) {
@@ -82,7 +97,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <AlertBanner items={items} />
+      <AlertBanner items={items} contracts={contracts} />
       <NavBar view={view} setView={setView} userName={userName}
         onAdd={() => setTaskModal({})} count={items.length} />
       {(view === 'liste') && (
@@ -96,12 +111,17 @@ export default function App() {
         {view === 'clients' && <ClientsView clients={clients} items={items}
           onAddClient={() => setClientModal({})} onEditClient={setClientModal}
           onDeleteClient={deleteClient} />}
+        {view === 'contrats' && <ContractsView contracts={contracts} clients={clients}
+          onAdd={() => setContractModal({})} onEdit={setContractModal}
+          onDelete={deleteContract} onTogglePaid={togglePaid} />}
         {view === 'stats' && <StatsView items={items} clients={clients} />}
       </main>
       {taskModal && <TaskModal item={taskModal} clients={clients}
         onSave={saveItem} onClose={() => setTaskModal(null)} />}
       {clientModal && <ClientModal client={clientModal}
         onSave={saveClient} onClose={() => setClientModal(null)} />}
+      {contractModal && <ContractModal contract={contractModal} clients={clients}
+        onSave={saveContract} onClose={() => setContractModal(null)} />}
     </div>
   );
 }

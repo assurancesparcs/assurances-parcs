@@ -2,6 +2,7 @@ const VIEWS = [
   { id: 'liste',      icon: '📋', label: 'Liste' },
   { id: 'calendrier', icon: '📅', label: 'Calendrier' },
   { id: 'clients',    icon: '👥', label: 'Clients' },
+  { id: 'contrats',   icon: '📄', label: 'Contrats' },
   { id: 'stats',      icon: '📊', label: 'Stats' },
 ];
 
@@ -26,7 +27,7 @@ export default function NavBar({ view, setView, userName, onAdd, count }) {
       <div className="nav-right">
         <button className="btn-add" onClick={onAdd}>+ Nouveau</button>
         <div className={`user-badge ${userName === 'Johann' ? 'patron' : 'assistante'}`}>
-          {userName === 'Johann' ? '👨‍💼' : '👩‍💼'} {userName}
+          {userName === 'Johann' ? '👨‍💼' : '👩‍💼'} {userName || '?'}
           <span className="sync-dot" title="Synchronisé" />
         </div>
       </div>

@@ -54,16 +54,28 @@ export function LoadingScreen() {
   );
 }
 
+const TEAM = [
+  { name: 'Johann',     icon: '👨‍💼', cls: 'patron' },
+  { name: 'Ombeline',   icon: '👩‍💼', cls: 'assistante' },
+  { name: 'Julie',      icon: '👩‍💼', cls: 'assistante' },
+  { name: 'Priscillia', icon: '👩‍💼', cls: 'assistante' },
+  { name: 'Amélie',     icon: '👩‍💼', cls: 'assistante' },
+  { name: 'Justine',    icon: '👩‍💼', cls: 'assistante' },
+];
+
 export function UserNameScreen({ onSelect }) {
   return (
     <div className="user-screen">
-      <div className="user-card">
+      <div className="user-card" style={{ maxWidth: 520 }}>
         <div style={{ fontSize: 48, marginBottom: 16 }}>👋</div>
         <h2>Qui êtes-vous ?</h2>
-        <p>Choisissez votre profil pour synchroniser vos données.</p>
-        <div className="user-btns">
-          <button className="user-btn patron" onClick={() => onSelect('Johann')}>👨‍💼 Johann</button>
-          <button className="user-btn assistante" onClick={() => onSelect('Collaboratrice')}>👩‍💼 Collaboratrice</button>
+        <p>Choisissez votre profil pour accéder à l'espace.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 20 }}>
+          {TEAM.map(u => (
+            <button key={u.name} className={`user-btn ${u.cls}`} onClick={() => onSelect(u.name)}>
+              {u.icon} {u.name}
+            </button>
+          ))}
         </div>
       </div>
     </div>

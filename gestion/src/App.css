@@ -193,6 +193,27 @@ textarea.form-control{resize:vertical;min-height:72px}
 .btn-secondary{background:var(--bg-input);color:var(--text-muted);border:1px solid var(--border);border-radius:var(--rs);padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer}
 .btn-secondary:hover{background:var(--border)}
 
+/* ─── CONTRACTS ─── */
+.contracts-view{}
+.contracts-header{display:flex;gap:10px;margin-bottom:16px;align-items:center;flex-wrap:wrap}
+.contracts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.contract-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:16px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px}
+.contract-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.contract-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.contract-client{font-size:15px;font-weight:700;margin-bottom:2px}
+.contract-type{font-size:12px;color:var(--purple);font-weight:600}
+.contract-num{font-size:11px;color:var(--text-dim);margin-top:2px}
+.contract-prime{font-size:16px;font-weight:800;color:var(--green);margin-bottom:4px}
+.contract-date{font-size:12px;font-weight:600}
+.contract-urgency{font-size:11px;font-weight:700;margin-top:2px}
+.contract-notes{font-size:12px;color:var(--text-muted);line-height:1.5;border-top:1px solid var(--border);padding-top:8px}
+.contract-footer{display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
+.btn-paid{border:none;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;flex:1}
+.btn-paid:not(.paid){background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
+.btn-paid:not(.paid):hover{background:rgba(251,191,36,.25)}
+.btn-paid.paid{background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.3)}
+.btn-paid.paid:hover{background:rgba(52,211,153,.25)}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   .navbar{flex-wrap:wrap;height:auto;padding:8px 12px;gap:8px}

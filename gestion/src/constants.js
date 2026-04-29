@@ -17,6 +17,13 @@ export const STATUSES = {
   termine:      { label: 'Terminé',      color: '#34d399', bg: 'rgba(52,211,153,0.15)' },
 };
 
+export const CONTRACT_TYPES = [
+  'Multi-risques', 'RC Professionnelle', 'Prévoyance Dirigeant',
+  'Homme-Clé', 'RC Dirigeants', 'Pertes d\'Exploitation', 'Autre',
+];
+
+export const USERS = ['Johann', 'Ombeline', 'Julie', 'Priscillia', 'Amélie', 'Justine'];
+
 export const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 export const DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 
@@ -38,4 +45,11 @@ export function isOverdue(item) {
   if (!item.date || item.status === 'termine') return false;
   const d = item.date.toDate ? item.date.toDate() : new Date(item.date);
   return d < today();
+}
+
+export function daysUntil(ts) {
+  if (!ts) return null;
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  d.setHours(0,0,0,0);
+  return Math.round((d - today()) / 86400000);
 }

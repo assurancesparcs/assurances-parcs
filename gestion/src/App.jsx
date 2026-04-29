@@ -31,11 +31,12 @@ export default function App() {
 
   useEffect(() => {
     if (!isConfigured) { setLoading(false); return; }
-    const u1 = onSnapshot(query(collection(db, 'items'), orderBy('createdAt', 'desc')),
+    const u1 = onSnapshot(collection(db, 'items'),
       s => { setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))); setLoading(false); },
-      () => setLoading(false));
-    const u2 = onSnapshot(query(collection(db, 'clients'), orderBy('name')),
-      s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+      e => { alert('Erreur Firestore items: ' + e.message); setLoading(false); });
+    const u2 = onSnapshot(collection(db, 'clients'),
+      s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))),
+      e => alert('Erreur Firestore clients: ' + e.message));
     return () => { u1(); u2(); };
   }, []);
 

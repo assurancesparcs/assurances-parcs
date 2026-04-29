@@ -52,8 +52,12 @@ export default function App() {
   const saveItem = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
-    if (id) await updateDoc(doc(db, 'items', id), payload);
-    else await addDoc(collection(db, 'items'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+    try {
+      if (id) await updateDoc(doc(db, 'items', id), payload);
+      else await addDoc(collection(db, 'items'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+    } catch (e) {
+      alert('Erreur sauvegarde : ' + e.message);
+    }
   };
   const deleteItem = async (id) => { if (confirm('Supprimer ?')) await deleteDoc(doc(db, 'items', id)); };
   const updateStatus = async (id, status) => updateDoc(doc(db, 'items', id), { status, updatedAt: serverTimestamp() });

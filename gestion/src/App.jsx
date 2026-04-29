@@ -111,7 +111,8 @@ export default function App() {
     <div className="app">
       <AlertBanner items={items} contracts={contracts} />
       <NavBar view={view} setView={setView} userName={userName}
-        onAdd={() => setTaskModal({})} count={items.length} />
+        onAdd={() => setTaskModal({})} count={items.length}
+        onChangeUser={() => { localStorage.removeItem('userName'); setUserName(null); }} />
       {(view === 'liste') && (
         <SearchFilters search={search} setSearch={setSearch}
           filters={filters} setFilters={setFilters} clients={clients} />

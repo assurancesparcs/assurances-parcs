@@ -6,7 +6,7 @@ const VIEWS = [
   { id: 'stats',      icon: '📊', label: 'Stats' },
 ];
 
-export default function NavBar({ view, setView, userName, onAdd, count }) {
+export default function NavBar({ view, setView, userName, onAdd, onChangeUser, count }) {
   return (
     <nav className="navbar">
       <div className="nav-brand">
@@ -26,7 +26,8 @@ export default function NavBar({ view, setView, userName, onAdd, count }) {
       </div>
       <div className="nav-right">
         <button className="btn-add" onClick={onAdd}>+ Nouveau</button>
-        <div className={`user-badge ${userName === 'Johann' ? 'patron' : 'assistante'}`}>
+        <div className={`user-badge ${userName === 'Johann' ? 'patron' : 'assistante'}`}
+          onClick={onChangeUser} title="Changer d'utilisateur" style={{ cursor: 'pointer' }}>
           {userName === 'Johann' ? '👨‍💼' : '👩‍💼'} {userName || '?'}
           <span className="sync-dot" title="Synchronisé" />
         </div>

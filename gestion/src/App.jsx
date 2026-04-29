@@ -16,6 +16,7 @@ import StatsView from './components/StatsView';
 import TaskModal from './components/TaskModal';
 import ClientModal from './components/ClientModal';
 import ContractModal from './components/ContractModal';
+import ContractImportModal from './components/ContractImportModal';
 import { LoadingScreen, UserNameScreen, ConfigScreen, PinScreen } from './components/Screens';
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
   const [taskModal, setTaskModal] = useState(null);
   const [clientModal, setClientModal] = useState(null);
   const [contractModal, setContractModal] = useState(null);
+  const [importModal, setImportModal] = useState(false);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState({ type: '', priority: '', status: '', clientId: '' });
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,16 @@ export default function App() {
   const deleteContract = async (id) => { if (confirm('Supprimer ce contrat ?')) await deleteDoc(doc(db, 'contrats', id)); };
   const togglePaid = async (id, primePayee) => updateDoc(doc(db, 'contrats', id), { primePayee, updatedAt: serverTimestamp() });
 
+  const importContracts = async (rows) => {
+    for (const r of rows) {
+      try {
+        await addDoc(collection(db, 'contrats'), {
+          ...r, primePayee: false, createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+        });
+      } catch (e) { console.error(e); }
+    }
+  };
+
   const filtered = useMemo(() => items.filter(i => {
     if (search) {
       const s = search.toLowerCase();
@@ -113,7 +125,7 @@ export default function App() {
           onDeleteClient={deleteClient} />}
         {view === 'contrats' && <ContractsView contracts={contracts} clients={clients}
           onAdd={() => setContractModal({})} onEdit={setContractModal}
-          onDelete={deleteContract} onTogglePaid={togglePaid} />}
+          onDelete={deleteContract} onTogglePaid={togglePaid} onImport={() => setImportModal(true)} />}
         {view === 'stats' && <StatsView items={items} clients={clients} />}
       </main>
       {taskModal && <TaskModal item={taskModal} clients={clients}
@@ -122,6 +134,8 @@ export default function App() {
         onSave={saveClient} onClose={() => setClientModal(null)} />}
       {contractModal && <ContractModal contract={contractModal} clients={clients}
         onSave={saveContract} onClose={() => setContractModal(null)} />}
+      {importModal && <ContractImportModal clients={clients}
+        onImport={importContracts} onClose={() => setImportModal(false)} />}
     </div>
   );
 }

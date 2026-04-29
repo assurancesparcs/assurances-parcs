@@ -18,7 +18,7 @@ function urgencyLabel(days) {
   return `Dans ${days} jours`;
 }
 
-export default function ContractsView({ contracts, clients, onAdd, onEdit, onDelete, onTogglePaid }) {
+export default function ContractsView({ contracts, clients, onAdd, onEdit, onDelete, onTogglePaid, onImport }) {
   const [filter, setFilter] = useState('tous');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
@@ -71,6 +71,7 @@ export default function ContractsView({ contracts, clients, onAdd, onEdit, onDel
             {CONTRACT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
+        <button className="btn-secondary" onClick={onImport} style={{ whiteSpace: 'nowrap' }}>📥 Import CSV</button>
         <button className="btn-primary" onClick={onAdd}>+ Nouveau contrat</button>
       </div>
 

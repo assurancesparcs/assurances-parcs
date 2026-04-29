@@ -1,3 +1,49 @@
+import { useState } from 'react';
+
+const SECRET = 'Cabinetpl';
+
+export function PinScreen({ onUnlock }) {
+  const [val, setVal] = useState('');
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (val === SECRET) {
+      sessionStorage.setItem('unlocked', '1');
+      onUnlock();
+    } else {
+      setError(true);
+      setVal('');
+      setTimeout(() => setError(false), 1500);
+    }
+  };
+
+  return (
+    <div className="user-screen">
+      <div className="user-card">
+        <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
+        <h2>Accès privé</h2>
+        <p>Entrez le code d'accès pour continuer.</p>
+        <form onSubmit={handleSubmit} style={{ marginTop: 16 }}>
+          <input
+            className="form-control"
+            type="password"
+            value={val}
+            onChange={e => setVal(e.target.value)}
+            placeholder="Code d'accès"
+            autoFocus
+            style={{ textAlign: 'center', fontSize: 18, letterSpacing: 4, marginBottom: 12 }}
+          />
+          {error && <p style={{ color: '#f87171', fontSize: 13, marginBottom: 8 }}>Code incorrect</p>}
+          <button type="submit" className="btn-primary" style={{ width: '100%', padding: '12px' }}>
+            Entrer
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export function LoadingScreen() {
   return (
     <div className="loading-screen">

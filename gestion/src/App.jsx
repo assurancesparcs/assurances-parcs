@@ -14,9 +14,10 @@ import ClientsView from './components/ClientsView';
 import StatsView from './components/StatsView';
 import TaskModal from './components/TaskModal';
 import ClientModal from './components/ClientModal';
-import { LoadingScreen, UserNameScreen, ConfigScreen } from './components/Screens';
+import { LoadingScreen, UserNameScreen, ConfigScreen, PinScreen } from './components/Screens';
 
 export default function App() {
+  const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('unlocked') === '1');
   const [user, setUser] = useState(null);
   const [userName, setUserName] = useState(() => localStorage.getItem('userName'));
   const [items, setItems] = useState([]);
@@ -78,6 +79,7 @@ export default function App() {
   }), [items, search, filters]);
 
   if (!isConfigured) return <ConfigScreen />;
+  if (!unlocked) return <PinScreen onUnlock={() => setUnlocked(true)} />;
   if (loading) return <LoadingScreen />;
   if (!userName) return <UserNameScreen onSelect={setUserName} />;
 

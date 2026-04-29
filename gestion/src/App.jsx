@@ -31,21 +31,13 @@ export default function App() {
 
   useEffect(() => {
     if (!isConfigured) { setLoading(false); return; }
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      if (u) { setUser(u); setLoading(false); }
-      else { try { await signInAnon(); } catch { setLoading(false); } }
-    });
-    return unsub;
-  }, []);
-
-  useEffect(() => {
-    if (!user) return;
     const u1 = onSnapshot(query(collection(db, 'items'), orderBy('createdAt', 'desc')),
-      s => setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+      s => { setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))); setLoading(false); },
+      () => setLoading(false));
     const u2 = onSnapshot(query(collection(db, 'clients'), orderBy('name')),
       s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))));
     return () => { u1(); u2(); };
-  }, [user]);
+  }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
 

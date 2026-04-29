@@ -25,8 +25,8 @@ export default function NavBar({ view, setView, userName, onAdd, count }) {
       </div>
       <div className="nav-right">
         <button className="btn-add" onClick={onAdd}>+ Nouveau</button>
-        <div className={`user-badge ${userName === 'Patron' ? 'patron' : 'assistante'}`}>
-          {userName === 'Patron' ? '👨‍💼' : '👩‍💼'} {userName}
+        <div className={`user-badge ${userName === 'Johann' ? 'patron' : 'assistante'}`}>
+          {userName === 'Johann' ? '👨‍💼' : '👩‍💼'} {userName}
           <span className="sync-dot" title="Synchronisé" />
         </div>
       </div>

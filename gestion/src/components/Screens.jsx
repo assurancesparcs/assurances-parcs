@@ -62,8 +62,8 @@ export function UserNameScreen({ onSelect }) {
         <h2>Qui êtes-vous ?</h2>
         <p>Choisissez votre profil pour synchroniser vos données.</p>
         <div className="user-btns">
-          <button className="user-btn patron" onClick={() => onSelect('Patron')}>👨‍💼 Patron (moi)</button>
-          <button className="user-btn assistante" onClick={() => onSelect('Assistante')}>👩‍💼 Assistante</button>
+          <button className="user-btn patron" onClick={() => onSelect('Johann')}>👨‍💼 Johann</button>
+          <button className="user-btn assistante" onClick={() => onSelect('Collaboratrice')}>👩‍💼 Collaboratrice</button>
         </div>
       </div>
     </div>

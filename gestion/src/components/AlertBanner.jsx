@@ -1,7 +1,15 @@
 import { useState, useMemo } from 'react';
-import { TYPES, fmtDate, daysUntil } from '../constants';
+import { TYPES, SINISTRE_TYPES, fmtDate, daysUntil, INACTIVITE_ALERTE_JOURS } from '../constants';
 
-export default function AlertBanner({ items, contracts }) {
+function daysSince(ts) {
+  if (!ts) return null;
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return Math.floor((Date.now() - d.getTime()) / 86400000);
+}
+
+const ACTIVE_SINISTRE_STATUSES = ['declare', 'en_instruction', 'attente_pieces', 'expertise'];
+
+export default function AlertBanner({ items, contracts, sinistres }) {
   const [dismissed, setDismissed] = useState(new Set());
   const dismiss = (id) => setDismissed(s => new Set([...s, id]));
 
@@ -17,7 +25,16 @@ export default function AlertBanner({ items, contracts }) {
     }).slice(0, 3),
     [contracts, dismissed]);
 
-  if (!urgentItems.length && !urgentContracts.length) return null;
+  const sinistresInactifs = useMemo(() =>
+    (sinistres || []).filter(s => {
+      if (!ACTIVE_SINISTRE_STATUSES.includes(s.status)) return false;
+      if (dismissed.has('s_' + s.id)) return false;
+      const j = daysSince(s.lastActivityAt || s.updatedAt);
+      return j !== null && j >= INACTIVITE_ALERTE_JOURS;
+    }).slice(0, 3),
+    [sinistres, dismissed]);
+
+  if (!urgentItems.length && !urgentContracts.length && !sinistresInactifs.length) return null;
 
   return (
     <div className="alert-banner">
@@ -39,6 +56,18 @@ export default function AlertBanner({ items, contracts }) {
               <span className="alert-title">{c.clientName}</span>
               <span className="alert-date">{c.type} — {days <= 0 ? 'Échu !' : `${days}j`}</span>
               <button className="alert-dismiss" onClick={() => dismiss('c_' + c.id)}>✕</button>
+            </div>
+          );
+        })}
+        {sinistresInactifs.map(s => {
+          const tp = SINISTRE_TYPES[s.type] || SINISTRE_TYPES.autre;
+          const j = daysSince(s.lastActivityAt || s.updatedAt);
+          return (
+            <div key={s.id} className="alert-item" style={{ borderColor: 'rgba(167,139,250,0.4)', background: 'rgba(167,139,250,0.1)' }}>
+              <span>{tp.icon}</span>
+              <span className="alert-title">{s.clientName}</span>
+              <span className="alert-date">Sinistre inactif depuis {j}j</span>
+              <button className="alert-dismiss" onClick={() => dismiss('s_' + s.id)}>✕</button>
             </div>
           );
         })}

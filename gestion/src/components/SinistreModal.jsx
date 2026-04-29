@@ -19,25 +19,23 @@ export default function SinistreModal({ sinistre, clients, contracts, onSave, on
     return d.toISOString().split('T')[0];
   };
 
+  const baseType = sinistre?.type || 'degats_eaux';
   const [form, setForm] = useState({
     numero: '',
     clientId: '', clientName: '',
     contractId: '',
-    type: 'degats_eaux',
+    type: baseType,
     status: 'declare',
     compagnie: '',
-    dateSinistre: '',
-    dateDeclaration: new Date().toISOString().split('T')[0],
     montantEstime: '',
     montantIndemnise: '',
     description: '',
     notes: '',
     assignedTo: userName || '',
-    pieces: initPieces('degats_eaux'),
     ...sinistre,
     dateSinistre: fmtInput(sinistre?.dateSinistre),
     dateDeclaration: fmtInput(sinistre?.dateDeclaration) || new Date().toISOString().split('T')[0],
-    pieces: sinistre?.pieces || initPieces(sinistre?.type || 'degats_eaux'),
+    pieces: sinistre?.pieces || initPieces(baseType),
   });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));

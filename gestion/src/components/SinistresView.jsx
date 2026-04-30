@@ -98,6 +98,29 @@ function SinistreCard({ s, types, onEdit, onDelete, onStatusChange, onRelance })
 
       {s.pieces?.length > 0 && <PiecesBar pieces={s.pieces} />}
 
+      {/* Historique courriers compact */}
+      {s.relances?.length > 0 && (
+        <div className="card-relance-log" onClick={e => e.stopPropagation()}>
+          {s.relances.slice(-3).reverse().map((r, i) => {
+            const dateStr = (() => {
+              if (!r.date) return '';
+              const d = r.date.toDate ? r.date.toDate() : new Date(r.date);
+              return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+            })();
+            const icons = { confirmation_reception: '📬', client_15j: '👤', client_30j: '👤', compagnie_15j: '🏢', compagnie_30j: '🏢' };
+            const icon = icons[r.template] || '✉️';
+            return (
+              <span key={i} className="card-relance-item" title={r.note || r.template}>
+                ✅ {icon} {dateStr}
+              </span>
+            );
+          })}
+          {s.relances.length > 3 && (
+            <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>+{s.relances.length - 3} autre{s.relances.length - 3 > 1 ? 's' : ''}</span>
+          )}
+        </div>
+      )}
+
       {/* Relances */}
       {!['cloture', 'indemnise', 'refuse'].includes(s.status) && (
         <div className="sinistre-relances" onClick={e => e.stopPropagation()}>

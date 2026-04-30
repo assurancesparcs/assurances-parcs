@@ -123,9 +123,12 @@ export function relanceUrgence(jours) {
 export function getEmailTemplate(type, sinistre, piecesMisquantes = []) {
   const client    = sinistre.clientName || 'Madame, Monsieur';
   const num       = sinistre.numero ? ` n° ${sinistre.numero}` : '';
+  const numAgence = sinistre.numero || '[ à compléter ]';
   const compagnie = sinistre.compagnie || 'votre compagnie d\'assurance';
   const typeSin   = (SINISTRE_TYPES[sinistre.type] || SINISTRE_CHASSE_TYPES[sinistre.type] || {}).label || 'sinistre';
   const dateDec   = fmtDate(sinistre.dateDeclaration) || 'récente';
+  const toutesLesPieces = (sinistre.pieces || []).map(p => `  • ${p.label}`).join('\n')
+    || '  • (liste des pièces à compléter)';
   const listePieces = piecesMisquantes.length
     ? piecesMisquantes.map(p => `  • ${p}`).join('\n')
     : '  • (aucune pièce manquante identifiée)';
@@ -133,6 +136,30 @@ export function getEmailTemplate(type, sinistre, piecesMisquantes = []) {
   const signatures = '\n\nCordialement,\n[Votre prénom]\nCabinet Assurances Parcs de Loisirs Indoor\nTél : [Votre numéro]';
 
   switch (type) {
+    case 'confirmation_reception':
+      return {
+        objet: `Confirmation de réception — Déclaration sinistre n° ${numAgence}`,
+        corps: `Madame, Monsieur ${client},
+
+Nous avons bien reçu votre déclaration de sinistre "${typeSin}" en date du ${dateDec} et nous vous en remercions.
+
+Votre dossier a été enregistré auprès de notre cabinet sous le numéro : ${numAgence}
+Compagnie d'assurance saisie : ${compagnie}
+
+Afin d'instruire votre dossier dans les meilleurs délais, nous vous invitons à nous faire parvenir les pièces justificatives suivantes :
+
+${toutesLesPieces}
+
+Ces documents peuvent être transmis :
+  • Par email à l'adresse de votre interlocutrice
+  • En courrier à notre cabinet
+  • Ou déposés directement à nos locaux
+
+Nous vous tiendrons informé(e) de l'avancement de votre dossier.
+
+N'hésitez pas à nous contacter pour toute question.${signatures}`,
+      };
+
     case 'client_15j':
       return {
         objet: `Dossier sinistre${num} — Documents manquants`,

@@ -250,6 +250,63 @@ textarea.form-control{resize:vertical;min-height:72px}
 .piece-check { background: none; border: none; cursor: pointer; font-size: 16px; padding: 0; flex-shrink: 0; line-height: 1; }
 .piece-input { flex: 1; }
 
+/* ─── STEPPER ÉTAPES ─── */
+.stepper { display: flex; align-items: center; gap: 0; overflow-x: auto; padding: 4px 0; }
+.stepper-item { display: flex; align-items: center; flex-shrink: 0; }
+.stepper-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background .2s; }
+.stepper-dot.done   { background: #34d399; }
+.stepper-dot.active { background: var(--orange); box-shadow: 0 0 0 3px rgba(255,107,53,.2); }
+.stepper-dot.pending{ background: var(--bg-input); border: 1px solid var(--border); }
+.stepper-label { font-size: 9px; color: var(--text-dim); margin: 0 4px; white-space: nowrap; font-weight: 600; }
+.stepper-label.active { color: var(--orange); font-weight: 800; }
+.stepper-line { width: 20px; height: 2px; background: var(--border); }
+.stepper-line.done { background: #34d399; }
+
+/* ─── RELANCES ─── */
+.sinistre-relances { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 8px; margin-top: 2px; }
+.relance-tag { background: none; border: 1px solid; border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.relance-tag:hover { opacity: .8; transform: scale(1.02); }
+
+/* ─── RELANCE MODAL ─── */
+.relance-info-box { flex: 1; background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--rs); padding: 10px 14px; }
+.relance-info-label { font-size: 10px; color: var(--text-dim); font-weight: 700; letter-spacing: .5px; margin-bottom: 4px; }
+.relance-info-val { font-size: 12px; color: var(--text); font-weight: 600; }
+.relance-pieces { background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25); border-radius: var(--rs); padding: 10px 14px; }
+.relance-pieces-title { font-size: 11px; font-weight: 700; color: #fbbf24; }
+.piece-badge { background: rgba(251,191,36,.15); border: 1px solid rgba(251,191,36,.3); border-radius: 20px; padding: 2px 8px; font-size: 11px; color: #fbbf24; }
+.relance-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--rs); cursor: pointer; transition: all .15s; background: var(--bg-input); }
+.relance-option.selected { border-color: var(--orange); background: rgba(255,107,53,.08); }
+.relance-option:hover { border-color: var(--orange); }
+.relance-cible { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px; }
+.relance-cible.client    { background: rgba(96,165,250,.15); color: #60a5fa; }
+.relance-cible.compagnie { background: rgba(167,139,250,.15); color: #a78bfa; }
+.relance-delai { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 20px; background: rgba(52,211,153,.15); color: #34d399; }
+.relance-delai.urgent { background: rgba(248,113,113,.15); color: #f87171; }
+.mail-preview { background: var(--bg-input); border: 1px solid var(--border); border-radius: var(--rs); overflow: hidden; max-height: 280px; overflow-y: auto; }
+.mail-objet { padding: 10px 14px; font-size: 12px; font-weight: 700; border-bottom: 1px solid var(--border); color: var(--text); }
+.mail-corps { padding: 12px 14px; font-size: 11px; color: var(--text-muted); white-space: pre-wrap; font-family: inherit; line-height: 1.6; margin: 0; }
+.btn-copy { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--rs); padding: 5px 14px; font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text); transition: all .2s; }
+.btn-copy:hover { border-color: var(--orange); color: var(--orange); }
+.btn-copy.copied { border-color: #34d399; color: #34d399; }
+
+/* ─── DASHBOARD MATIN ─── */
+.dashboard-matin { display: flex; flex-direction: column; gap: 20px; }
+.dashboard-header { display: flex; align-items: flex-start; gap: 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; flex-wrap: wrap; }
+.dashboard-title { font-size: 1.3rem; font-weight: 900; margin-bottom: 4px; }
+.dashboard-sub { font-size: 12px; color: var(--text-muted); }
+.dashboard-kpi { background: var(--bg-input); border: 1px solid; border-radius: var(--rs); padding: 10px 16px; text-align: center; min-width: 80px; }
+.dashboard-section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.dashboard-section-title { font-size: 12px; font-weight: 800; letter-spacing: .5px; padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-muted); background: var(--bg-input); }
+.dashboard-table { width: 100%; overflow-x: auto; }
+.dtable-head { display: grid; grid-template-columns: 1.8fr 1.4fr 1.2fr 1fr 1.3fr 1.3fr 40px; gap: 8px; padding: 8px 16px; font-size: 10px; font-weight: 800; color: var(--text-dim); letter-spacing: .5px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.02); }
+.dtable-row { display: grid; grid-template-columns: 1.8fr 1.4fr 1.2fr 1fr 1.3fr 1.3fr 40px; gap: 8px; padding: 12px 16px; align-items: center; border-bottom: 1px solid var(--border); font-size: 12px; transition: background .15s; }
+.dtable-row:last-child { border-bottom: none; }
+.dtable-row:hover { background: var(--bg-input); }
+.dtable-row.row-critique { background: rgba(248,113,113,.04); }
+.dtable-client { display: flex; flex-direction: column; gap: 2px; }
+.dtable-client > span:first-child { font-size: 14px; }
+.dtable-assignee { font-size: 10px; color: var(--text-dim); }
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   .navbar{flex-wrap:wrap;height:auto;padding:8px 12px;gap:8px}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SINISTRE_TYPES, SINISTRE_STATUSES, PIECES_DEFAUT, USERS, fmtDate } from '../constants';
+import { SINISTRE_TYPES, SINISTRE_CHASSE_TYPES, SINISTRE_STATUSES, PIECES_DEFAUT, USERS, fmtDate } from '../constants';
 
 const COMPAGNIES = [
   'AXA', 'Allianz', 'Generali', 'Groupama', 'MMA', 'MAIF', 'MACIF',
@@ -10,8 +10,11 @@ function initPieces(type) {
   return (PIECES_DEFAUT[type] || PIECES_DEFAUT.autre).map(label => ({ label, recu: false }));
 }
 
-export default function SinistreModal({ sinistre, clients, contracts, onSave, onClose, userName }) {
-  const isEdit = !!sinistre?.id;
+export default function SinistreModal({ sinistre, clients, contracts, onSave, onClose, userName, mode }) {
+  const isEdit  = !!sinistre?.id;
+  const isChasse = mode === 'chasse';
+  const types   = isChasse ? SINISTRE_CHASSE_TYPES : SINISTRE_TYPES;
+  const defaultType = isChasse ? 'accident_corporel' : 'degats_eaux';
 
   const fmtInput = (ts) => {
     if (!ts) return '';
@@ -19,7 +22,7 @@ export default function SinistreModal({ sinistre, clients, contracts, onSave, on
     return d.toISOString().split('T')[0];
   };
 
-  const baseType = sinistre?.type || 'degats_eaux';
+  const baseType = sinistre?.type || defaultType;
   const [form, setForm] = useState({
     numero: '',
     clientId: '', clientName: '',
@@ -96,7 +99,7 @@ export default function SinistreModal({ sinistre, clients, contracts, onSave, on
       <div className="modal" style={{ maxWidth: 640 }}>
         <div className="modal-header">
           <h2>
-            {SINISTRE_TYPES[form.type]?.icon} {isEdit ? 'Modifier le sinistre' : 'Nouveau sinistre'}
+            {types[form.type]?.icon} {isEdit ? 'Modifier' : 'Nouveau'} sinistre{isChasse ? ' chasse' : ''}
           </h2>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
@@ -108,7 +111,7 @@ export default function SinistreModal({ sinistre, clients, contracts, onSave, on
             <div className="form-group">
               <label>TYPE DE SINISTRE *</label>
               <select className="form-control" value={form.type} onChange={e => handleType(e.target.value)}>
-                {Object.entries(SINISTRE_TYPES).map(([k, v]) => (
+                {Object.entries(types).map(([k, v]) => (
                   <option key={k} value={k}>{v.icon} {v.label}</option>
                 ))}
               </select>

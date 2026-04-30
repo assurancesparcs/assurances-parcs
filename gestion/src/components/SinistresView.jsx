@@ -3,6 +3,7 @@ import {
   SINISTRE_TYPES, SINISTRE_CHASSE_TYPES, SINISTRE_STATUSES, SINISTRE_ETAPES,
   fmtDate, INACTIVITE_ALERTE_JOURS, joursDepuisRelance, relanceUrgence, daysSince,
 } from '../constants';
+import { exportSinistrePDF } from '../utils/exportPDF';
 
 function PiecesBar({ pieces }) {
   if (!pieces?.length) return null;
@@ -45,7 +46,7 @@ function EtapesStepper({ status }) {
   );
 }
 
-function SinistreCard({ s, types, onEdit, onDelete, onStatusChange, onRelance }) {
+function SinistreCard({ s, types, mode, onEdit, onDelete, onStatusChange, onRelance }) {
   const st  = SINISTRE_STATUSES[s.status] || SINISTRE_STATUSES.declare;
   const tp  = types[s.type] || SINISTRE_TYPES.autre;
   const joursClient    = joursDepuisRelance(s, 'client');
@@ -153,6 +154,8 @@ function SinistreCard({ s, types, onEdit, onDelete, onStatusChange, onRelance })
             <option key={k} value={k}>{v.icon} {v.label}</option>
           ))}
         </select>
+        <button className="btn-icon" title="Exporter en PDF"
+          onClick={() => exportSinistrePDF(s, mode)}>📄</button>
         <button className="btn-icon delete" onClick={() => onDelete(s.id)}>🗑️</button>
       </div>
     </div>
@@ -279,7 +282,7 @@ export default function SinistresView({
       ) : (
         <div className="sinistres-grid">
           {filtered.map(s => (
-            <SinistreCard key={s.id} s={s} types={types}
+            <SinistreCard key={s.id} s={s} types={types} mode={mode}
               onEdit={onEdit} onDelete={onDelete}
               onStatusChange={onStatusChange} onRelance={onRelance} />
           ))}

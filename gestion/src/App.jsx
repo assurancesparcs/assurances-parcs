@@ -230,7 +230,7 @@ export default function App() {
             sinistres={sinistres} sinistresChasse={sinistresChasse}
             onRelance={(s, col) => openRelance(s, col)} />
         )}
-        {view === 'stats' && <StatsView items={items} clients={clients} />}
+        {view === 'stats' && <StatsView items={items} clients={clients} sinistres={sinistres} sinistresChasse={sinistresChasse} />}
       </main>
 
       {taskModal     && <TaskModal item={taskModal} clients={clients} userName={userName}

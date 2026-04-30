@@ -5,9 +5,25 @@ export const CABINET = {
   telephone: '02 31 92 81 31',
   orias:     '07022305 - 12066667',
   contact:   'Amélie BLANCO',
-  email:     'amelie@poncey-lebas.fr',
+  email:     'assuraudio@gmail.com',
   adresse:   'Bayeux (14)',
 };
+
+// ─── SUIVI ENVOIS ──────────────────────────────────────────────────────────────
+// Collection Firestore : envois_audio
+// Chaque document = 1 envoi (1 prospect × 1 campagne)
+
+export const ENVOI_STATUTS = {
+  envoye:   { label: 'Envoyé',       color: '#60a5fa', bg: 'rgba(96,165,250,0.15)',   icon: '✉️'  },
+  relance1: { label: 'Relance 1',    color: '#fbbf24', bg: 'rgba(251,191,36,0.15)',   icon: '🔔'  },
+  relance2: { label: 'Relance 2',    color: '#fb923c', bg: 'rgba(251,146,60,0.15)',   icon: '⚠️'  },
+  repondu:  { label: 'Répondu',      color: '#34d399', bg: 'rgba(52,211,153,0.15)',   icon: '✅'  },
+  termine:  { label: 'Terminé',      color: '#6b7494', bg: 'rgba(107,116,148,0.15)',  icon: '🗄️'  },
+};
+
+// Délais de relance (en jours)
+export const DELAI_RELANCE_1 = 7;
+export const DELAI_RELANCE_2 = 14; // jours depuis relance 1
 
 const SIG = `\n\nCordialement,\n\n${CABINET.contact}\n${CABINET.nom}\nTél : ${CABINET.telephone}\nN° Orias : ${CABINET.orias}`;
 

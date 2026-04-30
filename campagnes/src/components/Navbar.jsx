@@ -6,11 +6,15 @@ const VIEWS = [
   { id: 'templates',  icon: '📝', label: 'Modèles'          },
   { id: 'prospects',  icon: '👥', label: 'Prospects'        },
   { id: 'planif',     icon: '📅', label: 'Planification'    },
+  { id: 'suivi',      icon: '📬', label: 'Suivi envois'     },
 ];
 
-export default function Navbar({ view, setView, campagnes, prospects }) {
-  const actives   = campagnes.filter(c => c.statut === 'active').length;
-  const planifees = campagnes.filter(c => c.statut === 'planifiee').length;
+export default function Navbar({ view, setView, campagnes, prospects, envois }) {
+  const actives    = campagnes.filter(c => c.statut === 'active').length;
+  const planifees  = campagnes.filter(c => c.statut === 'planifiee').length;
+  const sansReponse = (envois || []).filter(e =>
+    ['relance1', 'relance2'].includes(e.statut)
+  ).length;
 
   return (
     <nav className="navbar">
@@ -41,6 +45,9 @@ export default function Navbar({ view, setView, campagnes, prospects }) {
               <span className="nav-badge" style={{ background: 'var(--purple)' }}>
                 {prospects.filter(p => p.statut === 'prospect').length || null}
               </span>
+            )}
+            {v.id === 'suivi' && sansReponse > 0 && (
+              <span className="nav-badge yellow">{sansReponse}</span>
             )}
           </button>
         ))}

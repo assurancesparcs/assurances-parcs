@@ -17,8 +17,51 @@ function StatusSelect({ statut, onChange }) {
   );
 }
 
+function StatsCampagne({ campagneId, envois }) {
+  const stats = useMemo(() => {
+    const mine = (envois || []).filter(e => e.campagneId === campagneId);
+    if (mine.length === 0) return null;
+    const repondus  = mine.filter(e => e.statut === 'repondu').length;
+    const enCours   = mine.filter(e => ['envoye','relance1','relance2'].includes(e.statut)).length;
+    const taux      = Math.round((repondus / mine.length) * 100);
+    const delais    = mine.filter(e => e.reponduAt && e.envoye1At)
+      .map(e => Math.floor((new Date(e.reponduAt) - new Date(e.envoye1At)) / 86400000));
+    const delaiMoyen = delais.length ? Math.round(delais.reduce((a,b) => a+b,0) / delais.length) : null;
+    return { total: mine.length, repondus, enCours, taux, delaiMoyen };
+  }, [campagneId, envois]);
+
+  if (!stats) return null;
+
+  return (
+    <div style={{
+      display: 'flex', gap: 8, flexWrap: 'wrap', marginTop: 6,
+      paddingTop: 8, borderTop: '1px solid var(--border)',
+    }}>
+      <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+        <span style={{ fontWeight: 700, color: 'var(--blue)' }}>{stats.total}</span> suivi{stats.total > 1 ? 's' : ''}
+      </div>
+      <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+        <span style={{ fontWeight: 700, color: 'var(--green)' }}>{stats.repondus}</span> réponse{stats.repondus > 1 ? 's' : ''}
+      </div>
+      <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+        <span style={{ fontWeight: 700, color: 'var(--orange)' }}>{stats.taux}%</span> taux réponse
+      </div>
+      {stats.enCours > 0 && (
+        <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+          <span style={{ fontWeight: 700, color: 'var(--yellow)' }}>{stats.enCours}</span> en attente
+        </div>
+      )}
+      {stats.delaiMoyen !== null && (
+        <div style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+          délai moyen <span style={{ fontWeight: 700, color: 'var(--purple)' }}>{stats.delaiMoyen}j</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function CampagnesList({
-  campagnes, prospects,
+  campagnes, prospects, envois,
   onEdit, onDelete, onDuplicate, onChangeStatut, onNew,
 }) {
   const [search, setSearch]         = useState('');
@@ -37,12 +80,17 @@ export default function CampagnesList({
     return true;
   }), [campagnes, search, filterType, filterStatut]);
 
-  const stats = useMemo(() => ({
-    actives:   campagnes.filter(c => c.statut === 'active').length,
-    planifiees: campagnes.filter(c => c.statut === 'planifiee').length,
-    terminees:  campagnes.filter(c => c.statut === 'terminee').length,
-    envoyes:    campagnes.reduce((a, c) => a + (c.envoye || 0), 0),
-  }), [campagnes]);
+  const stats = useMemo(() => {
+    const totalEnvois  = (envois || []).length;
+    const totalRepondus = (envois || []).filter(e => e.statut === 'repondu').length;
+    return {
+      actives:    campagnes.filter(c => c.statut === 'active').length,
+      planifiees: campagnes.filter(c => c.statut === 'planifiee').length,
+      terminees:  campagnes.filter(c => c.statut === 'terminee').length,
+      envoyes:    campagnes.reduce((a, c) => a + (c.envoye || 0), 0),
+      tauxReponse: totalEnvois > 0 ? Math.round((totalRepondus / totalEnvois) * 100) : null,
+    };
+  }, [campagnes, envois]);
 
   const nbCibles = (c) => {
     if (c.cibles?.tous) return prospects.length;
@@ -56,10 +104,11 @@ export default function CampagnesList({
       {/* Mini stats */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
         {[
-          { label: 'Actives',    val: stats.actives,    color: 'var(--green)'  },
-          { label: 'Planifiées', val: stats.planifiees, color: 'var(--blue)'   },
-          { label: 'Terminées',  val: stats.terminees,  color: 'var(--text-dim)'},
-          { label: 'Envoyés',    val: stats.envoyes,    color: 'var(--orange)' },
+          { label: 'Actives',       val: stats.actives,    color: 'var(--green)'  },
+          { label: 'Planifiées',    val: stats.planifiees, color: 'var(--blue)'   },
+          { label: 'Terminées',     val: stats.terminees,  color: 'var(--text-dim)'},
+          { label: 'Envoyés',       val: stats.envoyes,    color: 'var(--orange)' },
+          ...(stats.tauxReponse !== null ? [{ label: 'Taux réponse', val: stats.tauxReponse + '%', color: 'var(--green)' }] : []),
         ].map(s => (
           <div key={s.label} style={{
             background: 'var(--bg-card)', border: '1px solid var(--border)',
@@ -173,6 +222,7 @@ export default function CampagnesList({
                     📝 {c.notes.slice(0, 80)}{c.notes.length > 80 ? '…' : ''}
                   </div>
                 )}
+                <StatsCampagne campagneId={c.id} envois={envois} />
               </div>
             );
           })}

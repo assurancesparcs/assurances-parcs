@@ -145,6 +145,14 @@ function traiterRelances(token, envois, campagnes, prospects) {
 
     var prospect = prospects.find(function(p) { return p.id === envoi.prospectId; });
     if (!prospect || !prospect.email) return;
+    if (prospect.statut === 'blacklist') {
+      // Clôturer les relances pour un contact blacklisté
+      if (envoi.statut !== 'termine' && envoi.statut !== 'repondu') {
+        majEnvoi(token, envoi.id, { statut: 'termine', updatedAt: new Date().toISOString() });
+        Logger.log('  🚫 Blacklist — clôturé : ' + prospect.email);
+      }
+      return;
+    }
 
     // ── RELANCE 1 ──
     if (envoi.statut === 'envoye' && envoi.envoye1At && !envoi.relance1At) {
@@ -273,9 +281,11 @@ function doitEnvoyerAujourdhui(campagne, aujourd_hui) {
 
 function getCibles(campagne, prospects) {
   if (!campagne.cibles) return [];
-  if (campagne.cibles.tous) return prospects.filter(function(p) { return p.email; });
+  // Exclure les contacts en blacklist
+  var actifs = prospects.filter(function(p) { return p.email && p.statut !== 'blacklist'; });
+  if (campagne.cibles.tous) return actifs;
   var ids = campagne.cibles.prospectIds || [];
-  return prospects.filter(function(p) { return ids.includes(p.id) && p.email; });
+  return actifs.filter(function(p) { return ids.includes(p.id); });
 }
 
 // ─── HELPERS DATE ──────────────────────────────────────────────────────────────

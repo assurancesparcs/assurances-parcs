@@ -139,6 +139,12 @@ export default function App() {
     await addDoc(collection(db, COL_PROSPECTS), { ...rest, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
   };
 
+  const bulkAddProspects = async (rows) => {
+    for (const row of rows) {
+      await addDoc(collection(db, COL_PROSPECTS), { ...row, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    }
+  };
+
   const editProspect = async (data) => {
     const { id, ...rest } = data;
     await updateDoc(doc(db, COL_PROSPECTS, id), { ...rest, updatedAt: serverTimestamp() });
@@ -232,7 +238,7 @@ export default function App() {
               <div className="section-title">📧 Campagnes</div>
             </div>
             <CampagnesList
-              campagnes={campagnes} prospects={prospects}
+              campagnes={campagnes} prospects={prospects} envois={envois}
               onEdit={(c) => openEdit(c, 'campagnes')}
               onDelete={deleteCampagne} onDuplicate={duplicateCampagne}
               onChangeStatut={changeStatut}
@@ -251,8 +257,9 @@ export default function App() {
               <div className="section-title">👥 Contacts & Prospects</div>
             </div>
             <ProspectsView
-              prospects={prospects}
+              prospects={prospects} envois={envois} campagnes={campagnes}
               onAdd={addProspect} onEdit={editProspect} onDelete={deleteProspect}
+              onBulkAdd={bulkAddProspects}
             />
           </div>
         )}

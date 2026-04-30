@@ -68,6 +68,7 @@ export const PROSPECT_STATUTS = {
   rdv_pris:   { label: 'RDV pris',      color: '#a78bfa', bg: 'rgba(167,139,250,0.15)' },
   client:     { label: 'Client',        color: '#34d399', bg: 'rgba(52,211,153,0.15)'  },
   perdu:      { label: 'Perdu',         color: '#f87171', bg: 'rgba(248,113,113,0.15)' },
+  blacklist:  { label: 'Ne plus contacter', color: '#6b7494', bg: 'rgba(107,116,148,0.15)' },
 };
 
 export const STRUCTURE_TYPES = {

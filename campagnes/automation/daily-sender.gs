@@ -302,21 +302,53 @@ function getFirebaseToken() {
     payload: JSON.stringify({ returnSecureToken: true }),
     muteHttpExceptions: true,
   });
-  var data = JSON.parse(resp.getContentText());
-  if (!data.idToken) throw new Error('Impossible d\'obtenir le token Firebase : ' + resp.getContentText());
+
+  var code = resp.getResponseCode();
+  var text = resp.getContentText();
+
+  if (code !== 200) {
+    throw new Error(
+      'Firebase Auth échouée (HTTP ' + code + ').\n' +
+      'Vérifiez que l\'API "Identity Toolkit" est activée dans Google Cloud Console\n' +
+      'et que la clé API n\'a pas de restriction HTTP referrer.\n' +
+      'Réponse reçue : ' + text.substring(0, 300)
+    );
+  }
+
+  var data;
+  try { data = JSON.parse(text); }
+  catch (e) {
+    throw new Error('Réponse Firebase Auth non-JSON (HTTP ' + code + ').\nDébut : ' + text.substring(0, 300));
+  }
+
+  if (!data.idToken) {
+    throw new Error('Token absent de la réponse Firebase.\nErreur : ' + JSON.stringify(data.error || data));
+  }
   return data.idToken;
 }
 
-function chargerCollection(token, collection) {
+function chargerCollection(token, col) {
   var url = 'https://firestore.googleapis.com/v1/projects/' + CONFIG.PROJECT_ID +
-            '/databases/(default)/documents/' + collection + '?pageSize=500';
+            '/databases/(default)/documents/' + col + '?pageSize=500';
   var resp = UrlFetchApp.fetch(url, {
     headers: { Authorization: 'Bearer ' + token },
     muteHttpExceptions: true,
   });
-  var data = JSON.parse(resp.getContentText());
-  if (!data.documents) return [];
 
+  var code = resp.getResponseCode();
+  var text = resp.getContentText();
+
+  if (code !== 200) {
+    throw new Error('Firestore GET /' + col + ' échoué (HTTP ' + code + ').\nRéponse : ' + text.substring(0, 300));
+  }
+
+  var data;
+  try { data = JSON.parse(text); }
+  catch (e) {
+    throw new Error('Réponse Firestore non-JSON pour /' + col + '.\nDébut : ' + text.substring(0, 300));
+  }
+
+  if (!data.documents) return [];
   return data.documents.map(function(doc) {
     var id  = doc.name.split('/').pop();
     var obj = parseFirestoreDoc(doc.fields || {});
@@ -431,9 +463,110 @@ function parseFirestoreDoc(fields) {
   return obj;
 }
 
-// ─── TEST MANUEL ───────────────────────────────────────────────────────────────
-// Décommentez et exécutez cette fonction pour tester sans attendre le déclencheur
+// ─── DIAGNOSTIC ────────────────────────────────────────────────────────────────
+// Lance cette fonction EN PREMIER pour identifier ce qui ne fonctionne pas.
+// Menu déroulant → sélectionner "diagnostiquer" → ▶ Exécuter
+// Regarde ensuite les Journaux (Ctrl+Entrée)
 
-// function testerScript() {
-//   lancerEnvoisDuJour();
-// }
+function diagnostiquer() {
+  Logger.log('══════════════════════════════════════');
+  Logger.log('  DIAGNOSTIC — ' + new Date().toLocaleString('fr-FR'));
+  Logger.log('══════════════════════════════════════');
+
+  // ── ÉTAPE 1 : Firebase Auth ──
+  Logger.log('\n[1/3] Test Firebase Auth (connexion anonyme)...');
+  var authUrl = 'https://identitytoolkit.googleapis.com/v1/accounts:signInAnonymously?key=' + CONFIG.FIREBASE_API_KEY;
+  var authResp = UrlFetchApp.fetch(authUrl, {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify({ returnSecureToken: true }),
+    muteHttpExceptions: true,
+  });
+
+  var authCode = authResp.getResponseCode();
+  var authText = authResp.getContentText();
+  Logger.log('  → HTTP ' + authCode);
+  Logger.log('  → Réponse : ' + authText.substring(0, 250));
+
+  var token = null;
+  if (authCode === 200) {
+    try {
+      var authData = JSON.parse(authText);
+      if (authData.idToken) {
+        token = authData.idToken;
+        Logger.log('  ✅ Token Firebase obtenu.');
+      } else {
+        Logger.log('  ❌ Erreur Firebase : ' + JSON.stringify(authData.error));
+        Logger.log('\n  → SOLUTION : Allez sur console.firebase.google.com');
+        Logger.log('    Authentication → Méthodes de connexion → Activez "Anonyme"');
+      }
+    } catch(e) {
+      Logger.log('  ❌ Réponse non-JSON. Probablement une restriction sur la clé API.');
+      Logger.log('\n  → SOLUTION : Allez sur console.cloud.google.com → APIs & Services → Identifiants');
+      Logger.log('    Cliquez sur votre clé API → supprimez les restrictions HTTP referrer');
+    }
+  } else {
+    Logger.log('  ❌ Firebase Auth inaccessible (HTTP ' + authCode + ').');
+    Logger.log('\n  → SOLUTION A : Dans console.cloud.google.com → APIs & Services → Bibliothèque');
+    Logger.log('    Cherchez "Identity Toolkit API" et activez-la.');
+    Logger.log('\n  → SOLUTION B : La clé API a des restrictions. Supprimez-les ou créez une clé sans restriction.');
+  }
+
+  if (!token) {
+    Logger.log('\n══ Diagnostic arrêté — Firebase Auth bloqué ══');
+    return;
+  }
+
+  // ── ÉTAPE 2 : Firestore ──
+  Logger.log('\n[2/3] Test Firestore (lecture collection campagnes_audio)...');
+  var fsUrl = 'https://firestore.googleapis.com/v1/projects/' + CONFIG.PROJECT_ID +
+              '/databases/(default)/documents/campagnes_audio?pageSize=2';
+  var fsResp = UrlFetchApp.fetch(fsUrl, {
+    headers: { Authorization: 'Bearer ' + token },
+    muteHttpExceptions: true,
+  });
+
+  var fsCode = fsResp.getResponseCode();
+  var fsText = fsResp.getContentText();
+  Logger.log('  → HTTP ' + fsCode);
+  Logger.log('  → Réponse : ' + fsText.substring(0, 250));
+
+  if (fsCode === 200) {
+    try {
+      var fsData = JSON.parse(fsText);
+      var nbDocs = (fsData.documents || []).length;
+      Logger.log('  ✅ Firestore accessible. ' + nbDocs + ' campagne(s) trouvée(s).');
+    } catch(e) {
+      Logger.log('  ❌ Réponse Firestore non-JSON.');
+    }
+  } else {
+    Logger.log('  ❌ Firestore inaccessible (HTTP ' + fsCode + ').');
+    Logger.log('\n  → SOLUTION : Dans console.cloud.google.com → APIs & Services → Bibliothèque');
+    Logger.log('    Cherchez "Cloud Firestore API" et activez-la.');
+  }
+
+  // ── ÉTAPE 3 : Gmail ──
+  Logger.log('\n[3/3] Test Gmail (envoi email de test)...');
+  try {
+    GmailApp.sendEmail(
+      CONFIG.FROM_EMAIL,
+      '[TEST] Script campagnes audio — diagnostic OK — ' + new Date().toLocaleDateString('fr-FR'),
+      'Bonjour,\n\nCe message confirme que le script peut envoyer des emails depuis votre compte Gmail.\n\nLe script est opérationnel.'
+    );
+    Logger.log('  ✅ Email de test envoyé à ' + CONFIG.FROM_EMAIL + ' — vérifiez votre boîte "Envoyés".');
+  } catch(e) {
+    Logger.log('  ❌ Gmail échoué : ' + e.toString());
+    Logger.log('\n  → SOLUTION : Réexécutez et ré-autorisez les permissions Gmail.');
+  }
+
+  Logger.log('\n══════════════════════════════════════');
+  Logger.log('  FIN DIAGNOSTIC');
+  Logger.log('══════════════════════════════════════');
+}
+
+// ─── TEST MANUEL ───────────────────────────────────────────────────────────────
+// Pour tester sans attendre 8h30 — sélectionner "testerScript" dans le menu déroulant
+
+function testerScript() {
+  lancerEnvoisDuJour();
+}

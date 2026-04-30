@@ -564,8 +564,29 @@ function diagnostiquer() {
   Logger.log('══════════════════════════════════════');
 }
 
-// ─── TEST MANUEL ───────────────────────────────────────────────────────────────
-// Pour tester sans attendre 8h30 — sélectionner "testerScript" dans le menu déroulant
+// ─── INSTALLATION DU DÉCLENCHEUR AUTOMATIQUE ──────────────────────────────────
+// Lance cette fonction UNE SEULE FOIS pour programmer l'envoi quotidien à 8h30.
+// Sélectionne "creerDeclencheur" dans le menu déroulant → ▶ Exécuter
+
+function creerDeclencheur() {
+  // Supprimer les anciens déclencheurs pour éviter les doublons
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === 'lancerEnvoisDuJour') {
+      ScriptApp.deleteTrigger(t);
+      Logger.log('Ancien déclencheur supprimé.');
+    }
+  });
+
+  // Créer le déclencheur quotidien entre 8h et 9h
+  ScriptApp.newTrigger('lancerEnvoisDuJour')
+    .timeBased()
+    .everyDays(1)
+    .atHour(8)
+    .create();
+
+  Logger.log('✅ Déclencheur créé : envoi automatique tous les jours entre 8h et 9h.');
+  Logger.log('   Tu peux vérifier dans : menu gauche → ⏰ Déclencheurs');
+}
 
 function testerScript() {
   lancerEnvoisDuJour();

@@ -120,20 +120,25 @@ export function relanceUrgence(jours) {
 
 // ─── TEMPLATES MAILS ───────────────────────────────────────────────────────────
 
-export function getEmailTemplate(type, sinistre, piecesMisquantes = []) {
+export function getEmailTemplate(type, sinistre, piecesMisquantes = [], mode = 'standard') {
   const client    = sinistre.clientName || 'Madame, Monsieur';
   const num       = sinistre.numero ? ` n° ${sinistre.numero}` : '';
   const numAgence = sinistre.numero || '[ à compléter ]';
   const compagnie = sinistre.compagnie || 'votre compagnie d\'assurance';
   const typeSin   = (SINISTRE_TYPES[sinistre.type] || SINISTRE_CHASSE_TYPES[sinistre.type] || {}).label || 'sinistre';
   const dateDec   = fmtDate(sinistre.dateDeclaration) || 'récente';
+  const montant   = sinistre.montantIndemnise
+    ? Number(sinistre.montantIndemnise).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €'
+    : '[ montant à compléter ]';
   const toutesLesPieces = (sinistre.pieces || []).map(p => `  • ${p.label}`).join('\n')
     || '  • (liste des pièces à compléter)';
   const listePieces = piecesMisquantes.length
     ? piecesMisquantes.map(p => `  • ${p}`).join('\n')
     : '  • (aucune pièce manquante identifiée)';
 
-  const signatures = '\n\nCordialement,\n[Votre prénom]\nCabinet Assurances Parcs de Loisirs Indoor\nTél : [Votre numéro]';
+  const sigStandard = `\n\nCordialement,\n\nAmélie BLANCO\nCABINET PONCEY LEBAS\nTél : 02 31 92 81 31\nN° Orias : 07022305 - 12066667`;
+  const sigChasse   = `\n\nCordialement,\n\nAmélie BLANCO — Collaboratrice d'agence\nCabinet PONCEY Assurance Chasse\nTél : 0 800 014 033 (appel gratuit)\nSiège administratif : 97 rue de Bretagne — 14400 Bayeux`;
+  const signatures  = mode === 'chasse' ? sigChasse : sigStandard;
 
   switch (type) {
     case 'confirmation_reception':
@@ -229,6 +234,22 @@ Nous vous demandons expressément de :
 Sans retour de votre part, nous serons contraints d'escalader ce dossier auprès de votre direction et, si nécessaire, de saisir le médiateur de l'assurance.
 
 Dans l'attente de votre retour.${signatures}`,
+      };
+
+    case 'cloture':
+      return {
+        objet: `Clôture de votre dossier sinistre${num}`,
+        corps: `Madame, Monsieur ${client},
+
+Nous revenons vers vous concernant votre dossier sinistre "${typeSin}"${num}, déclaré le ${dateDec} auprès de ${compagnie}.
+
+Nous avons le plaisir de vous informer que votre dossier est désormais clôturé.
+
+Le règlement de votre sinistre est intervenu pour un montant de : ${montant}
+
+Nous restons à votre disposition pour toute question concernant ce dossier ou pour toute nouvelle démarche.
+
+Nous vous remercions de la confiance que vous accordez à notre cabinet.${signatures}`,
       };
 
     default:

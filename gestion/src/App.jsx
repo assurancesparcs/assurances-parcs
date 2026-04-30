@@ -248,6 +248,7 @@ export default function App() {
         onClose={() => setSinistreModal(null)} />}
       {relanceModal !== null && <RelanceModal
         sinistre={relanceModal}
+        mode={relanceCollection === 'sinistresChasse' ? 'chasse' : 'standard'}
         onSave={(id, upd) => saveRelance(id, upd, relanceCollection)}
         onClose={() => setRelanceModal(null)} />}
     </div>

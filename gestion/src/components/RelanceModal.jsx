@@ -2,19 +2,21 @@ import { useState } from 'react';
 import { getEmailTemplate, fmtDate, joursDepuisRelance } from '../constants';
 
 const TYPES_RELANCE = [
-  { key: 'confirmation_reception', label: 'Confirmation de réception de déclaration', cible: 'client', delai: '—', icon: '📬' },
+  { key: 'confirmation_reception', label: 'Confirmation de réception de déclaration', cible: 'client',    delai: '—',   icon: '📬' },
   { key: 'client_15j',             label: 'Client — Pièces manquantes (1re relance 15j)',  cible: 'client',    delai: '15j', icon: '👤' },
   { key: 'client_30j',             label: 'Client — Pièces manquantes (2e relance 30j)',   cible: 'client',    delai: '30j', icon: '👤' },
   { key: 'compagnie_15j',          label: 'Compagnie — Suivi dossier (1re relance 15j)',   cible: 'compagnie', delai: '15j', icon: '🏢' },
   { key: 'compagnie_30j',          label: 'Compagnie — Relance urgente (2e relance 30j)',  cible: 'compagnie', delai: '30j', icon: '🏢' },
+  { key: 'cloture',                label: 'Clôture du sinistre — Notification au client',  cible: 'client',    delai: '—',   icon: '🏁' },
 ];
 
 const TEMPLATE_LABELS = {
-  confirmation_reception: { label: 'Confirmation réception',    color: '#34d399', bg: 'rgba(52,211,153,.15)' },
-  client_15j:             { label: 'Relance client 15j',         color: '#fbbf24', bg: 'rgba(251,191,36,.15)' },
-  client_30j:             { label: 'Relance client 30j',         color: '#f87171', bg: 'rgba(248,113,113,.15)' },
-  compagnie_15j:          { label: 'Relance compagnie 15j',      color: '#a78bfa', bg: 'rgba(167,139,250,.15)' },
-  compagnie_30j:          { label: 'Relance compagnie 30j',      color: '#f87171', bg: 'rgba(248,113,113,.15)' },
+  confirmation_reception: { label: 'Confirmation réception', color: '#34d399', bg: 'rgba(52,211,153,.15)' },
+  client_15j:             { label: 'Relance client 15j',      color: '#fbbf24', bg: 'rgba(251,191,36,.15)' },
+  client_30j:             { label: 'Relance client 30j',      color: '#f87171', bg: 'rgba(248,113,113,.15)' },
+  compagnie_15j:          { label: 'Relance compagnie 15j',   color: '#a78bfa', bg: 'rgba(167,139,250,.15)' },
+  compagnie_30j:          { label: 'Relance compagnie 30j',   color: '#f87171', bg: 'rgba(248,113,113,.15)' },
+  cloture:                { label: 'Clôture dossier',          color: '#34d399', bg: 'rgba(52,211,153,.15)' },
 };
 
 function fmtTs(ts) {
@@ -23,7 +25,7 @@ function fmtTs(ts) {
   return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
-export default function RelanceModal({ sinistre, onSave, onClose }) {
+export default function RelanceModal({ sinistre, onSave, onClose, mode }) {
   const piecesMisquantes = (sinistre.pieces || []).filter(p => !p.recu).map(p => p.label);
 
   const joursClient    = joursDepuisRelance(sinistre, 'client');
@@ -42,7 +44,7 @@ export default function RelanceModal({ sinistre, onSave, onClose }) {
   const [copied, setCopied]       = useState(false);
   const [tab, setTab]             = useState('nouveau');
 
-  const tpl      = getEmailTemplate(selected, sinistre, piecesMisquantes);
+  const tpl      = getEmailTemplate(selected, sinistre, piecesMisquantes, mode);
   const fullText = `Objet : ${tpl.objet}\n\n${tpl.corps}`;
 
   const handleCopy = () => {
@@ -138,22 +140,26 @@ export default function RelanceModal({ sinistre, onSave, onClose }) {
             <div className="form-group">
               <label>TYPE DE COURRIER</label>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 4 }}>
-                {TYPES_RELANCE.map(t => (
-                  <label key={t.key} className={`relance-option ${selected === t.key ? 'selected' : ''}`}
-                    style={t.key === 'confirmation_reception' ? { borderColor: 'rgba(52,211,153,.4)', background: selected === t.key ? 'rgba(52,211,153,.08)' : undefined } : {}}>
-                    <input type="radio" name="relance" value={t.key}
-                      checked={selected === t.key}
-                      onChange={() => setSelected(t.key)}
-                      style={{ display: 'none' }} />
-                    <span className={`relance-cible ${t.cible}`} style={t.key === 'confirmation_reception' ? { background: 'rgba(52,211,153,.15)', color: '#34d399' } : {}}>
-                      {t.icon} {t.key === 'confirmation_reception' ? 'Confirmation' : t.cible === 'client' ? 'Client' : 'Compagnie'}
-                    </span>
-                    <span style={{ flex: 1, fontSize: 12 }}>{t.label}</span>
-                    {t.delai !== '—' && (
-                      <span className={`relance-delai ${t.delai === '30j' ? 'urgent' : ''}`}>{t.delai}</span>
-                    )}
-                  </label>
-                ))}
+                {TYPES_RELANCE.map(t => {
+                  const isSpecial = t.key === 'confirmation_reception' || t.key === 'cloture';
+                  return (
+                    <label key={t.key} className={`relance-option ${selected === t.key ? 'selected' : ''}`}
+                      style={isSpecial ? { borderColor: 'rgba(52,211,153,.4)', background: selected === t.key ? 'rgba(52,211,153,.08)' : undefined } : {}}>
+                      <input type="radio" name="relance" value={t.key}
+                        checked={selected === t.key}
+                        onChange={() => setSelected(t.key)}
+                        style={{ display: 'none' }} />
+                      <span className={`relance-cible ${t.cible}`}
+                        style={isSpecial ? { background: 'rgba(52,211,153,.15)', color: '#34d399' } : {}}>
+                        {t.icon} {t.key === 'confirmation_reception' ? 'Confirmation' : t.key === 'cloture' ? 'Clôture' : t.cible === 'client' ? 'Client' : 'Compagnie'}
+                      </span>
+                      <span style={{ flex: 1, fontSize: 12 }}>{t.label}</span>
+                      {t.delai !== '—' && (
+                        <span className={`relance-delai ${t.delai === '30j' ? 'urgent' : ''}`}>{t.delai}</span>
+                      )}
+                    </label>
+                  );
+                })}
               </div>
             </div>
 

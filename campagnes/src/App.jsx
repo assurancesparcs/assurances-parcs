@@ -19,12 +19,76 @@ const COL_CAMPAGNES = 'campagnes_audio';
 const COL_PROSPECTS = 'prospects_audio';
 const COL_ENVOIS    = 'envois_audio';
 
+const MOT_DE_PASSE = 'Cabinetpl';
+
+function LoginScreen({ onLogin }) {
+  const [input, setInput] = useState('');
+  const [erreur, setErreur] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (input === MOT_DE_PASSE) {
+      sessionStorage.setItem('cpl_auth', '1');
+      onLogin();
+    } else {
+      setErreur(true);
+      setInput('');
+      setTimeout(() => setErreur(false), 2000);
+    }
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center',
+      justifyContent: 'center', background: 'var(--bg)',
+    }}>
+      <form onSubmit={handleSubmit} style={{
+        background: 'var(--bg-card)', border: '1px solid var(--border)',
+        borderRadius: 16, padding: '40px 48px', display: 'flex',
+        flexDirection: 'column', alignItems: 'center', gap: 20, minWidth: 320,
+      }}>
+        <div style={{ fontSize: 48 }}>🎧</div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text)' }}>Campagnes Emailing</div>
+        <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>Cabinet Poncey Lebas</div>
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          autoFocus
+          style={{
+            width: '100%', padding: '10px 14px', borderRadius: 8,
+            border: `1.5px solid ${erreur ? 'var(--red,#ef4444)' : 'var(--border)'}`,
+            background: 'var(--bg)', color: 'var(--text)', fontSize: 15,
+            outline: 'none', transition: 'border .2s',
+          }}
+        />
+        {erreur && (
+          <div style={{ color: 'var(--red,#ef4444)', fontSize: 13, marginTop: -10 }}>
+            Mot de passe incorrect
+          </div>
+        )}
+        <button type="submit" style={{
+          width: '100%', padding: '10px 0', borderRadius: 8,
+          background: 'var(--orange)', color: '#fff', fontWeight: 700,
+          fontSize: 15, border: 'none', cursor: 'pointer',
+        }}>
+          Accéder
+        </button>
+      </form>
+    </div>
+  );
+}
+
 export default function App() {
+  const [auth, setAuth]           = useState(sessionStorage.getItem('cpl_auth') === '1');
   const [view, setView]           = useState('dashboard');
   const [campagnes, setCampagnes] = useState([]);
   const [prospects, setProspects] = useState([]);
   const [envois, setEnvois]       = useState([]);
   const [loading, setLoading]     = useState(true);
+
+  if (!auth) return <LoginScreen onLogin={() => setAuth(true)} />;
 
   const [editorData, setEditorData] = useState(null);
   const [editorFrom, setEditorFrom] = useState('campagnes');

@@ -1,5 +1,4 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Exercice en Association | AssurAudio</title><meta name="description" content="Assurance pour audioprothésistes en association professionnelle. Protégez votre structure commune."><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
 <style>
   :root{--navy:#0B2545;--blue:#1A56A0;--sky:#4A9FD4;--ice:#EAF4FB;--white:#FFFFFF;--slate:#6B7E96;--light:#F4F8FC;--accent:#2BB5E0}
   *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
@@ -148,7 +147,7 @@
         <div class="si">🎉</div>
         <h3>Demande bien reçue !</h3>
         <p>Nous vous recontactons sous 48h avec votre devis.<br>En attendant, profitez d'un bilan découverte gratuit en visio.</p>
-        <button class="btn-primary" style="margin:0 auto" onclick="openCalendly()">📅 Réserver mon bilan visio gratuit</button>
+        <button class="btn-primary" style="margin:0 auto" onclick="openCal()">📅 Réserver mon bilan visio gratuit</button>
       </div>
     </div>
     <div class="sinistre-strip reveal">
@@ -182,9 +181,8 @@
   </div>
 </footer>
 
-<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+<button class="phone-float" onclick="openCal()">📅 Bilan découverte gratuit</button>
 
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 <script src="chatbot.js" defer></script>
 
 <script type="module">
@@ -229,14 +227,23 @@
 </script>
 
 <script>
-  const CALENDLY_URL = 'https://calendly.com/assuraudio/bilan-decouverte-30min';
-  function openCalendly() {
-    if (typeof Calendly !== 'undefined') Calendly.initPopupWidget({ url: CALENDLY_URL });
-    else window.open(CALENDLY_URL, '_blank');
+  function openCal() {
+    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
+    return false;
   }
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((el, i) => { if (el.isIntersecting) setTimeout(() => el.target.classList.add('visible'), i * 80); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.loaded = true; let script = d.createElement("script"); script.src = A; script.async = true; d.head.appendChild(script); } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", {origin:"https://cal.com"});
+</script>
+<script>
+  function openCal() {
+    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
+    return false;
+  }
 </script>
 </body></html>

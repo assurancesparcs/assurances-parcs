@@ -182,7 +182,7 @@
       <div class="si">✅</div>
       <h3>Demande envoyée !</h3>
       <p>Merci, nous vous recontactons sous 48h. En attendant, vous pouvez réserver un bilan découverte gratuit.</p>
-      <button class="btn-primary" onclick="openCalendly()">📅 Réserver mon bilan gratuit</button>
+      <button class="btn-primary" onclick="openCal()">📅 Réserver mon bilan gratuit</button>
     </div>
   </div>
   <div class="sinistre-strip reveal"><div class="strip-icon">🏢</div><div class="strip-text"><strong>Sinistre ? On gère directement pour vous.</strong><span>En cas de sinistre, votre conseiller AssurAudio prend en charge votre dossier de A à Z — pas de plateforme anonyme, pas de perte de temps.</span></div></div>
@@ -209,9 +209,8 @@
   </div>
 </footer>
 
-<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+<button class="phone-float" onclick="openCal()">📅 Bilan découverte gratuit</button>
 
-<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
 <script src="chatbot.js" defer></script>
 
 <script type="module">
@@ -256,10 +255,9 @@
 </script>
 
 <script>
-  const CALENDLY_URL = 'https://calendly.com/assuraudio/bilan-decouverte-30min';
-  function openCalendly() {
-    if (typeof Calendly !== 'undefined') Calendly.initPopupWidget({ url: CALENDLY_URL });
-    else window.open(CALENDLY_URL, '_blank');
+  function openCal() {
+    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
+    return false;
   }
   const obs = new IntersectionObserver((entries) => {
     entries.forEach((el, i) => { if (el.isIntersecting) setTimeout(() => el.target.classList.add('visible'), i * 80); });
@@ -268,6 +266,16 @@
   window.addEventListener('scroll', () => {
     document.querySelector('nav').style.boxShadow = window.scrollY > 40 ? '0 4px 32px rgba(11,37,69,.12)' : '0 2px 24px rgba(11,37,69,.07)';
   });
+</script>
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.loaded = true; let script = d.createElement("script"); script.src = A; script.async = true; d.head.appendChild(script); } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", {origin:"https://cal.com"});
+</script>
+<script>
+  function openCal() {
+    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
+    return false;
+  }
 </script>
 </body>
 </html>

@@ -408,7 +408,7 @@
       <div class="icon">✅</div>
       <h3>Message envoyé !</h3>
       <p>Votre demande a bien été reçue. Un conseiller AssurAudio vous répond dans les 24 heures ouvrées.</p>
-      <button class="btn-calendly" onclick="openCalendly()">📅 Prendre rendez-vous maintenant</button>
+      <button class="btn-calendly" onclick="openCal()">📅 Prendre rendez-vous maintenant</button>
     </div>
   </div>
 
@@ -419,7 +419,7 @@
     <div class="calendly-card">
       <h3>📅 Bilan découverte gratuit</h3>
       <p>Prenez rendez-vous directement pour un bilan assurance de 30 minutes avec un conseiller spécialisé.</p>
-      <button class="btn-cal" onclick="openCalendly()">Choisir un créneau</button>
+      <button class="btn-cal" onclick="openCal()">Choisir un créneau</button>
     </div>
 
     <!-- COORDONNÉES -->
@@ -516,14 +516,17 @@
 </footer>
 
 <!-- FLOAT BUTTON -->
-<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+<button class="phone-float" onclick="openCal()">📅 Bilan découverte gratuit</button>
 
 <!-- CALENDLY -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.loaded = true; let script = d.createElement("script"); script.src = A; script.async = true; d.head.appendChild(script); } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", {origin:"https://cal.com"});
+</script>
 <script>
-  function openCalendly() {
-    Calendly.initPopupWidget({ url: 'https://calendly.com/assuraudio/bilan-decouverte-30min' });
+  function openCal() {
+    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
+    return false;
   }
 </script>
 

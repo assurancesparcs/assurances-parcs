@@ -352,7 +352,7 @@
   <p>Des remboursements renforcés, un réseau de soins étendu et des cotisations maîtrisées. Spécialement négociée pour les audioprothésistes.</p>
   <div class="hero-cta">
     <button class="btn-hero-primary" onclick="document.getElementById('form-section').scrollIntoView({behavior:'smooth'})">Demander un devis gratuit</button>
-    <button class="btn-hero-secondary" onclick="openCalendly()">📅 Prendre rendez-vous</button>
+    <button class="btn-hero-secondary" onclick="openCal()">📅 Prendre rendez-vous</button>
   </div>
 </section>
 
@@ -499,7 +499,7 @@
           <div class="check">✅</div>
           <h3>Demande envoyée !</h3>
           <p>Votre demande de devis mutuelle santé a bien été reçue. Un conseiller AssurAudio vous contacte sous 24h avec une proposition personnalisée.</p>
-          <button class="btn-calendly-success" onclick="openCalendly()">📅 Prendre rendez-vous maintenant</button>
+          <button class="btn-calendly-success" onclick="openCal()">📅 Prendre rendez-vous maintenant</button>
         </div>
       </div>
     </div>
@@ -543,14 +543,17 @@
 </footer>
 
 <!-- FLOAT BUTTON -->
-<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+<button class="phone-float" onclick="openCal()">📅 Bilan découverte gratuit</button>
 
 <!-- CALENDLY -->
-<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script type="text/javascript">
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.loaded = true; let script = d.createElement("script"); script.src = A; script.async = true; d.head.appendChild(script); } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", {origin:"https://cal.com"});
+</script>
 <script>
-  function openCalendly() {
-    Calendly.initPopupWidget({ url: 'https://calendly.com/assuraudio/bilan-decouverte-30min' });
+  function openCal() {
+    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
+    return false;
   }
 </script>
 

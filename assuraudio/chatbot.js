@@ -194,7 +194,7 @@ GESTION DES SINISTRES :
     var div  = document.createElement('div');
     div.className = 'aa-msg bot';
     if (showRdv) {
-      div.innerHTML = '<div class="aa-rdv-card"><p>' + escHtml(text) + '</p><button class="aa-rdv-btn" onclick="openCalendly ? openCalendly() : window.open(\'https://calendly.com/assuraudio/bilan-decouverte-30min\',\'_blank\')">📅 Prendre RDV gratuitement</button></div>';
+      div.innerHTML = '<div class="aa-rdv-card"><p>' + escHtml(text) + '</p><button class="aa-rdv-btn" onclick="openCal ? openCal() : window.open(\'https://cal.com/johann-lebas-cdagzu/bilan-decouverte\',\'_blank\')">📅 Prendre RDV gratuitement</button></div>';
     } else {
       div.innerHTML = '<div class="aa-bubble">' + escHtml(text).replace(/\n/g, '<br>') + '</div>';
     }

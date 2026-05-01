@@ -3,9 +3,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { messages, system } = req.body;
+  const { messages } = req.body;
+
   if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Invalid request' });
+    return res.status(400).json({ error: 'Invalid request body' });
   }
 
   try {
@@ -14,19 +15,30 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 300,
-        system: system || '',
-        messages: messages.slice(-10), // garder 10 derniers messages max
-      }),
+        system: `Tu es l'assistant virtuel d'AssurAudio, le cabinet de courtage spécialisé pour les audioprothésistes en France.
+Tu aides les audioprothésistes à comprendre leurs besoins en assurance : mutuelle santé professionnelle, prévoyance (arrêt maladie, invalidité, décès), assurance multirisque et RC Pro pour leur centre, et assurance emprunteur pour leurs projets.
+Réponds en français, de façon concise et professionnelle. Oriente toujours vers un devis gratuit ou un bilan découverte de 30 minutes avec un conseiller.
+Ne donne jamais de tarifs précis — propose plutôt de les rappeler pour une étude personnalisée.`,
+        messages: messages.slice(-10)
+      })
     });
 
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('Anthropic API error:', error);
+      return res.status(500).json({ error: 'API error' });
+    }
+
     const data = await response.json();
-    return res.status(response.status).json(data);
+    return res.status(200).json({ reply: data.content[0].text });
+
   } catch (err) {
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('Server error:', err);
+    return res.status(500).json({ error: 'Server error' });
   }
 }

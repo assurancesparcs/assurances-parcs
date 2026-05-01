@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mentions légales – AssurAudio</title>
+  <meta name="description" content="Mentions légales du site AssurAudio, courtier en assurances pour audioprothésistes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #1557b0;
+      --teal: #00897b;
+      --dark: #1a1a2e;
+      --gray: #f5f7fa;
+      --text: #333;
+      --radius: 12px;
+    }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: #fff; }
+
+    /* NAV */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #e8ecf0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo { font-size: 1.4rem; font-weight: 800; color: var(--blue); text-decoration: none; }
+    .logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 0.9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: var(--blue);
+      color: #fff !important;
+      padding: 8px 18px;
+      border-radius: 6px;
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: var(--blue-dark) !important; color: #fff !important; }
+    .burger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--dark); }
+    @media(max-width:768px) {
+      .burger { display: block; }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: #fff;
+        border-bottom: 1px solid #e8ecf0;
+        padding: 16px 24px;
+        gap: 16px;
+      }
+      .nav-links.open { display: flex; }
+    }
+
+    /* HERO */
+    .hero {
+      background: var(--gray);
+      padding: 60px 24px 40px;
+      text-align: center;
+      border-bottom: 1px solid #e8ecf0;
+    }
+    .hero h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+    .hero p { color: #666; font-size: 0.95rem; }
+
+    /* CONTENT */
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .content h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 36px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--blue);
+    }
+    .content h2:first-child { margin-top: 0; }
+    .content p { font-size: 0.92rem; line-height: 1.8; color: #555; margin-bottom: 10px; }
+    .content ul { margin: 10px 0 10px 20px; }
+    .content ul li { font-size: 0.92rem; line-height: 1.8; color: #555; margin-bottom: 6px; }
+    .content a { color: var(--blue); text-decoration: none; }
+    .content a:hover { text-decoration: underline; }
+    .info-block {
+      background: var(--gray);
+      border-left: 4px solid var(--blue);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+    .info-block p { margin: 0; }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.7);
+      padding: 48px 24px 24px;
+    }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    @media(max-width:768px) { .footer-grid { grid-template-columns: 1fr; gap: 24px; } }
+    .footer-brand .logo { font-size: 1.3rem; margin-bottom: 10px; display: block; }
+    .footer-brand p { font-size: 0.85rem; line-height: 1.7; }
+    footer h4 { color: #fff; font-size: 0.9rem; font-weight: 700; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 8px; }
+    footer ul a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
+    footer ul a:hover { color: #fff; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.8rem;
+    }
+
+    /* FLOAT BUTTON */
+    .phone-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 22px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(26,115,232,0.4);
+      z-index: 999;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .phone-float:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(26,115,232,0.5); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">Assur<span>Audio</span></a>
+    <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="sante.html">Mutuelle santé</a></li>
+      <li><a href="prevoyance.html">Prévoyance</a></li>
+      <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+      <li><a href="emprunteur.html">Emprunteur</a></li>
+      <li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li>
+      <li><a href="contact.html" class="nav-cta">Devis gratuit</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Mentions légales</h1>
+  <p>Informations légales relatives au site AssurAudio</p>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <h2>Éditeur du site</h2>
+  <div class="info-block">
+    <p><strong>AssurAudio</strong><br />
+    Cabinet de courtage en assurances<br />
+    Email : <a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a><br />
+    Immatriculé à l'ORIAS sous le numéro : <strong>24XXXXXX</strong><br />
+    (Registre des intermédiaires en assurance, banque et finance — <a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>)
+    </p>
+  </div>
+
+  <h2>Statut professionnel</h2>
+  <p>AssurAudio exerce en qualité de <strong>Courtier en assurances</strong>, soumis au contrôle de l'Autorité de Contrôle Prudentiel et de Résolution (ACPR), 4 place de Budapest, CS 92459, 75436 Paris Cedex 09.</p>
+  <p>AssurAudio est membre d'une association professionnelle agréée et souscrit une assurance de responsabilité civile professionnelle ainsi qu'une garantie financière conformément aux articles L. 512-6 et L. 512-7 du Code des assurances.</p>
+
+  <h2>Hébergement</h2>
+  <div class="info-block">
+    <p><strong>Vercel Inc.</strong><br />
+    340 Pine Street, Suite 701<br />
+    San Francisco, CA 94104, États-Unis<br />
+    <a href="https://vercel.com" target="_blank" rel="noopener">www.vercel.com</a></p>
+  </div>
+
+  <h2>Propriété intellectuelle</h2>
+  <p>L'ensemble du contenu de ce site (textes, images, graphismes, logo, structure) est la propriété exclusive d'AssurAudio ou de ses partenaires, et est protégé par les lois françaises et internationales relatives à la propriété intellectuelle.</p>
+  <p>Toute reproduction, représentation, modification, publication ou adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite sans l'autorisation écrite préalable d'AssurAudio.</p>
+
+  <h2>Liens hypertextes</h2>
+  <p>Le site AssurAudio peut contenir des liens vers des sites tiers. Ces liens sont fournis à titre informatif uniquement. AssurAudio ne peut être tenu responsable du contenu de ces sites externes ni de leurs pratiques en matière de données personnelles.</p>
+
+  <h2>Limitation de responsabilité</h2>
+  <p>Les informations fournies sur ce site ont un caractère général et ne constituent pas un conseil en assurance personnalisé. Elles ne remplacent pas l'analyse de votre situation individuelle par un conseiller qualifié.</p>
+  <p>AssurAudio s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site, mais ne peut garantir l'exhaustivité ou l'absence d'erreur de ces informations.</p>
+
+  <h2>Données personnelles</h2>
+  <p>Le traitement des données personnelles collectées via ce site est décrit dans notre <a href="confidentialite.html">Politique de confidentialité</a>. Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement et d'opposition sur vos données.</p>
+  <p>Pour exercer ces droits : <a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></p>
+
+  <h2>Cookies</h2>
+  <p>Ce site utilise des cookies techniques nécessaires à son fonctionnement ainsi que des cookies analytiques anonymisés. Aucun cookie publicitaire tiers n'est déposé sans votre consentement.</p>
+
+  <h2>Droit applicable</h2>
+  <p>Les présentes mentions légales sont soumises au droit français. En cas de litige, les tribunaux compétents sont ceux du ressort du siège social d'AssurAudio.</p>
+
+  <h2>Contact</h2>
+  <p>Pour toute question relative aux présentes mentions légales ou au fonctionnement du site :</p>
+  <p><a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></p>
+
+  <p style="margin-top:32px; font-size:0.8rem; color:#aaa;">Dernière mise à jour : janvier 2024</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="index.html">Assur<span>Audio</span></a>
+        <p>Le cabinet de courtage spécialisé pour les audioprothésistes. Mutuelle, prévoyance, multirisque, RC Pro, emprunteur.</p>
+      </div>
+      <div>
+        <h4>Nos offres</h4>
+        <ul>
+          <li><a href="sante.html">Mutuelle santé</a></li>
+          <li><a href="prevoyance.html">Prévoyance</a></li>
+          <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+          <li><a href="emprunteur.html">Assurance emprunteur</a></li>
+          <li><a href="association.html">Associations</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="confidentialite.html">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 AssurAudio – Courtier en assurances. ORIAS n° 24XXXXXX.</span>
+      <span>assuraudio@gmail.com</span>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOAT BUTTON -->
+<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+
+<!-- CALENDLY -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+  function openCalendly() {
+    Calendly.initPopupWidget({ url: 'https://calendly.com/assuraudio/bilan-decouverte-30min' });
+  }
+</script>
+
+<!-- CHATBOT -->
+<script src="chatbot.js"></script>
+
+</body>
+</html>

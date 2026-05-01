@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Politique de confidentialité | AssurAudio</title>
+<meta name="description" content="Politique de confidentialité d'AssurAudio — comment nous traitons vos données personnelles.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0B2545;--blue:#1A56A0;--sky:#4A9FD4;--ice:#EAF4FB;--white:#FFFFFF;--slate:#6B7E96;--light:#F4F8FC;--accent:#2BB5E0}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+  body{font-family:"DM Sans",sans-serif;color:var(--navy);background:var(--white);overflow-x:hidden}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,159,212,.15);padding:0 5%;height:72px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 24px rgba(11,37,69,.07)}
+  .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .logo-text{display:flex;flex-direction:column;line-height:1}.logo-text strong{font-family:"Playfair Display",serif;font-size:20px;color:var(--navy)}.logo-text span{font-size:11px;color:var(--sky);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+  .nav-links{display:flex;align-items:center;gap:22px;list-style:none}.nav-links a{text-decoration:none;color:var(--navy);font-size:13px;font-weight:500;transition:color .2s}.nav-links a:hover{color:var(--sky)}
+  .nav-cta{background:linear-gradient(135deg,var(--blue),var(--sky)) !important;color:white !important;padding:10px 20px;border-radius:8px;font-weight:600 !important;box-shadow:0 4px 14px rgba(26,86,160,.3)}
+  .burger{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--navy)}
+  .page-hero{padding:140px 5% 80px;background:linear-gradient(160deg,var(--navy) 0%,#0D3060 55%,#1A56A0 100%);position:relative;overflow:hidden}
+  .page-hero::after{content:"";position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--white),transparent)}
+  .page-hero::before{content:"";position:absolute;top:-20%;right:-10%;width:60%;height:130%;background:radial-gradient(ellipse,rgba(43,181,224,.12) 0%,transparent 70%)}
+  .hero-text{position:relative;z-index:2;animation:fadeUp .7s ease both;max-width:680px;margin:0 auto;text-align:center}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(43,181,224,.15);border:1px solid rgba(43,181,224,.3);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:22px}
+  .page-hero h1{font-family:"Playfair Display",serif;font-size:clamp(30px,4vw,48px);color:white;line-height:1.15;margin-bottom:18px;font-weight:700}.page-hero h1 em{font-style:normal;color:var(--accent)}
+  .page-hero .sub{font-size:16px;color:rgba(255,255,255,.72);line-height:1.7;font-weight:300}
+  .legal-content{max-width:800px;margin:0 auto;padding:80px 5%}
+  .legal-content h2{font-family:"Playfair Display",serif;font-size:clamp(20px,2.5vw,28px);color:var(--navy);margin-bottom:16px;margin-top:48px;padding-bottom:8px;border-bottom:2px solid rgba(74,159,212,.2)}
+  .legal-content h2:first-child{margin-top:0}
+  .legal-content p{font-size:15px;color:var(--slate);line-height:1.75;margin-bottom:14px}
+  .legal-content ul{margin:0 0 16px 24px;color:var(--slate);font-size:15px;line-height:1.75}
+  .legal-content ul li{margin-bottom:6px}
+  .legal-content a{color:var(--sky);text-decoration:none}.legal-content a:hover{text-decoration:underline}
+  .info-box{background:var(--ice);border-left:4px solid var(--sky);border-radius:0 12px 12px 0;padding:18px 24px;margin-bottom:24px}
+  .info-box p{margin-bottom:0;font-size:14px;color:var(--navy)}
+  footer{background:var(--navy);color:rgba(255,255,255,.7);padding:60px 5% 32px}
+  .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+  .footer-brand strong{font-family:"Playfair Display",serif;font-size:22px;color:white;display:block;margin-bottom:12px}.footer-brand p{font-size:14px;line-height:1.65;margin-bottom:24px;color:rgba(255,255,255,.55)}
+  .footer-social{display:flex;gap:12px}.social-btn{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s;text-decoration:none;color:white}.social-btn:hover{background:var(--sky)}
+  .footer-col h4{color:white;font-size:14px;font-weight:600;margin-bottom:18px}.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.footer-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:13.5px;transition:color .2s}.footer-col a:hover{color:var(--sky)}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.35);flex-wrap:wrap;gap:12px}
+  .phone-float{position:fixed;bottom:28px;right:28px;background:linear-gradient(135deg,var(--blue),var(--sky));color:white;padding:14px 22px;border-radius:50px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;box-shadow:0 8px 28px rgba(26,86,160,.45);z-index:999;transition:transform .2s,box-shadow .2s}.phone-float:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(26,86,160,.55)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+  @media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr}.nav-links{display:none;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:white;padding:20px 5%;box-shadow:0 8px 24px rgba(11,37,69,.1);gap:16px}.nav-links.open{display:flex}.burger{display:block}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110" width="42" height="42" style="flex-shrink:0">
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0B2545"/><stop offset="100%" stop-color="#1A56A0"/></linearGradient>
+        <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1A56A0"/><stop offset="100%" stop-color="#2BB5E0"/></linearGradient>
+      </defs>
+      <rect x="2" y="2" width="106" height="106" rx="22" fill="url(#lg1)"/>
+      <path d="M55 18 C38 18,26 32,26 48 C26 62,33 71,43 75 C46 76.5,48 79,48 83 C48 88,52 92,57 92 C62 92,65 88,65 83 L65 75 C65 72,67 70,70 68 C78 62,82 56,82 48 C82 33,70 18,55 18Z" fill="white" opacity="0.97"/>
+      <path d="M55 38 C48 38,43 44,43 50 C43 56,47 60,53 62 C55 63,56 65,56 67 L56 74" fill="none" stroke="url(#lg2)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <circle cx="55" cy="50" r="5.5" fill="url(#lg2)" opacity="0.85"/>
+      <path d="M18 57 C16 33,28 14,55 10 C82 14,94 33,92 57" fill="none" stroke="#2BB5E0" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+      <circle cx="18" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+      <circle cx="92" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+    </svg>
+    <div class="logo-text"><strong>AssurAudio</strong><span>L'assureur des audios</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+    <li><a href="sante.html">Santé</a></li>
+    <li><a href="prevoyance.html">Prévoyance</a></li>
+    <li><a href="association.html">Exercice en Asso</a></li>
+    <li><a href="emprunteur.html">Emprunteur</a></li>
+    <li><a href="contact.html" class="nav-cta">📞 Devis gratuit</a></li>
+  </ul>
+  <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-text">
+    <div class="hero-badge">Vos données</div>
+    <h1>Politique de <em>confidentialité</em></h1>
+    <p class="sub">Nous respectons votre vie privée. Voici comment nous collectons, utilisons et protégeons vos données personnelles.</p>
+  </div>
+</section>
+
+<div class="legal-content">
+  <div class="info-box">
+    <p>📅 Dernière mise à jour : avril 2026 — Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés.</p>
+  </div>
+
+  <h2>1. Responsable du traitement</h2>
+  <p>Le responsable du traitement de vos données personnelles est :</p>
+  <p><strong>AssurAudio — Cabinet PL</strong><br>
+  Email : <a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a><br>
+  Téléphone : 06 32 06 90 49</p>
+
+  <h2>2. Données collectées</h2>
+  <p>Nous collectons les données personnelles que vous nous transmettez volontairement via nos formulaires de contact et de devis :</p>
+  <ul>
+    <li>Nom et prénom</li>
+    <li>Adresse email professionnelle</li>
+    <li>Numéro de téléphone</li>
+    <li>Nom de votre cabinet / structure</li>
+    <li>Ville et département</li>
+    <li>Informations sur vos besoins en assurance (type de garantie souhaitée)</li>
+    <li>Tout message que vous rédigez librement dans nos formulaires</li>
+  </ul>
+  <p>Nous collectons également des données techniques lors de votre navigation (adresse IP, type de navigateur, pages visitées) via des outils d'analyse.</p>
+
+  <h2>3. Finalités du traitement</h2>
+  <p>Vos données sont utilisées exclusivement aux fins suivantes :</p>
+  <ul>
+    <li>Répondre à vos demandes de devis et d'information</li>
+    <li>Vous contacter dans le cadre d'un suivi commercial (propositions adaptées à vos besoins)</li>
+    <li>Améliorer la qualité de nos services</li>
+    <li>Respecter nos obligations légales et réglementaires (ORIAS, ACPR)</li>
+  </ul>
+
+  <h2>4. Base légale</h2>
+  <p>Le traitement de vos données repose sur les bases légales suivantes :</p>
+  <ul>
+    <li><strong>Consentement</strong> : lorsque vous remplissez un formulaire de contact ou de devis</li>
+    <li><strong>Intérêt légitime</strong> : pour le suivi commercial dans le cadre d'une relation professionnelle</li>
+    <li><strong>Obligation légale</strong> : pour les obligations déclaratives liées à notre statut de courtier</li>
+  </ul>
+
+  <h2>5. Durée de conservation</h2>
+  <p>Vos données personnelles sont conservées pendant <strong>3 ans</strong> à compter de votre dernier contact avec nous. Au-delà de cette durée, vos données sont supprimées ou anonymisées.</p>
+  <p>En cas de souscription à un contrat d'assurance, les données liées au contrat sont conservées conformément aux obligations légales applicables (généralement 5 à 10 ans après la fin du contrat).</p>
+
+  <h2>6. Destinataires des données</h2>
+  <p>Vos données peuvent être partagées avec :</p>
+  <ul>
+    <li><strong>UNIM</strong> (Union Nationale Interprofessionnelle des Mutuelles) : partenaire pour les garanties Santé, Prévoyance et Emprunteur</li>
+    <li>Les compagnies d'assurance partenaires dans le cadre de la mise en place de vos contrats</li>
+    <li>Les prestataires techniques nécessaires au fonctionnement de nos outils (hébergement, CRM)</li>
+  </ul>
+  <p>Vos données ne sont <strong>jamais vendues</strong> à des tiers à des fins commerciales.</p>
+
+  <h2>7. Vos droits RGPD</h2>
+  <p>Conformément au RGPD, vous disposez des droits suivants :</p>
+  <ul>
+    <li><strong>Droit d'accès</strong> : obtenir une copie de vos données</li>
+    <li><strong>Droit de rectification</strong> : corriger des données inexactes</li>
+    <li><strong>Droit à l'effacement</strong> : demander la suppression de vos données</li>
+    <li><strong>Droit à la limitation</strong> : restreindre le traitement de vos données</li>
+    <li><strong>Droit à la portabilité</strong> : recevoir vos données dans un format structuré</li>
+    <li><strong>Droit d'opposition</strong> : vous opposer à un traitement basé sur l'intérêt légitime</li>
+  </ul>
+  <p>Pour exercer ces droits, contactez-nous à : <a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></p>
+  <p>En cas de réclamation, vous pouvez également contacter la <strong>CNIL</strong> : <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a></p>
+
+  <h2>8. Cookies</h2>
+  <p>Notre site utilise des cookies techniques nécessaires à son bon fonctionnement. Ces cookies ne collectent pas de données personnelles à des fins publicitaires.</p>
+  <p>Nous pouvons également utiliser des outils d'analyse anonymisés (tels que des statistiques de fréquentation) afin d'améliorer l'expérience utilisateur de notre site.</p>
+  <p>Vous pouvez configurer votre navigateur pour refuser les cookies. Toutefois, certaines fonctionnalités du site pourraient ne plus fonctionner correctement.</p>
+
+  <h2>9. Sécurité</h2>
+  <p>Nous mettons en œuvre les mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, toute perte ou toute divulgation.</p>
+
+  <h2>10. Modifications</h2>
+  <p>Cette politique de confidentialité peut être mise à jour à tout moment. La date de dernière modification est indiquée en haut de page. Nous vous encourageons à la consulter régulièrement.</p>
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <strong>AssurAudio</strong>
+      <p>L'assureur spécialiste des audioprothésistes indépendants. Multirisque, RC Pro, santé, prévoyance — gestion des sinistres directement en agence.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/assuraudio" target="_blank" rel="noopener" class="social-btn">📸</a>
+        <a href="tel:+33632069049" class="social-btn">📞</a>
+        <a href="mailto:assuraudio@gmail.com" class="social-btn">✉️</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Garanties</h4><ul><li><a href="multirisque.html">Multirisque & RC Pro</a></li><li><a href="sante.html">Santé</a></li><li><a href="prevoyance.html">Prévoyance</a></li><li><a href="association.html">Exercice en Asso</a></li><li><a href="emprunteur.html">Emprunteur</a></li></ul></div>
+    <div class="footer-col"><h4>Notre agence</h4><ul><li><a href="index.html#why">Qui sommes-nous</a></li><li><a href="index.html#sinistres">Gestion sinistres</a></li><li><a href="index.html#rdv">Bilan découverte</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="index.html#contact">Devis gratuit</a></li><li><a href="tel:+33632069049">06 32 06 90 49</a></li><li><a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AssurAudio — Cabinet PL · N° Orias : 07022305 - 12066667</span>
+    <div style="display:flex;gap:24px"><a href="mentions-legales.html" style="color:rgba(255,255,255,.35);text-decoration:none">Mentions légales</a><a href="confidentialite.html" style="color:rgba(255,255,255,.35);text-decoration:none">Confidentialité</a></div>
+  </div>
+</footer>
+
+<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<script src="chatbot.js" defer></script>
+<script>
+  const CALENDLY_URL = 'https://calendly.com/assuraudio/bilan-decouverte-30min';
+  function openCalendly() {
+    if (typeof Calendly !== 'undefined') Calendly.initPopupWidget({ url: CALENDLY_URL });
+    else window.open(CALENDLY_URL, '_blank');
+  }
+</script>
+</body>
+</html>

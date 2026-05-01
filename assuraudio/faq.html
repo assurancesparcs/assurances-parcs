@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ – Questions fréquentes | AssurAudio</title>
+<meta name="description" content="Toutes les réponses à vos questions sur l'assurance pour audioprothésistes — contrats, sinistres, devis, garanties.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0B2545;--blue:#1A56A0;--sky:#4A9FD4;--ice:#EAF4FB;--white:#FFFFFF;--slate:#6B7E96;--light:#F4F8FC;--accent:#2BB5E0}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+  body{font-family:"DM Sans",sans-serif;color:var(--navy);background:var(--white);overflow-x:hidden}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,159,212,.15);padding:0 5%;height:72px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 24px rgba(11,37,69,.07)}
+  .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .logo-text{display:flex;flex-direction:column;line-height:1}.logo-text strong{font-family:"Playfair Display",serif;font-size:20px;color:var(--navy)}.logo-text span{font-size:11px;color:var(--sky);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+  .nav-links{display:flex;align-items:center;gap:22px;list-style:none}.nav-links a{text-decoration:none;color:var(--navy);font-size:13px;font-weight:500;transition:color .2s}.nav-links a:hover{color:var(--sky)}
+  .nav-cta{background:linear-gradient(135deg,var(--blue),var(--sky)) !important;color:white !important;padding:10px 20px;border-radius:8px;font-weight:600 !important;box-shadow:0 4px 14px rgba(26,86,160,.3)}
+  .burger{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--navy)}
+  .page-hero{padding:140px 5% 80px;background:linear-gradient(160deg,var(--navy) 0%,#0D3060 55%,#1A56A0 100%);position:relative;overflow:hidden}
+  .page-hero::after{content:"";position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--white),transparent)}
+  .page-hero::before{content:"";position:absolute;top:-20%;right:-10%;width:60%;height:130%;background:radial-gradient(ellipse,rgba(43,181,224,.12) 0%,transparent 70%)}
+  .hero-text{position:relative;z-index:2;animation:fadeUp .7s ease both;max-width:700px;margin:0 auto;text-align:center}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(43,181,224,.15);border:1px solid rgba(43,181,224,.3);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:22px}
+  .page-hero h1{font-family:"Playfair Display",serif;font-size:clamp(30px,4vw,48px);color:white;line-height:1.15;margin-bottom:18px;font-weight:700}.page-hero h1 em{font-style:normal;color:var(--accent)}
+  .page-hero .sub{font-size:16px;color:rgba(255,255,255,.72);line-height:1.7;font-weight:300}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--sky);margin-bottom:12px;display:block}
+  h2{font-family:"Playfair Display",serif;font-size:clamp(26px,3.5vw,40px);color:var(--navy);line-height:1.2;margin-bottom:16px}
+  .content-section{padding:80px 5%}
+  .faq-list{display:flex;flex-direction:column;gap:16px;max-width:860px;margin:0 auto}
+  .faq-item{background:var(--light);border-radius:14px;overflow:hidden;border:1px solid rgba(74,159,212,.12)}
+  .faq-q{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;cursor:pointer;font-weight:600;font-size:15px;color:var(--navy);transition:background .2s;gap:16px}
+  .faq-q:hover{background:rgba(74,159,212,.06)}
+  .faq-q .icon{font-size:18px;flex-shrink:0;transition:transform .3s;color:var(--sky)}
+  .faq-a{padding:0 28px 22px;font-size:14px;color:var(--slate);line-height:1.7;display:none}
+  .faq-item.open .faq-a{display:block}
+  .faq-item.open .icon{transform:rotate(45deg)}
+  .sinistre-strip{background:var(--ice);border-radius:20px;padding:36px 40px;margin:56px 0 0;display:flex;align-items:center;gap:24px}
+  .strip-icon{font-size:36px;flex-shrink:0}.strip-text strong{display:block;font-size:16px;color:var(--navy);margin-bottom:4px;font-weight:700}.strip-text span{font-size:14px;color:var(--slate);line-height:1.55}
+  footer{background:var(--navy);color:rgba(255,255,255,.7);padding:60px 5% 32px}
+  .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+  .footer-brand strong{font-family:"Playfair Display",serif;font-size:22px;color:white;display:block;margin-bottom:12px}.footer-brand p{font-size:14px;line-height:1.65;margin-bottom:24px;color:rgba(255,255,255,.55)}
+  .footer-social{display:flex;gap:12px}.social-btn{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s;text-decoration:none;color:white}.social-btn:hover{background:var(--sky)}
+  .footer-col h4{color:white;font-size:14px;font-weight:600;margin-bottom:18px}.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.footer-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:13.5px;transition:color .2s}.footer-col a:hover{color:var(--sky)}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.35);flex-wrap:wrap;gap:12px}
+  .phone-float{position:fixed;bottom:28px;right:28px;background:linear-gradient(135deg,var(--blue),var(--sky));color:white;padding:14px 22px;border-radius:50px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;box-shadow:0 8px 28px rgba(26,86,160,.45);z-index:999;transition:transform .2s,box-shadow .2s}.phone-float:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(26,86,160,.55)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+  @media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr}.nav-links{display:none;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:white;padding:20px 5%;box-shadow:0 8px 24px rgba(11,37,69,.1);gap:16px}.nav-links.open{display:flex}.burger{display:block}.sinistre-strip{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110" width="42" height="42" style="flex-shrink:0">
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0B2545"/><stop offset="100%" stop-color="#1A56A0"/></linearGradient>
+        <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1A56A0"/><stop offset="100%" stop-color="#2BB5E0"/></linearGradient>
+      </defs>
+      <rect x="2" y="2" width="106" height="106" rx="22" fill="url(#lg1)"/>
+      <path d="M55 18 C38 18,26 32,26 48 C26 62,33 71,43 75 C46 76.5,48 79,48 83 C48 88,52 92,57 92 C62 92,65 88,65 83 L65 75 C65 72,67 70,70 68 C78 62,82 56,82 48 C82 33,70 18,55 18Z" fill="white" opacity="0.97"/>
+      <path d="M55 38 C48 38,43 44,43 50 C43 56,47 60,53 62 C55 63,56 65,56 67 L56 74" fill="none" stroke="url(#lg2)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <circle cx="55" cy="50" r="5.5" fill="url(#lg2)" opacity="0.85"/>
+      <path d="M18 57 C16 33,28 14,55 10 C82 14,94 33,92 57" fill="none" stroke="#2BB5E0" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+      <circle cx="18" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+      <circle cx="92" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+    </svg>
+    <div class="logo-text"><strong>AssurAudio</strong><span>L'assureur des audios</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+    <li><a href="sante.html">Santé</a></li>
+    <li><a href="prevoyance.html">Prévoyance</a></li>
+    <li><a href="association.html">Exercice en Asso</a></li>
+    <li><a href="emprunteur.html">Emprunteur</a></li>
+    <li><a href="contact.html" class="nav-cta">📞 Devis gratuit</a></li>
+  </ul>
+  <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-text">
+    <div class="hero-badge">Questions fréquentes</div>
+    <h1>Tout ce que vous voulez <em>savoir</em></h1>
+    <p class="sub">Vous avez des questions sur vos garanties, les sinistres ou nos contrats ? Retrouvez ici les réponses les plus demandées par les audioprothésistes.</p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div style="text-align:center;margin-bottom:56px" class="reveal">
+    <span class="section-label">Contrats & garanties</span>
+    <h2>Sur vos assurances</h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Quelles sont les garanties indispensables pour un audioprothésiste indépendant ?<span class="icon">+</span></div>
+      <div class="faq-a">Les deux garanties prioritaires sont le <strong>Multirisque local</strong> (qui couvre votre cabinet, votre matériel, vos stocks d'appareils auditifs contre l'incendie, le vol, les dégâts des eaux et la perte d'exploitation) et la <strong>Responsabilité Civile Professionnelle</strong> (qui couvre les dommages que vous pourriez causer à vos patients ou à des tiers). Ensuite viennent la santé et la prévoyance pour protéger vos revenus personnels.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Puis-je couvrir mon stock d'appareils auditifs en cas de vol ?<span class="icon">+</span></div>
+      <div class="faq-a">Oui, absolument. Notre contrat Multirisque intègre une garantie vol avec effraction qui couvre les appareils auditifs en stock, le matériel audiologique et les équipements informatiques. Nous adaptons le plafond de garantie à la valeur réelle de votre stock.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">La perte d'exploitation est-elle vraiment utile ?<span class="icon">+</span></div>
+      <div class="faq-a">Oui, et souvent sous-estimée. Si un sinistre vous force à fermer temporairement votre cabinet (incendie, dégâts majeurs…), la perte d'exploitation compense le manque à gagner pendant toute la durée de fermeture. Pour un indépendant sans filet de sécurité employeur, c'est une garantie essentielle.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Puis-je assurer plusieurs centres sous un seul contrat ?<span class="icon">+</span></div>
+      <div class="faq-a">Oui, nous pouvons structurer un contrat multi-sites qui couvre l'ensemble de vos centres auditifs. Cela simplifie la gestion administrative et permet souvent d'obtenir de meilleures conditions tarifaires.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">La RC Pro couvre-t-elle mes remplaçants et stagiaires ?<span class="icon">+</span></div>
+      <div class="faq-a">Oui. Notre contrat de Responsabilité Civile Professionnelle inclut la couverture de vos collaborateurs, qu'il s'agisse de salariés, de remplaçants ou de stagiaires intervenant sous votre responsabilité.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:72px 0 56px" class="reveal">
+    <span class="section-label">Sinistres & indemnisation</span>
+    <h2>Sur la gestion des sinistres</h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Que se passe-t-il si j'ai un sinistre ?<span class="icon">+</span></div>
+      <div class="faq-a">Vous contactez directement votre conseiller AssurAudio — par téléphone ou email. Nous prenons en charge l'instruction de votre dossier auprès de l'assureur. Vous n'avez pas à gérer les démarches administratives : nous vous tenons informé à chaque étape et suivons le dossier jusqu'à votre indemnisation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Combien de temps dure l'instruction d'un sinistre ?<span class="icon">+</span></div>
+      <div class="faq-a">Les délais varient selon la nature et la complexité du sinistre. Pour les sinistres simples (vol, bris de matériel), les indemnisations interviennent généralement sous 15 à 30 jours. Nous assurons un suivi actif pour réduire au maximum les délais.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Y a-t-il une franchise sur mes contrats ?<span class="icon">+</span></div>
+      <div class="faq-a">Cela dépend du contrat souscrit et des garanties choisies. Nous vous expliquons clairement les franchises applicables lors de la présentation de votre devis — sans surprise. Certaines garanties permettent de réduire ou supprimer la franchise moyennant un ajustement de cotisation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Puis-je faire appel à AssurAudio même si mon sinistre est en cours avec un autre assureur ?<span class="icon">+</span></div>
+      <div class="faq-a">Si vous êtes déjà client AssurAudio, nous vous accompagnons bien sûr. Si vous n'êtes pas encore client, nous pouvons vous conseiller et vous aider à comprendre vos droits — c'est souvent l'occasion de constater que notre offre vous aurait mieux protégé.</div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin:72px 0 56px" class="reveal">
+    <span class="section-label">Devis & tarifs</span>
+    <h2>Sur nos devis et nos tarifs</h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Le devis est-il vraiment gratuit et sans engagement ?<span class="icon">+</span></div>
+      <div class="faq-a">Oui, totalement. Nous vous présentons une proposition détaillée, vous expliquez chaque garantie et leur coût — et c'est vous qui décidez. Aucune pression, aucun frais de dossier.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Combien coûte une assurance pour audioprothésiste ?<span class="icon">+</span></div>
+      <div class="faq-a">Le tarif dépend de plusieurs facteurs : superficie de votre local, valeur du matériel et des stocks, votre chiffre d'affaires, le niveau de garanties souhaité. C'est précisément pourquoi nous réalisons un devis personnalisé plutôt que d'afficher des tarifs génériques souvent inadaptés.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggle(this)">Puis-je changer d'assureur en cours d'année ?<span class="icon">+</span></div>
+      <div class="faq-a">Depuis la loi Hamon et la loi Châtel, vous pouvez résilier votre contrat d'assurance professionnel à tout moment après la première année, avec un préavis d'un mois. Nous vous guidons dans les démarches de résiliation de votre contrat actuel si vous souhaitez rejoindre AssurAudio.</div>
+    </div>
+  </div>
+
+  <div class="sinistre-strip reveal" style="margin-top:64px">
+    <div class="strip-icon">💬</div>
+    <div class="strip-text"><strong>Votre question n'est pas ici ?</strong><span>Contactez directement votre conseiller AssurAudio — par téléphone, email ou Instagram. Nous répondons sous 2h en journée.</span></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <strong>AssurAudio</strong>
+      <p>L'assureur spécialiste des audioprothésistes indépendants. Multirisque, RC Pro, santé, prévoyance — gestion des sinistres directement en agence.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/assuraudio" target="_blank" rel="noopener" class="social-btn">📸</a>
+        <a href="tel:+33632069049" class="social-btn">📞</a>
+        <a href="mailto:assuraudio@gmail.com" class="social-btn">✉️</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Garanties</h4><ul><li><a href="multirisque.html">Multirisque & RC Pro</a></li><li><a href="sante.html">Santé</a></li><li><a href="prevoyance.html">Prévoyance</a></li><li><a href="association.html">Exercice en Asso</a></li><li><a href="emprunteur.html">Emprunteur</a></li></ul></div>
+    <div class="footer-col"><h4>AssurAudio</h4><ul><li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li><li><a href="faq.html">FAQ</a></li><li><a href="mentions-legales.html">Mentions légales</a></li><li><a href="confidentialite.html">Confidentialité</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="contact.html">Devis gratuit</a></li><li><a href="tel:+33632069049">06 32 06 90 49</a></li><li><a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AssurAudio — Cabinet PL · N° Orias : 07022305 - 12066667</span>
+    <div style="display:flex;gap:24px"><a href="mentions-legales.html" style="color:rgba(255,255,255,.35);text-decoration:none">Mentions légales</a><a href="confidentialite.html" style="color:rgba(255,255,255,.35);text-decoration:none">Politique de confidentialité</a></div>
+  </div>
+</footer>
+
+<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<script src="chatbot.js" defer></script>
+<script>
+  const CALENDLY_URL = 'https://calendly.com/assuraudio/bilan-decouverte-30min';
+  function openCalendly() {
+    if (typeof Calendly !== 'undefined') Calendly.initPopupWidget({ url: CALENDLY_URL });
+    else window.open(CALENDLY_URL, '_blank');
+  }
+  function toggle(el) {
+    var item = el.parentElement;
+    item.classList.toggle('open');
+  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((el, i) => { if (el.isIntersecting) setTimeout(() => el.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.boxShadow = window.scrollY > 40 ? '0 4px 32px rgba(11,37,69,.12)' : '0 2px 24px rgba(11,37,69,.07)';
+  });
+</script>
+</body>
+</html>

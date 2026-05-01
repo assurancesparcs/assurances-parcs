@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assurance Emprunteur | AssurAudio</title>
+<meta name="description" content="Assurance emprunteur pour audioprothésistes. Financement de votre cabinet aux meilleures conditions.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0B2545;--blue:#1A56A0;--sky:#4A9FD4;--ice:#EAF4FB;--white:#FFFFFF;--slate:#6B7E96;--light:#F4F8FC;--accent:#2BB5E0}
+  *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+  body{font-family:"DM Sans",sans-serif;color:var(--navy);background:var(--white);overflow-x:hidden}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,159,212,.15);padding:0 5%;height:72px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 24px rgba(11,37,69,.07)}
+  .logo{display:flex;align-items:center;gap:12px;text-decoration:none}.logo-mark{width:42px;height:42px;display:flex;align-items:center;justify-content:center}
+  .logo-text{display:flex;flex-direction:column;line-height:1}.logo-text strong{font-family:"Playfair Display",serif;font-size:20px;color:var(--navy)}.logo-text span{font-size:11px;color:var(--sky);font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+  .nav-links{display:flex;align-items:center;gap:22px;list-style:none}.nav-links a{text-decoration:none;color:var(--navy);font-size:13px;font-weight:500;transition:color .2s}.nav-links a:hover{color:var(--sky)}
+  .nav-cta{background:linear-gradient(135deg,var(--blue),var(--sky)) !important;color:white !important;padding:10px 20px;border-radius:8px;font-weight:600 !important;box-shadow:0 4px 14px rgba(26,86,160,.3)}
+  .burger{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:var(--navy)}
+  .page-hero{padding:140px 5% 80px;background:linear-gradient(160deg,var(--navy) 0%,#0D3060 55%,#1A56A0 100%);position:relative;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .page-hero::after{content:"";position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--white),transparent)}
+  .page-hero::before{content:"";position:absolute;top:-20%;right:-10%;width:60%;height:130%;background:radial-gradient(ellipse,rgba(43,181,224,.12) 0%,transparent 70%)}
+  .hero-text{position:relative;z-index:2;animation:fadeUp .7s ease both}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(43,181,224,.15);border:1px solid rgba(43,181,224,.3);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:30px;margin-bottom:22px}
+  .page-hero h1{font-family:"Playfair Display",serif;font-size:clamp(30px,4vw,48px);color:white;line-height:1.15;margin-bottom:18px;font-weight:700}.page-hero h1 em{font-style:normal;color:var(--accent)}
+  .page-hero .sub{font-size:16px;color:rgba(255,255,255,.72);line-height:1.7;margin-bottom:36px;font-weight:300}
+  .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:white;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:600;font-size:15px;transition:transform .2s,box-shadow .2s;box-shadow:0 6px 20px rgba(43,181,224,.4);border:none;cursor:pointer;font-family:"DM Sans",sans-serif}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(43,181,224,.5)}
+  .hero-img{position:relative;z-index:2;animation:fadeUp .7s .15s ease both}.hero-img img{width:100%;height:380px;object-fit:cover;border-radius:20px;box-shadow:0 28px 70px rgba(0,0,0,.4)}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--sky);margin-bottom:12px;display:block}
+  h2{font-family:"Playfair Display",serif;font-size:clamp(26px,3.5vw,40px);color:var(--navy);line-height:1.2;margin-bottom:16px}
+  .intro{font-size:16px;color:var(--slate);line-height:1.7;font-weight:300}
+  .content-section{padding:80px 5%}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+  .two-col img{width:100%;height:400px;object-fit:cover;border-radius:20px;box-shadow:0 20px 50px rgba(11,37,69,.1)}
+  .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+  .card{background:var(--light);border-radius:18px;padding:32px 28px;border:1px solid transparent;transition:all .3s;position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--sky));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+  .card:hover{transform:translateY(-5px);box-shadow:0 18px 45px rgba(26,86,160,.1);border-color:rgba(74,159,212,.25);background:white}
+  .card:hover::before{transform:scaleX(1)}
+  .card-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--sky));display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;box-shadow:0 6px 16px rgba(26,86,160,.25)}
+  .card h3{font-family:"Playfair Display",serif;font-size:19px;color:var(--navy);margin-bottom:10px}.card p{font-size:13.5px;color:var(--slate);line-height:1.65}
+  .highlight-band{background:linear-gradient(160deg,var(--navy),#1A3A6B);padding:70px 5%}
+  .check-list{display:flex;flex-direction:column;gap:16px}.check-item{display:flex;align-items:flex-start;gap:16px}
+  .check-dot{width:28px;height:28px;border-radius:50%;background:rgba(43,181,224,.2);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;color:var(--accent);font-size:13px}
+  .check-body strong{display:block;color:white;font-size:15px;margin-bottom:3px;font-weight:600}.check-body span{color:rgba(255,255,255,.58);font-size:13.5px;line-height:1.5}
+  .form-section{background:var(--light);padding:80px 5%}.form-wrap{max-width:760px;margin:0 auto}.form-header{text-align:center;margin-bottom:40px}
+  .devis-form{background:white;border-radius:20px;padding:44px;box-shadow:0 10px 40px rgba(11,37,69,.08);border:1px solid rgba(74,159,212,.15)}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+  .form-group label{font-size:13px;font-weight:600;color:var(--navy)}
+  .form-group input,.form-group select,.form-group textarea{padding:12px 16px;border:1.5px solid #E0EBF5;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--navy);background:var(--light);transition:border-color .2s,box-shadow .2s;outline:none}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--sky);box-shadow:0 0 0 3px rgba(74,159,212,.12);background:white}
+  .form-group textarea{resize:vertical;min-height:100px}
+  .form-submit{width:100%;padding:15px;background:linear-gradient(135deg,var(--blue),var(--sky));color:white;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:"DM Sans",sans-serif;cursor:pointer;transition:all .25s;box-shadow:0 6px 20px rgba(26,86,160,.3);display:flex;align-items:center;justify-content:center;gap:8px}
+  .form-submit:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(26,86,160,.4)}.form-submit:disabled{opacity:.7;cursor:not-allowed;transform:none}
+  .form-note{text-align:center;font-size:12px;color:var(--slate);margin-top:14px}
+  #form-success{display:none;text-align:center;padding:32px 20px}
+  #form-success .si{font-size:52px;margin-bottom:16px}
+  #form-success h3{font-family:"Playfair Display",serif;font-size:22px;color:var(--navy);margin-bottom:10px}
+  #form-success p{color:var(--slate);font-size:15px;line-height:1.6;margin-bottom:24px}
+  .sinistre-strip{background:var(--ice);border-radius:20px;padding:36px 40px;margin:56px 0 0;display:flex;align-items:center;gap:24px}
+  .strip-icon{font-size:36px;flex-shrink:0}.strip-text strong{display:block;font-size:16px;color:var(--navy);margin-bottom:4px;font-weight:700}.strip-text span{font-size:14px;color:var(--slate);line-height:1.55}
+  footer{background:var(--navy);color:rgba(255,255,255,.7);padding:60px 5% 32px}
+  .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px}
+  .footer-brand strong{font-family:"Playfair Display",serif;font-size:22px;color:white;display:block;margin-bottom:12px}.footer-brand p{font-size:14px;line-height:1.65;margin-bottom:24px;color:rgba(255,255,255,.55)}
+  .footer-social{display:flex;gap:12px}.social-btn{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;transition:background .2s;text-decoration:none;color:white}.social-btn:hover{background:var(--sky)}
+  .footer-col h4{color:white;font-size:14px;font-weight:600;margin-bottom:18px}.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}.footer-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:13.5px;transition:color .2s}.footer-col a:hover{color:var(--sky)}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:28px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:rgba(255,255,255,.35);flex-wrap:wrap;gap:12px}
+  .phone-float{position:fixed;bottom:28px;right:28px;background:linear-gradient(135deg,var(--blue),var(--sky));color:white;padding:14px 22px;border-radius:50px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;border:none;cursor:pointer;font-family:"DM Sans",sans-serif;box-shadow:0 8px 28px rgba(26,86,160,.45);z-index:999;transition:transform .2s,box-shadow .2s}.phone-float:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(26,86,160,.55)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}.reveal.visible{opacity:1;transform:translateY(0)}
+  @media(max-width:900px){.page-hero{grid-template-columns:1fr}.hero-img{display:none}.two-col{grid-template-columns:1fr}.cards-grid{grid-template-columns:1fr}.footer-top{grid-template-columns:1fr 1fr}.nav-links{display:none;flex-direction:column;position:absolute;top:72px;left:0;right:0;background:white;padding:20px 5%;box-shadow:0 8px 24px rgba(11,37,69,.1);gap:16px}.nav-links.open{display:flex}.burger{display:block}.sinistre-strip{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110" width="42" height="42" style="flex-shrink:0">
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0B2545"/><stop offset="100%" stop-color="#1A56A0"/></linearGradient>
+        <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1A56A0"/><stop offset="100%" stop-color="#2BB5E0"/></linearGradient>
+      </defs>
+      <rect x="2" y="2" width="106" height="106" rx="22" fill="url(#lg1)"/>
+      <path d="M55 18 C38 18,26 32,26 48 C26 62,33 71,43 75 C46 76.5,48 79,48 83 C48 88,52 92,57 92 C62 92,65 88,65 83 L65 75 C65 72,67 70,70 68 C78 62,82 56,82 48 C82 33,70 18,55 18Z" fill="white" opacity="0.97"/>
+      <path d="M55 38 C48 38,43 44,43 50 C43 56,47 60,53 62 C55 63,56 65,56 67 L56 74" fill="none" stroke="url(#lg2)" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+      <circle cx="55" cy="50" r="5.5" fill="url(#lg2)" opacity="0.85"/>
+      <path d="M18 57 C16 33,28 14,55 10 C82 14,94 33,92 57" fill="none" stroke="#2BB5E0" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+      <circle cx="18" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+      <circle cx="92" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+    </svg>
+    <div class="logo-text"><strong>AssurAudio</strong><span>L'assureur des audios</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+    <li><a href="sante.html">Santé</a></li>
+    <li><a href="prevoyance.html">Prévoyance</a></li>
+    <li><a href="association.html">Exercice en Asso</a></li>
+    <li><a href="emprunteur.html">Emprunteur</a></li>
+    <li><a href="contact.html" class="nav-cta">📞 Devis gratuit</a></li>
+  </ul>
+  <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-text">
+    <div class="hero-badge">Développez votre activité</div>
+    <h1>Financez l'avenir de votre cabinet <em>sereinement</em></h1>
+    <p class="sub">Acquisition de locaux, investissement en matériel, rachat de parts — notre assurance emprunteur vous ouvre les portes du financement aux meilleures conditions du marché, grâce à notre expertise en audiologie.</p>
+    <a href="#devis" class="btn-primary">📋 Demander un devis gratuit</a>
+  </div>
+  <div class="hero-img"><img src="images/appareil-auditif.jpg" alt="Audioprothésiste investissant dans son activité"></div>
+</section>
+
+<section class="content-section">
+  <div class="two-col">
+    <div class="reveal"><img src="images/consultation-patient.jpg" alt="Audioprothésiste en rendez-vous financier"></div>
+    <div class="reveal">
+      <span class="section-label">Pourquoi une assurance emprunteur adaptée</span>
+      <h2>Les banques exigent une couverture. Nous vous la proposons au meilleur prix.</h2>
+      <p class="intro" style="margin-bottom:28px">Tout emprunt professionnel est conditionné à une assurance emprunteur. Mais l'assurance proposée par la banque n'est pas toujours la plus compétitive — ni la plus adaptée à votre statut d'audioprothésiste indépendant. Nous négocions pour vous des garanties précises, aux tarifs les plus justes.</p>
+      <div class="check-list">
+        <div class="check-item"><div class="check-dot" style="color:var(--sky);border-color:var(--sky);background:var(--ice)">✓</div><div class="check-body"><strong style="color:var(--navy)">Garantie décès & PTIA</strong><span style="color:var(--slate)">En cas de décès ou perte totale et irréversible d'autonomie, le capital restant dû est remboursé intégralement.</span></div></div>
+        <div class="check-item"><div class="check-dot" style="color:var(--sky);border-color:var(--sky);background:var(--ice)">✓</div><div class="check-body"><strong style="color:var(--navy)">Garantie invalidité (IPT/IPP)</strong><span style="color:var(--slate)">En cas d'invalidité partielle ou totale, les mensualités de votre emprunt sont prises en charge par l'assurance.</span></div></div>
+        <div class="check-item"><div class="check-dot" style="color:var(--sky);border-color:var(--sky);background:var(--ice)">✓</div><div class="check-body"><strong style="color:var(--navy)">Garantie arrêt de travail</strong><span style="color:var(--slate)">Vos échéances de crédit sont couvertes pendant toute la durée de votre arrêt de travail.</span></div></div>
+        <div class="check-item"><div class="check-dot" style="color:var(--sky);border-color:var(--sky);background:var(--ice)">✓</div><div class="check-body"><strong style="color:var(--navy)">Délégation d'assurance possible</strong><span style="color:var(--slate)">Vous avez le droit de choisir votre assureur. Nous vous accompagnons pour substituer un contrat plus avantageux à celui de la banque.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="highlight-band">
+  <div style="max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start">
+    <div class="reveal">
+      <span class="section-label" style="color:var(--accent)">Financement de cabinet</span>
+      <h2 style="color:white">Quels projets pouvez-vous financer ?</h2>
+      <p class="intro" style="color:rgba(255,255,255,.68);margin-bottom:32px">Que vous souhaitiez acquérir vos locaux, investir dans des équipements audiologiques de pointe ou reprendre un cabinet existant, nous structurons la protection de votre emprunt de façon optimale.</p>
+      <a href="#devis" class="btn-primary">Obtenir mon devis →</a>
+    </div>
+    <div class="check-list reveal">
+      <div class="check-item"><div class="check-dot">✓</div><div class="check-body"><strong>Acquisition de locaux professionnels</strong><span>Achetez les murs de votre cabinet au lieu de louer — une décision patrimoniale sécurisée par notre emprunteur.</span></div></div>
+      <div class="check-item"><div class="check-dot">✓</div><div class="check-body"><strong>Investissement en équipements</strong><span>Cabines audiométriques, équipements de bilan, matériel informatique — financez votre développement.</span></div></div>
+      <div class="check-item"><div class="check-dot">✓</div><div class="check-body"><strong>Rachat de parts ou de cabinet</strong><span>Vous reprenez une activité existante ? Notre assurance emprunteur sécurise votre opération de bout en bout.</span></div></div>
+      <div class="check-item"><div class="check-dot">✓</div><div class="check-body"><strong>Travaux d'aménagement</strong><span>Accessibilité PMR, rénovation, signalétique — transformez votre espace et financez-le avec notre accompagnement.</span></div></div>
+    </div>
+  </div>
+</div>
+
+<section class="form-section" id="devis"><div class="form-wrap">
+  <div class="form-header reveal"><span class="section-label">Devis gratuit</span><h2>Obtenez votre devis en 48h</h2><p class="intro">Sans engagement. Votre conseiller AssurAudio vous rappelle rapidement pour construire votre solution sur mesure.</p></div>
+  <div class="devis-form reveal">
+    <form id="devis-form">
+      <div class="form-row">
+        <div class="form-group"><label>Prénom *</label><input id="prenom" type="text" placeholder="Jean" required></div>
+        <div class="form-group"><label>Nom *</label><input id="nom" type="text" placeholder="Dupont" required></div>
+      </div>
+      <div class="form-group"><label>Email *</label><input id="email" type="email" placeholder="jean.dupont@moncentre.fr" required></div>
+      <div class="form-group"><label>Téléphone *</label><input id="telephone" type="tel" placeholder="06 XX XX XX XX" required></div>
+      <div class="form-group"><label>Garantie souhaitée</label>
+        <select id="garantie"><option value="Assurance emprunteur">Assurance emprunteur</option><option value="Acquisition locaux">Acquisition locaux</option><option value="Investissement matériel">Investissement matériel</option><option value="Rachat de cabinet">Rachat de cabinet</option><option value="Travaux & aménagement">Travaux & aménagement</option></select>
+      </div>
+      <div class="form-group"><label>Ville / Département</label><input id="ville" type="text" placeholder="Paris, 75"></div>
+      <div class="form-group"><label>Message (optionnel)</label><textarea id="message" placeholder="Décrivez votre situation ou besoin..."></textarea></div>
+      <button id="submit-btn" class="form-submit" type="submit">🚀 Envoyer ma demande de devis</button>
+      <p class="form-note">🔒 Données confidentielles — jamais revendues. Partenaire UNIM.</p>
+    </form>
+    <div id="form-success">
+      <div class="si">✅</div>
+      <h3>Demande envoyée !</h3>
+      <p>Merci, nous vous recontactons sous 48h. En attendant, vous pouvez réserver un bilan découverte gratuit.</p>
+      <button class="btn-primary" onclick="openCalendly()">📅 Réserver mon bilan gratuit</button>
+    </div>
+  </div>
+  <div class="sinistre-strip reveal"><div class="strip-icon">🏢</div><div class="strip-text"><strong>Sinistre ? On gère directement pour vous.</strong><span>Votre conseiller AssurAudio prend en charge votre dossier de A à Z — pas de plateforme anonyme, un suivi jusqu'à indemnisation.</span></div></div>
+</div></section>
+
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <strong>AssurAudio</strong>
+      <p>L'assureur spécialiste des audioprothésistes indépendants. Multirisque, RC Pro, santé, prévoyance — gestion des sinistres directement en agence.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/assuraudio" target="_blank" rel="noopener" class="social-btn">📸</a>
+        <a href="tel:+33632069049" class="social-btn">📞</a>
+        <a href="mailto:assuraudio@gmail.com" class="social-btn">✉️</a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Garanties</h4><ul><li><a href="multirisque.html">Multirisque & RC Pro</a></li><li><a href="sante.html">Santé</a></li><li><a href="prevoyance.html">Prévoyance</a></li><li><a href="association.html">Exercice en Asso</a></li><li><a href="emprunteur.html">Emprunteur</a></li></ul></div>
+    <div class="footer-col"><h4>Notre agence</h4><ul><li><a href="index.html#why">Qui sommes-nous</a></li><li><a href="index.html#sinistres">Gestion sinistres</a></li><li><a href="index.html#rdv">Bilan découverte</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="index.html#contact">Devis gratuit</a></li><li><a href="tel:+33632069049">06 32 06 90 49</a></li><li><a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AssurAudio — Cabinet PL · N° Orias : 07022305 - 12066667</span>
+    <div style="display:flex;gap:24px"><a href="mentions-legales.html" style="color:rgba(255,255,255,.35);text-decoration:none">Mentions légales</a><a href="confidentialite.html" style="color:rgba(255,255,255,.35);text-decoration:none">Confidentialité</a></div>
+  </div>
+</footer>
+
+<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+<script src="chatbot.js" defer></script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, addDoc, Timestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const app = initializeApp({
+    apiKey: "AIzaSyBlWYj-tOLHL_lAoY2ibXpx7QF2m4gvRfY",
+    authDomain: "gestion-assurances-parcs.firebaseapp.com",
+    projectId: "gestion-assurances-parcs",
+    storageBucket: "gestion-assurances-parcs.firebasestorage.app",
+    messagingSenderId: "549084650030",
+    appId: "1:549084650030:web:7905ea4d025d6f56e05dbf",
+  }, 'assuraudio-emprunteur');
+  const db = getFirestore(app);
+
+  document.getElementById('devis-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = '⏳ Envoi en cours…';
+    try {
+      await addDoc(collection(db, 'prospects_audio'), {
+        nom:       (document.getElementById('prenom').value + ' ' + document.getElementById('nom').value).trim(),
+        email:     document.getElementById('email').value.trim(),
+        telephone: document.getElementById('telephone').value.trim(),
+        ville:     document.getElementById('ville').value.trim(),
+        cabinet:   '',
+        structure: 'independant',
+        statut:    'prospect',
+        notes:     ['Intérêt : ' + document.getElementById('garantie').value, document.getElementById('message').value].filter(Boolean).join('\n'),
+        source:    'site_assuraudio_emprunteur',
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
+      document.getElementById('devis-form').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } catch(err) {
+      btn.disabled = false; btn.innerHTML = '🚀 Envoyer ma demande de devis';
+      alert('Une erreur est survenue. Merci de nous contacter au 06 32 06 90 49.');
+    }
+  });
+</script>
+
+<script>
+  const CALENDLY_URL = 'https://calendly.com/assuraudio/bilan-decouverte-30min';
+  function openCalendly() {
+    if (typeof Calendly !== 'undefined') Calendly.initPopupWidget({ url: CALENDLY_URL });
+    else window.open(CALENDLY_URL, '_blank');
+  }
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((el, i) => { if (el.isIntersecting) setTimeout(() => el.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.boxShadow = window.scrollY > 40 ? '0 4px 32px rgba(11,37,69,.12)' : '0 2px 24px rgba(11,37,69,.07)';
+  });
+</script>
+</body>
+</html>

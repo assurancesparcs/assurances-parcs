@@ -1,7 +1,9 @@
 {
+  "buildCommand": null,
+  "outputDirectory": ".",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)\\.html", "destination": "/$1.html" },
+    { "source": "/((?!api/).*)\\.(html|js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2)", "destination": "/$1.$2" },
     { "source": "/", "destination": "/index.html" }
   ],
   "headers": [

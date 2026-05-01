@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AssurAudio – L'assureur des audioprothésistes | Devis gratuit</title>
+<meta name="description" content="Assurance spécialisée pour audioprothésistes : multirisque, RC Pro, santé, prévoyance. Devis gratuit en 48h. Bilan découverte offert en visio.">
+<meta name="robots" content="index, follow">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Calendly -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0B2545;
+    --blue: #1A56A0;
+    --sky: #4A9FD4;
+    --ice: #EAF4FB;
+    --white: #FFFFFF;
+    --slate: #6B7E96;
+    --light: #F4F8FC;
+    --accent: #2BB5E0;
+    --green: #1DAA72;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: "DM Sans", sans-serif; color: var(--navy); background: var(--white); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74,159,212,0.15);
+    padding: 0 5%; height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 2px 24px rgba(11,37,69,0.07);
+  }
+  .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .logo-text { display: flex; flex-direction: column; line-height: 1; }
+  .logo-text strong { font-family: "Playfair Display", serif; font-size: 20px; color: var(--navy); }
+  .logo-text span { font-size: 11px; color: var(--sky); font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--navy); font-size: 14px; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover { color: var(--sky); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--blue), var(--sky)) !important;
+    color: white !important; padding: 10px 22px; border-radius: 8px;
+    font-weight: 600 !important; box-shadow: 0 4px 14px rgba(26,86,160,.3);
+    transition: transform .2s, box-shadow .2s !important;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,86,160,.4) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--navy) 0%, #0D3060 55%, #1A56A0 100%);
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding: 100px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ""; position: absolute; top: -20%; right: -10%; width: 70%; height: 120%;
+    background: radial-gradient(ellipse, rgba(43,181,224,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+    background: linear-gradient(to top, var(--white), transparent);
+  }
+  .hero-content { position: relative; z-index: 2; animation: fadeUp .8s ease both; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(43,181,224,.15); border: 1px solid rgba(43,181,224,.3);
+    color: var(--accent); font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 7px 16px; border-radius: 30px; margin-bottom: 28px;
+  }
+  .hero-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+  h1 { font-family: "Playfair Display", serif; font-size: clamp(34px,4vw,52px); color: white; line-height: 1.15; margin-bottom: 20px; font-weight: 700; }
+  h1 em { font-style: normal; color: var(--accent); }
+  .hero-sub { font-size: 17px; color: rgba(255,255,255,.75); line-height: 1.7; margin-bottom: 40px; max-width: 480px; font-weight: 300; }
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: white; text-decoration: none;
+    padding: 15px 30px; border-radius: 10px; font-weight: 600; font-size: 15px;
+    transition: transform .2s, box-shadow .2s; box-shadow: 0 6px 20px rgba(43,181,224,.4);
+    border: none; cursor: pointer; font-family: "DM Sans", sans-serif;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(43,181,224,.5); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: white; text-decoration: none;
+    padding: 15px 30px; border-radius: 10px; font-weight: 500; font-size: 15px;
+    border: 1.5px solid rgba(255,255,255,.3); transition: all .2s; cursor: pointer;
+    font-family: "DM Sans", sans-serif;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.6); }
+  .hero-image { position: relative; z-index: 2; display: flex; justify-content: center; animation: fadeUp .8s .2s ease both; }
+  .hero-card { position: relative; width: 90%; max-width: 480px; }
+  .hero-card img { width: 100%; height: 420px; object-fit: cover; border-radius: 20px; box-shadow: 0 30px 80px rgba(0,0,0,.4); }
+  .hero-stat-card {
+    position: absolute; background: white; border-radius: 14px; padding: 16px 20px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.2); display: flex; align-items: center; gap: 12px;
+  }
+  .hero-stat-card.top-left { top: -20px; left: -30px; }
+  .hero-stat-card.bottom-right { bottom: -16px; right: -20px; }
+  .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .stat-icon.blue { background: var(--ice); }
+  .stat-icon.green { background: #E8F8F0; }
+  .stat-text strong { display: block; font-size: 18px; font-weight: 700; color: var(--navy); }
+  .stat-text span { font-size: 12px; color: var(--slate); }
+
+  /* TRUST BAR */
+  .trust-bar {
+    background: var(--light); padding: 28px 5%;
+    display: flex; align-items: center; justify-content: center; gap: 48px;
+    border-bottom: 1px solid rgba(74,159,212,.15); flex-wrap: wrap;
+  }
+  .trust-item { display: flex; align-items: center; gap: 10px; color: var(--slate); font-size: 14px; font-weight: 500; }
+  .trust-item .icon { font-size: 20px; }
+
+  /* SINISTRES BANNER */
+  .sinistres-banner {
+    background: linear-gradient(135deg, #0B2545 0%, #1A3A6B 100%);
+    padding: 60px 5%; position: relative; overflow: hidden;
+  }
+  .sinistres-banner::before {
+    content: ""; position: absolute; top: 0; right: 0; width: 40%; height: 100%;
+    background: radial-gradient(ellipse at right, rgba(43,181,224,.15) 0%, transparent 65%);
+  }
+  .sinistres-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1200px; margin: 0 auto; position: relative; z-index: 2; }
+  .sinistres-content .section-label { color: var(--accent); }
+  .sinistres-content h2 { color: white; font-family: "Playfair Display", serif; font-size: clamp(26px,3vw,38px); margin-bottom: 16px; }
+  .sinistres-content .intro { font-size: 16px; color: rgba(255,255,255,.7); line-height: 1.7; margin-bottom: 32px; font-weight: 300; }
+  .sinistres-steps { display: flex; flex-direction: column; gap: 16px; }
+  .sinistre-step {
+    display: flex; align-items: flex-start; gap: 18px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; padding: 20px 22px; transition: background .25s;
+  }
+  .sinistre-step:hover { background: rgba(255,255,255,.1); }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--sky), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: white; flex-shrink: 0;
+  }
+  .step-body strong { display: block; color: white; font-size: 15px; margin-bottom: 3px; }
+  .step-body span { color: rgba(255,255,255,.6); font-size: 13px; line-height: 1.5; }
+  .sinistres-visual { position: relative; }
+  .sinistres-visual img { width: 100%; height: 380px; object-fit: cover; border-radius: 20px; box-shadow: 0 24px 60px rgba(0,0,0,.4); }
+  .sinistres-badge {
+    position: absolute; bottom: -18px; left: -20px;
+    background: white; border-radius: 14px; padding: 18px 22px;
+    box-shadow: 0 16px 40px rgba(0,0,0,.25); display: flex; align-items: center; gap: 14px;
+  }
+  .sinistres-badge-icon { width: 48px; height: 48px; border-radius: 12px; background: #E8F8F0; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .sinistres-badge-text strong { display: block; color: var(--navy); font-size: 16px; font-weight: 700; }
+  .sinistres-badge-text span { font-size: 12px; color: var(--slate); }
+
+  /* SECTION BASE */
+  section { padding: 90px 5%; }
+  .section-label { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--sky); margin-bottom: 12px; display: block; }
+  h2 { font-family: "Playfair Display", serif; font-size: clamp(28px,3.5vw,42px); color: var(--navy); line-height: 1.2; margin-bottom: 16px; }
+  .section-intro { font-size: 17px; color: var(--slate); line-height: 1.7; max-width: 580px; font-weight: 300; }
+
+  /* SERVICES */
+  .services { background: var(--white); }
+  .services-header { text-align: center; margin-bottom: 64px; }
+  .services-header .section-intro { margin: 0 auto; }
+  .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+  .service-card {
+    background: var(--light); border-radius: 18px; padding: 36px 30px;
+    border: 1px solid transparent; transition: all .3s;
+    position: relative; overflow: hidden; cursor: pointer;
+    text-decoration: none; color: inherit; display: block;
+  }
+  .service-card.featured { border-color: rgba(74,159,212,.3); background: linear-gradient(145deg, #f0f8ff, #e8f4fc); }
+  .service-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--sky));
+    transform: scaleX(0); transition: transform .3s; transform-origin: left;
+  }
+  .service-card.featured::before { transform: scaleX(1); }
+  .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(26,86,160,.12); border-color: rgba(74,159,212,.3); background: white; }
+  .service-icon {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue), var(--sky));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 22px; box-shadow: 0 8px 20px rgba(26,86,160,.25);
+  }
+  .featured-tag { position: absolute; top: 20px; right: 20px; background: var(--sky); color: white; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+  .service-card h3 { font-family: "Playfair Display", serif; font-size: 20px; color: var(--navy); margin-bottom: 10px; }
+  .service-card p { font-size: 14px; color: var(--slate); line-height: 1.65; margin-bottom: 20px; }
+  .service-link { font-size: 13px; font-weight: 600; color: var(--sky); display: flex; align-items: center; gap: 6px; transition: gap .2s; }
+  .service-card:hover .service-link { gap: 10px; }
+
+  /* WHY */
+  .why { background: var(--light); }
+  .why-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .why-image { position: relative; }
+  .why-image img { width: 100%; height: 460px; object-fit: cover; border-radius: 20px; box-shadow: 0 24px 60px rgba(11,37,69,.12); }
+  .why-badge { position: absolute; bottom: -18px; right: -20px; background: white; border-radius: 14px; padding: 18px 22px; box-shadow: 0 16px 40px rgba(11,37,69,.12); display: flex; align-items: center; gap: 12px; }
+  .why-badge-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--ice); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .why-badge-text strong { display: block; color: var(--navy); font-size: 17px; font-weight: 700; }
+  .why-badge-text span { font-size: 12px; color: var(--slate); }
+  .why-list { margin-top: 36px; display: flex; flex-direction: column; gap: 20px; }
+  .why-item { display: flex; align-items: flex-start; gap: 16px; }
+  .why-check {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--ice); border: 1.5px solid var(--sky);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px; color: var(--sky); font-size: 13px;
+  }
+  .why-item-text strong { display: block; color: var(--navy); font-size: 15px; margin-bottom: 3px; font-weight: 600; }
+  .why-item-text span { color: var(--slate); font-size: 13.5px; line-height: 1.55; }
+
+  /* ─── BILAN DÉCOUVERTE ─────────────────────────────────────────────────────── */
+  .rdv-section {
+    background: linear-gradient(135deg, var(--navy) 0%, #1A56A0 100%);
+    padding: 90px 5%; position: relative; overflow: hidden;
+  }
+  .rdv-section::before {
+    content: ""; position: absolute; top: -30%; right: -5%; width: 60%; height: 140%;
+    background: radial-gradient(ellipse, rgba(43,181,224,.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .rdv-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+    max-width: 1200px; margin: 0 auto; position: relative; z-index: 2;
+  }
+  .rdv-content .section-label { color: var(--accent); }
+  .rdv-content h2 { color: white; font-family: "Playfair Display", serif; margin-bottom: 16px; }
+  .rdv-content .rdv-intro { font-size: 17px; color: rgba(255,255,255,.8); line-height: 1.7; margin-bottom: 36px; font-weight: 300; }
+  .rdv-features { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 40px; }
+  .rdv-feature {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+    border-radius: 12px; padding: 18px 20px;
+    display: flex; align-items: center; gap: 12px;
+    color: white; font-size: 14px; font-weight: 500;
+  }
+  .rdv-feature-icon { font-size: 22px; flex-shrink: 0; }
+  .rdv-visual {
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.15);
+    border-radius: 24px; padding: 48px 40px; text-align: center;
+  }
+  .rdv-visual-icon { font-size: 64px; margin-bottom: 20px; }
+  .rdv-visual h3 { color: white; font-family: "Playfair Display", serif; font-size: 24px; margin-bottom: 12px; }
+  .rdv-visual p { color: rgba(255,255,255,.7); font-size: 15px; line-height: 1.6; margin-bottom: 32px; font-weight: 300; }
+  .rdv-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; text-align: left; }
+  .rdv-step-item { display: flex; align-items: center; gap: 14px; }
+  .rdv-step-num {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    background: var(--accent); color: white; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .rdv-step-item span { color: rgba(255,255,255,.8); font-size: 13.5px; }
+  .btn-calendly {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--accent); color: white; border: none; cursor: pointer;
+    padding: 16px 36px; border-radius: 10px; font-weight: 700; font-size: 16px;
+    font-family: "DM Sans", sans-serif; width: 100%;
+    transition: transform .2s, box-shadow .2s; box-shadow: 0 6px 24px rgba(43,181,224,.45);
+  }
+  .btn-calendly:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(43,181,224,.55); }
+  .rdv-note { color: rgba(255,255,255,.5); font-size: 12px; margin-top: 12px; }
+
+  /* CONTACT */
+  .contact { background: var(--white); }
+  .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+  .contact-info .section-intro { margin-bottom: 36px; }
+  .contact-visual { margin-top: 24px; border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(11,37,69,.1); }
+  .contact-visual img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .contact-options { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+  .contact-option {
+    display: flex; align-items: center; gap: 18px;
+    background: var(--light); border-radius: 14px; padding: 20px 24px;
+    box-shadow: 0 4px 16px rgba(11,37,69,.06); border: 1.5px solid transparent;
+    transition: all .25s; text-decoration: none; color: inherit; cursor: pointer;
+  }
+  .contact-option:hover { border-color: var(--sky); transform: translateX(6px); box-shadow: 0 8px 24px rgba(26,86,160,.12); }
+  .opt-icon {
+    width: 50px; height: 50px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--blue), var(--sky));
+    display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; color: white;
+  }
+  .opt-text strong { display: block; font-size: 15px; color: var(--navy); margin-bottom: 2px; }
+  .opt-text span { font-size: 13px; color: var(--slate); }
+
+  /* FORM */
+  .devis-form { background: var(--light); border-radius: 20px; padding: 40px; box-shadow: 0 10px 40px rgba(11,37,69,.08); border: 1px solid rgba(74,159,212,.15); }
+  .form-title { font-family: "Playfair Display", serif; font-size: 22px; color: var(--navy); margin-bottom: 24px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 0; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .form-group label { font-size: 13px; font-weight: 600; color: var(--navy); letter-spacing: .3px; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 12px 16px; border: 1.5px solid #E0EBF5; border-radius: 10px;
+    font-family: "DM Sans", sans-serif; font-size: 14px; color: var(--navy);
+    background: white; transition: border-color .2s, box-shadow .2s; outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--sky); box-shadow: 0 0 0 3px rgba(74,159,212,.12);
+  }
+  .form-group textarea { resize: vertical; min-height: 90px; }
+  .form-submit {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, var(--blue), var(--sky));
+    color: white; border: none; border-radius: 10px; font-size: 15px;
+    font-weight: 600; font-family: "DM Sans", sans-serif; cursor: pointer;
+    transition: all .25s; box-shadow: 0 6px 20px rgba(26,86,160,.3);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(26,86,160,.4); }
+  .form-submit:disabled { opacity: .7; cursor: not-allowed; transform: none; }
+  .form-note { text-align: center; font-size: 12px; color: var(--slate); margin-top: 14px; }
+  #form-success { display: none; text-align: center; padding: 32px 20px; }
+  #form-success .success-icon { font-size: 52px; margin-bottom: 16px; }
+  #form-success h3 { font-family: "Playfair Display", serif; font-size: 22px; color: var(--navy); margin-bottom: 10px; }
+  #form-success p { color: var(--slate); font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+
+  /* INSTAGRAM */
+  .instagram { background: var(--light); padding: 80px 5%; text-align: center; }
+  .instagram-header { margin-bottom: 48px; }
+  .instagram-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; max-width: 900px; margin: 0 auto 36px; }
+  .insta-tile { aspect-ratio: 1; border-radius: 14px; overflow: hidden; cursor: pointer; background: var(--ice); }
+  .insta-tile-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--ice), rgba(74,159,212,.2));
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    color: var(--sky); font-size: 13px; font-weight: 500; transition: transform .3s;
+  }
+  .insta-tile:hover .insta-tile-inner { transform: scale(1.05); }
+  .insta-tile-inner span { font-size: 32px; }
+  .insta-follow {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #833AB4, #FD1D1D, #FCB045);
+    color: white; padding: 13px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 15px; text-decoration: none;
+    transition: transform .2s, box-shadow .2s; box-shadow: 0 6px 20px rgba(131,58,180,.3);
+  }
+  .insta-follow:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(131,58,180,.4); }
+
+  /* PARTNER */
+  .partner { background: var(--ice); padding: 60px 5%; text-align: center; }
+  .partner-label { font-size: 11px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--slate); margin-bottom: 24px; display: block; }
+  .partner-logos { display: flex; align-items: center; justify-content: center; gap: 48px; }
+  .partner-logo-box {
+    background: white; border-radius: 14px; padding: 20px 36px;
+    box-shadow: 0 4px 16px rgba(11,37,69,.07);
+    display: flex; align-items: center; gap: 10px;
+    font-family: "Playfair Display", serif; font-weight: 700; font-size: 18px; color: var(--navy);
+  }
+
+  /* FOOTER */
+  footer { background: var(--navy); color: rgba(255,255,255,.7); padding: 60px 5% 32px; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+  .footer-brand strong { font-family: "Playfair Display", serif; font-size: 22px; color: white; display: block; margin-bottom: 12px; }
+  .footer-brand p { font-size: 14px; line-height: 1.65; margin-bottom: 24px; color: rgba(255,255,255,.55); }
+  .footer-social { display: flex; gap: 12px; }
+  .social-btn {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background .2s; text-decoration: none; color: white;
+  }
+  .social-btn:hover { background: var(--sky); }
+  .footer-col h4 { color: white; font-size: 14px; font-weight: 600; margin-bottom: 18px; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a { color: rgba(255,255,255,.5); text-decoration: none; font-size: 13.5px; transition: color .2s; }
+  .footer-col a:hover { color: var(--sky); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.1); padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: rgba(255,255,255,.35); flex-wrap: wrap; gap: 12px;
+  }
+
+  /* PHONE FLOAT */
+  .phone-float {
+    position: fixed; bottom: 28px; right: 28px;
+    background: linear-gradient(135deg, var(--blue), var(--sky));
+    color: white; padding: 14px 22px; border-radius: 50px;
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 14px; text-decoration: none;
+    box-shadow: 0 8px 28px rgba(26,86,160,.45); z-index: 999;
+    transition: transform .2s, box-shadow .2s; animation: fadeUp 1s .5s both;
+    border: none; cursor: pointer; font-family: "DM Sans", sans-serif;
+  }
+  .phone-float:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(26,86,160,.55); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; text-align: center; }
+    .hero-sub { margin: 0 auto 40px; }
+    .hero-actions { justify-content: center; }
+    .hero-image { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .sinistres-inner { grid-template-columns: 1fr; }
+    .sinistres-visual { display: none; }
+    .why-inner { grid-template-columns: 1fr; }
+    .why-image { display: none; }
+    .rdv-inner { grid-template-columns: 1fr; }
+    .contact-inner { grid-template-columns: 1fr; }
+    .instagram-grid { grid-template-columns: repeat(2,1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .rdv-features { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 110" width="42" height="42" style="flex-shrink:0">
+      <defs>
+        <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0B2545"/><stop offset="100%" stop-color="#1A56A0"/></linearGradient>
+        <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1A56A0"/><stop offset="100%" stop-color="#2BB5E0"/></linearGradient>
+      </defs>
+      <rect x="2" y="2" width="106" height="106" rx="22" fill="url(#lg1)"/>
+      <path d="M55 18 C38 18,26 32,26 48 C26 62,33 71,43 75 C46 76.5,48 79,48 83 C48 88,52 92,57 92 C62 92,65 88,65 83 L65 75 C65 72,67 70,70 68 C78 62,82 56,82 48 C82 33,70 18,55 18Z" fill="white" opacity="0.97"/>
+      <circle cx="55" cy="50" r="5.5" fill="url(#lg2)" opacity="0.85"/>
+      <path d="M18 57 C16 33,28 14,55 10 C82 14,94 33,92 57" fill="none" stroke="#2BB5E0" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
+      <circle cx="18" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+      <circle cx="92" cy="57" r="3.5" fill="#2BB5E0" opacity="0.9"/>
+    </svg>
+    <div class="logo-text">
+      <strong>AssurAudio</strong>
+      <span>L'assureur des audios</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Nos garanties</a></li>
+    <li><a href="#sinistres">Gestion sinistres</a></li>
+    <li><a href="#why">Pourquoi nous</a></li>
+    <li><a href="#rdv">📅 Bilan découverte</a></li>
+    <li><a href="#contact" class="nav-cta">Devis gratuit</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="hero-badge">Spécialiste audioprothésistes indépendants</div>
+    <h1>L'assurance taillée pour <em>votre cabinet</em></h1>
+    <p class="hero-sub">Multirisque, responsabilité civile, santé, prévoyance… Des garanties pensées exclusivement pour les audioprothésistes, avec un suivi des sinistres assuré directement par notre agence.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openCalendly()">📅 Bilan découverte offert — 30 min</button>
+      <a href="#contact" class="btn-secondary">📋 Devis gratuit</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <div class="hero-card">
+      <img src="images/consultation-patient.jpg" alt="Consultation audioprothésiste et patient">
+      <div class="hero-stat-card top-left">
+        <div class="stat-icon blue">🛡️</div>
+        <div class="stat-text"><strong>100%</strong><span>Dédié aux audios</span></div>
+      </div>
+      <div class="hero-stat-card bottom-right">
+        <div class="stat-icon green">⚡</div>
+        <div class="stat-text"><strong>48h</strong><span>Réponse garantie</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="icon">🏅</span> Partenaire UNIM</div>
+  <div class="trust-item"><span class="icon">🏢</span> Gestion sinistres en agence</div>
+  <div class="trust-item"><span class="icon">📍</span> Présent partout en France</div>
+  <div class="trust-item"><span class="icon">🤝</span> Interlocuteur dédié</div>
+  <div class="trust-item"><span class="icon">⚡</span> Devis en 48h</div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header reveal">
+    <span class="section-label">Nos garanties</span>
+    <h2>Toutes vos protections,<br>en un seul endroit</h2>
+    <p class="section-intro">En tant qu'audioprothésiste indépendant, vous avez des besoins spécifiques. Nous les connaissons mieux que personne — et nous gérons tout depuis notre agence.</p>
+  </div>
+  <div class="services-grid">
+    <a href="#contact" class="service-card featured reveal">
+      <div class="featured-tag">⭐ Prioritaire</div>
+      <div class="service-icon">🏢</div>
+      <h3>Multirisque Local</h3>
+      <p>Votre centre auditif, votre matériel audiologique, vos locaux — tout est couvert dans un contrat unique. Protection incendie, dégâts des eaux, vol, bris de matériel.</p>
+      <div class="service-link">En savoir plus →</div>
+    </a>
+    <a href="#contact" class="service-card featured reveal">
+      <div class="featured-tag">⭐ Prioritaire</div>
+      <div class="service-icon">⚖️</div>
+      <h3>Responsabilité Civile Professionnelle</h3>
+      <p>Protégez-vous contre les conséquences financières d'un dommage causé à un patient ou à un tiers dans le cadre de votre activité.</p>
+      <div class="service-link">En savoir plus →</div>
+    </a>
+    <a href="#contact" class="service-card reveal">
+      <div class="service-icon">🏥</div>
+      <h3>Santé</h3>
+      <p>Une complémentaire santé adaptée aux praticiens du secteur auditif. Remboursements optimisés, réseau de soins étendu.</p>
+      <div class="service-link">En savoir plus →</div>
+    </a>
+    <a href="#contact" class="service-card reveal">
+      <div class="service-icon">🛡️</div>
+      <h3>Prévoyance</h3>
+      <p>Protégez vos revenus en cas d'arrêt de travail, d'invalidité ou de décès. Des garanties solides sans mauvaise surprise.</p>
+      <div class="service-link">En savoir plus →</div>
+    </a>
+    <a href="#contact" class="service-card reveal">
+      <div class="service-icon">🤝</div>
+      <h3>Exercice en Association</h3>
+      <p>Vous exercez à plusieurs ? Nous sécurisons les risques liés à l'association professionnelle avec des garanties collectives sur mesure.</p>
+      <div class="service-link">En savoir plus →</div>
+    </a>
+    <a href="#contact" class="service-card reveal">
+      <div class="service-icon">🏦</div>
+      <h3>Emprunteur</h3>
+      <p>Besoin d'un crédit pour développer votre activité ? Notre assurance emprunteur vous ouvre les portes du financement.</p>
+      <div class="service-link">En savoir plus →</div>
+    </a>
+  </div>
+</section>
+
+<!-- SINISTRES BANNER -->
+<div class="sinistres-banner" id="sinistres">
+  <div class="sinistres-inner">
+    <div class="sinistres-content reveal">
+      <span class="section-label">Notre engagement fort</span>
+      <h2>Votre sinistre géré directement par notre agence</h2>
+      <p class="intro">Chez AssurAudio, vous n'êtes jamais renvoyé vers un numéro vert anonyme. En cas de sinistre, c'est nous qui prenons en charge votre dossier, de A à Z.</p>
+      <div class="sinistres-steps">
+        <div class="sinistre-step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Vous nous contactez directement</strong>
+            <span>Un appel ou un email à votre conseiller dédié — pas de plateforme impersonnelle.</span>
+          </div>
+        </div>
+        <div class="sinistre-step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Nous instruisons votre dossier</strong>
+            <span>Notre agence coordonne tout avec l'assureur. Vous n'avez qu'à nous faire confiance.</span>
+          </div>
+        </div>
+        <div class="sinistre-step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Vous êtes indemnisé rapidement</strong>
+            <span>Suivi en temps réel, délais maîtrisés, reprise d'activité sereine.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sinistres-visual reveal">
+      <img src="images/consultation-accueil.jpg" alt="Conseillère AssurAudio gérant un dossier sinistre">
+      <div class="sinistres-badge">
+        <div class="sinistres-badge-icon">✅</div>
+        <div class="sinistres-badge-text">
+          <strong>Gestion 100% agence</strong>
+          <span>Votre conseiller suit votre sinistre jusqu'à clôture</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY -->
+<section class="why" id="why">
+  <div class="why-inner">
+    <div class="why-image reveal">
+      <img src="images/appareil-auditif.jpg" alt="Pose d'appareil auditif — audioprothésiste">
+      <div class="why-badge">
+        <div class="why-badge-icon">🎖️</div>
+        <div class="why-badge-text">
+          <strong>Partenaire certifié</strong>
+          <span>UNIM – Mutuelle interprofessionnelle</span>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <span class="section-label">Pourquoi AssurAudio</span>
+      <h2>Pas un assureur généraliste.<br>Votre assureur.</h2>
+      <p class="section-intro">Chez AssurAudio, nous ne faisons qu'une chose : protéger les audioprothésistes. C'est notre spécialité, notre passion — et notre engagement quotidien.</p>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div class="why-item-text">
+            <strong>Expertise sectorielle unique</strong>
+            <span>Nous connaissons les spécificités de votre métier, de votre local et de vos risques professionnels mieux que quiconque.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div class="why-item-text">
+            <strong>Gestion des sinistres en agence</strong>
+            <span>En cas de problème, votre conseiller prend en charge votre dossier directement, sans intermédiaire anonyme.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div class="why-item-text">
+            <strong>Partenaire UNIM de confiance</strong>
+            <span>Nous travaillons avec les assureurs de référence du secteur de la santé et de l'audiologie.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-check">✓</div>
+          <div class="why-item-text">
+            <strong>Devis gratuit et sans engagement</strong>
+            <span>Aucune pression, aucune surprise. On vous présente clairement ce que vous paierez et ce que vous couvrez.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── BILAN DÉCOUVERTE 30 MIN ───────────────────────────────────────────────── -->
+<section class="rdv-section" id="rdv">
+  <div class="rdv-inner">
+    <div class="rdv-content reveal">
+      <span class="section-label">Offert — Sans engagement</span>
+      <h2>Un bilan découverte de 30 min pour faire le point sur vos assurances</h2>
+      <p class="rdv-intro">Vous ne savez pas si vos contrats actuels vous protègent vraiment ? En 30 minutes en visio, nous analysons votre situation, identifions les manques, et vous proposons des solutions concrètes — sans pression, sans engagement.</p>
+      <div class="rdv-features">
+        <div class="rdv-feature"><span class="rdv-feature-icon">⏱️</span> 30 minutes chrono</div>
+        <div class="rdv-feature"><span class="rdv-feature-icon">📹</span> Visio (Google Meet)</div>
+        <div class="rdv-feature"><span class="rdv-feature-icon">🆓</span> 100% gratuit</div>
+        <div class="rdv-feature"><span class="rdv-feature-icon">🚫</span> Sans engagement</div>
+      </div>
+      <button class="btn-primary" onclick="openCalendly()" style="font-size:16px;padding:16px 36px">
+        📅 Réserver mon bilan découverte
+      </button>
+    </div>
+    <div class="rdv-visual reveal">
+      <div class="rdv-visual-icon">📹</div>
+      <h3>Ce qu'on abordera ensemble</h3>
+      <p>Un échange structuré pour repartir avec une vision claire de votre couverture.</p>
+      <div class="rdv-steps">
+        <div class="rdv-step-item">
+          <div class="rdv-step-num">1</div>
+          <span>Votre situation actuelle — vos contrats en cours, vos besoins</span>
+        </div>
+        <div class="rdv-step-item">
+          <div class="rdv-step-num">2</div>
+          <span>Les risques non couverts — les angles morts à combler</span>
+        </div>
+        <div class="rdv-step-item">
+          <div class="rdv-step-num">3</div>
+          <span>Les solutions adaptées — ce que nous pouvons faire pour vous</span>
+        </div>
+      </div>
+      <button class="btn-calendly" onclick="openCalendly()">
+        📅 Choisir mon créneau
+      </button>
+      <p class="rdv-note">Disponible du lundi au vendredi, 9h–18h · Réponse de confirmation immédiate</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <span class="section-label">Prenons contact</span>
+      <h2>Un devis gratuit en 48h, sans engagement</h2>
+      <p class="section-intro">Choisissez comment vous souhaitez qu'on échange. Nous nous adaptons à votre emploi du temps.</p>
+      <div class="contact-options">
+        <button class="contact-option" onclick="openCalendly()">
+          <div class="opt-icon">📅</div>
+          <div class="opt-text">
+            <strong>Bilan découverte visio — 30 min</strong>
+            <span>Gratuit · Choisissez votre créneau en ligne</span>
+          </div>
+        </button>
+        <a href="tel:+33632069049" class="contact-option">
+          <div class="opt-icon">📞</div>
+          <div class="opt-text">
+            <strong>Appeler directement</strong>
+            <span>06 32 06 90 49 · Lun-Ven 9h-18h · Réponse sous 2h</span>
+          </div>
+        </a>
+        <a href="mailto:assuraudio@gmail.com" class="contact-option">
+          <div class="opt-icon">✉️</div>
+          <div class="opt-text">
+            <strong>Envoyer un email</strong>
+            <span>assuraudio@gmail.com · Réponse sous 24h</span>
+          </div>
+        </a>
+      </div>
+      <div class="contact-visual">
+        <img src="images/consultation-patient.jpg" alt="Conseiller AssurAudio en consultation">
+      </div>
+    </div>
+
+    <div class="devis-form reveal">
+      <p class="form-title">📋 Demande de devis gratuit</p>
+      <form id="devis-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" placeholder="Jean" required>
+          </div>
+          <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" placeholder="Dupont" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" placeholder="jean.dupont@moncentre.fr" required>
+        </div>
+        <div class="form-group">
+          <label for="telephone">Téléphone *</label>
+          <input type="tel" id="telephone" placeholder="06 32 06 90 49" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cabinet">Cabinet / Enseigne</label>
+            <input type="text" id="cabinet" placeholder="Centre Audition Dupont">
+          </div>
+          <div class="form-group">
+            <label for="ville">Ville</label>
+            <input type="text" id="ville" placeholder="Lyon, Paris…">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="garantie">Vous êtes intéressé(e) par</label>
+          <select id="garantie">
+            <option value="">Choisir une garantie...</option>
+            <option>Multirisque local</option>
+            <option>Responsabilité Civile Professionnelle</option>
+            <option>Santé</option>
+            <option>Prévoyance</option>
+            <option>Exercice en association</option>
+            <option>Emprunteur</option>
+            <option>Plusieurs garanties</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message (optionnel)</label>
+          <textarea id="message" placeholder="Décrivez votre situation ou votre besoin..."></textarea>
+        </div>
+        <button type="submit" class="form-submit" id="submit-btn">
+          🚀 Envoyer ma demande de devis
+        </button>
+        <p class="form-note">🔒 Vos données sont confidentielles et ne sont jamais revendues.</p>
+      </form>
+      <div id="form-success">
+        <div class="success-icon">🎉</div>
+        <h3>Demande bien reçue !</h3>
+        <p>Nous vous recontactons sous 48h avec votre devis personnalisé.<br>En attendant, profitez de votre bilan découverte gratuit.</p>
+        <button class="btn-primary" style="margin:0 auto" onclick="openCalendly()">
+          📅 Réserver mon bilan visio gratuit
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="instagram" id="instagram">
+  <div class="instagram-header reveal">
+    <span class="section-label">Suivez-nous</span>
+    <h2>AssurAudio sur Instagram</h2>
+    <p class="section-intro" style="margin:0 auto">Conseils, actualités du secteur auditif, témoignages et coulisses — rejoignez notre communauté.</p>
+  </div>
+  <div class="instagram-grid reveal">
+    <div class="insta-tile"><div class="insta-tile-inner"><span>📷</span>Actualités</div></div>
+    <div class="insta-tile"><div class="insta-tile-inner"><span>💡</span>Conseils</div></div>
+    <div class="insta-tile"><div class="insta-tile-inner"><span>🎧</span>Audiologie</div></div>
+    <div class="insta-tile"><div class="insta-tile-inner"><span>🤝</span>Témoignages</div></div>
+  </div>
+  <a href="https://www.instagram.com/assuraudio" target="_blank" rel="noopener" class="insta-follow">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    Suivre @assuraudio
+  </a>
+</section>
+
+<!-- PARTNER -->
+<div class="partner">
+  <span class="partner-label">Partenaire officiel</span>
+  <div class="partner-logos">
+    <div class="partner-logo-box">🎖️ UNIM — Mutuelle interprofessionnelle</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <strong>AssurAudio</strong>
+      <p>L'assureur spécialiste des audioprothésistes indépendants. Multirisque, RC Pro, santé, prévoyance — toutes vos protections, gérées directement par notre agence.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/assuraudio" target="_blank" rel="noopener" class="social-btn">📸</a>
+        <a href="tel:+33632069049" class="social-btn">📞</a>
+        <a href="mailto:assuraudio@gmail.com" class="social-btn">✉️</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Garanties</h4>
+      <ul>
+        <li><a href="#services">Multirisque local</a></li>
+        <li><a href="#services">RC Professionnelle</a></li>
+        <li><a href="#services">Santé</a></li>
+        <li><a href="#services">Prévoyance</a></li>
+        <li><a href="#services">Exercice en Asso</a></li>
+        <li><a href="#services">Emprunteur</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Notre agence</h4>
+      <ul>
+        <li><a href="#why">Qui sommes-nous</a></li>
+        <li><a href="#sinistres">Gestion des sinistres</a></li>
+        <li><a href="#rdv">Bilan découverte</a></li>
+        <li><a href="#instagram">Instagram</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#contact">Devis gratuit</a></li>
+        <li><a href="tel:+33632069049">06 32 06 90 49</a></li>
+        <li><a href="mailto:assuraudio@gmail.com">assuraudio@gmail.com</a></li>
+        <li><a href="#rdv">RDV visio gratuit</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 AssurAudio — Cabinet Poncey Lebas · N° Orias : 07022305 - 12066667</span>
+    <div style="display:flex;gap:24px">
+      <a href="mentions-legales.html" style="color:rgba(255,255,255,.35);text-decoration:none">Mentions légales</a>
+      <a href="confidentialite.html" style="color:rgba(255,255,255,.35);text-decoration:none">Confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+<!-- BOUTON FLOTTANT -->
+<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+
+<!-- ─── SCRIPTS ──────────────────────────────────────────────────────────────── -->
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getFirestore, collection, addDoc, Timestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyBlWYj-tOLHL_lAoY2ibXpx7QF2m4gvRfY",
+    authDomain:        "gestion-assurances-parcs.firebaseapp.com",
+    projectId:         "gestion-assurances-parcs",
+    storageBucket:     "gestion-assurances-parcs.firebasestorage.app",
+    messagingSenderId: "549084650030",
+    appId:             "1:549084650030:web:7905ea4d025d6f56e05dbf",
+  };
+
+  const app = initializeApp(firebaseConfig, 'assuraudio-site');
+  const db  = getFirestore(app);
+
+  document.getElementById('devis-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Envoi en cours…';
+
+    const prenom   = document.getElementById('prenom').value.trim();
+    const nom      = document.getElementById('nom').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const telephone= document.getElementById('telephone').value.trim();
+    const cabinet  = document.getElementById('cabinet').value.trim();
+    const ville    = document.getElementById('ville').value.trim();
+    const garantie = document.getElementById('garantie').value;
+    const message  = document.getElementById('message').value.trim();
+
+    const notes = [
+      garantie  ? `Intérêt : ${garantie}` : '',
+      message   ? `Message : ${message}` : '',
+    ].filter(Boolean).join('\n');
+
+    try {
+      await addDoc(collection(db, 'prospects_audio'), {
+        nom:       `${prenom} ${nom}`.trim(),
+        cabinet:   cabinet || '',
+        email:     email,
+        telephone: telephone,
+        ville:     ville,
+        structure: 'independant',
+        statut:    'prospect',
+        notes:     notes,
+        source:    'site_assuraudio',
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now(),
+      });
+
+      document.getElementById('devis-form').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Envoyer ma demande de devis';
+      alert('Une erreur est survenue. Merci de nous contacter directement au 06 32 06 90 49.');
+      console.error(err);
+    }
+  });
+</script>
+
+<script>
+  // Calendly — remplacez l'URL par votre lien Calendly
+  const CALENDLY_URL = 'https://calendly.com/assuraudio/bilan-decouverte-30min';
+
+  function openCalendly() {
+    if (typeof Calendly !== 'undefined') {
+      Calendly.initPopupWidget({ url: CALENDLY_URL });
+    } else {
+      window.open(CALENDLY_URL, '_blank');
+    }
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Êtes-vous bien assuré ? – AssurAudio</title>
+  <meta name="description" content="Testez votre couverture assurance en tant qu'audioprothésiste. Quiz gratuit en 2 minutes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #1557b0;
+      --teal: #00897b;
+      --gold: #f9a825;
+      --dark: #1a1a2e;
+      --gray: #f5f7fa;
+      --red: #e53935;
+      --orange: #fb8c00;
+      --green: #43a047;
+      --radius: 12px;
+    }
+    body { font-family: 'Inter', sans-serif; color: #333; background: var(--gray); min-height: 100vh; }
+
+    /* NAV QUIZ */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #e8ecf0;
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .logo { font-size: 1.3rem; font-weight: 800; color: var(--blue); text-decoration: none; }
+    .logo span { color: var(--teal); }
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #666;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--blue); }
+
+    /* MAIN */
+    main {
+      max-width: 760px;
+      margin: 40px auto;
+      padding: 0 20px 80px;
+    }
+
+    /* INTRO */
+    .quiz-intro { text-align: center; margin-bottom: 36px; }
+    .quiz-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+    .quiz-intro h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+    .quiz-intro p { color: #666; font-size: 0.95rem; }
+
+    /* PROGRESS */
+    .progress-bar-wrap {
+      background: #e0e6f0;
+      border-radius: 8px;
+      height: 8px;
+      margin-bottom: 32px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      height: 100%;
+      border-radius: 8px;
+      transition: width .4s ease;
+    }
+    .progress-label { text-align: right; font-size: 0.78rem; color: #888; margin-bottom: 6px; }
+
+    /* QUESTION CARDS */
+    .question-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px 28px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      transition: box-shadow .2s;
+    }
+    .question-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+    .q-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .q-text { font-size: 1.05rem; font-weight: 700; color: var(--dark); margin-bottom: 20px; line-height: 1.5; }
+    .q-options { display: flex; flex-direction: column; gap: 10px; }
+    .q-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border: 2px solid #e0e6f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      font-size: 0.9rem;
+    }
+    .q-option:hover { border-color: var(--blue); background: #f0f6ff; }
+    .q-option input[type="radio"] { accent-color: var(--blue); width: 18px; height: 18px; flex-shrink: 0; }
+    .q-option.selected { border-color: var(--blue); background: #e8f0fe; }
+
+    /* SUBMIT */
+    .quiz-actions { text-align: center; margin-top: 28px; }
+    .btn-quiz {
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 15px 36px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(26,115,232,0.3);
+    }
+    .btn-quiz:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,115,232,0.4); }
+    .btn-quiz:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* RESULTS */
+    #results { display: none; }
+    .result-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 32px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      margin-bottom: 24px;
+    }
+    .score-ring {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 2rem;
+      font-weight: 800;
+      border: 6px solid;
+    }
+    .score-ring .score-pct { font-size: 0.75rem; font-weight: 600; }
+    .score-ring.bad { border-color: var(--red); color: var(--red); background: #fff5f5; }
+    .score-ring.medium { border-color: var(--orange); color: var(--orange); background: #fff8f0; }
+    .score-ring.good { border-color: var(--green); color: var(--green); background: #f0fff4; }
+    .result-title { font-size: 1.5rem; font-weight: 800; color: var(--dark); margin-bottom: 8px; }
+    .result-sub { color: #666; font-size: 0.95rem; margin-bottom: 28px; }
+
+    /* GAPS */
+    .gaps-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      margin-bottom: 24px;
+    }
+    .gaps-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
+    .gap-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .gap-item:last-child { border-bottom: none; }
+    .gap-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .gap-icon.red { background: #fde8e8; color: var(--red); }
+    .gap-icon.orange { background: #fff3e0; color: var(--orange); }
+    .gap-icon.green { background: #e8f5e9; color: var(--green); }
+    .gap-text { font-size: 0.88rem; color: #555; line-height: 1.6; }
+    .gap-text strong { color: var(--dark); }
+
+    /* LEAD FORM */
+    .lead-form-card {
+      background: linear-gradient(135deg, var(--dark), #16213e);
+      border-radius: 20px;
+      padding: 36px 32px;
+      color: #fff;
+    }
+    .lead-form-card h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; }
+    .lead-form-card p { opacity: 0.8; font-size: 0.9rem; margin-bottom: 24px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    @media(max-width:600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .form-field label { font-size: 0.8rem; font-weight: 600; opacity: 0.85; }
+    .form-field input, .form-field select, .form-field textarea {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: border-color .2s;
+    }
+    .form-field input::placeholder { color: rgba(255,255,255,0.45); }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      outline: none;
+      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.15);
+    }
+    .form-field select option { color: #333; background: #fff; }
+    .btn-lead {
+      width: 100%;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s;
+      margin-top: 8px;
+    }
+    .btn-lead:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.3); }
+    .form-legal { font-size: 0.73rem; opacity: 0.55; margin-top: 12px; line-height: 1.6; }
+    .success-msg {
+      text-align: center;
+      padding: 20px;
+    }
+    .success-msg .icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .success-msg h4 { font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+    .success-msg p { opacity: 0.8; font-size: 0.9rem; }
+    .btn-calendly {
+      display: inline-block;
+      margin-top: 16px;
+      background: #fff;
+      color: var(--blue);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .btn-calendly:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">Assur<span>Audio</span></a>
+    <a class="back-link" href="index.html">← Retour au site</a>
+  </div>
+</nav>
+
+<main>
+  <!-- INTRO -->
+  <div class="quiz-intro">
+    <div class="quiz-badge">Quiz gratuit · 2 minutes</div>
+    <h1>Êtes-vous bien assuré ?</h1>
+    <p>7 questions pour évaluer votre couverture assurance en tant qu'audioprothésiste.</p>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div id="quiz-section">
+    <div class="progress-label" id="progress-label">Question 0 / 7</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question-card">
+      <div class="q-num">Question 1 / 7</div>
+      <div class="q-text">Avez-vous une assurance Responsabilité Civile Professionnelle à jour ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q1" value="2" onchange="updateProgress(1)" /> Oui, à jour et vérifiée récemment</label>
+        <label class="q-option"><input type="radio" name="q1" value="1" onchange="updateProgress(1)" /> Oui, mais je ne l'ai pas vérifiée depuis longtemps</label>
+        <label class="q-option"><input type="radio" name="q1" value="0" onchange="updateProgress(1)" /> Non ou je ne sais pas</label>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question-card">
+      <div class="q-num">Question 2 / 7</div>
+      <div class="q-text">Votre centre est-il couvert contre l'incendie, le vol et les dégâts des eaux ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q2" value="2" onchange="updateProgress(2)" /> Oui, avec un inventaire à jour du matériel</label>
+        <label class="q-option"><input type="radio" name="q2" value="1" onchange="updateProgress(2)" /> Oui, mais les montants n'ont pas été réévalués</label>
+        <label class="q-option"><input type="radio" name="q2" value="0" onchange="updateProgress(2)" /> Non ou couverture insuffisante</label>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question-card">
+      <div class="q-num">Question 3 / 7</div>
+      <div class="q-text">En cas d'arrêt maladie de plus d'un mois, percevriez-vous un revenu de remplacement suffisant ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q3" value="2" onchange="updateProgress(3)" /> Oui, j'ai une prévoyance avec indemnités journalières adaptées</label>
+        <label class="q-option"><input type="radio" name="q3" value="1" onchange="updateProgress(3)" /> Partiellement, mais le montant est insuffisant</label>
+        <label class="q-option"><input type="radio" name="q3" value="0" onchange="updateProgress(3)" /> Non, je n'ai pas de prévoyance</label>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question-card">
+      <div class="q-num">Question 4 / 7</div>
+      <div class="q-text">Vos charges fixes (loyer, salaires, crédit) seraient-elles couvertes en cas de sinistre grave ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q4" value="2" onchange="updateProgress(4)" /> Oui, j'ai une assurance perte d'exploitation</label>
+        <label class="q-option"><input type="radio" name="q4" value="1" onchange="updateProgress(4)" /> Je ne suis pas certain(e) de la couverture exacte</label>
+        <label class="q-option"><input type="radio" name="q4" value="0" onchange="updateProgress(4)" /> Non, je n'ai rien prévu pour ce cas</label>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question-card">
+      <div class="q-num">Question 5 / 7</div>
+      <div class="q-text">Avez-vous une mutuelle santé adaptée à votre statut de professionnel de santé libéral ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q5" value="2" onchange="updateProgress(5)" /> Oui, avec de bons remboursements optique/dentaire et hospitalisation</label>
+        <label class="q-option"><input type="radio" name="q5" value="1" onchange="updateProgress(5)" /> Oui, mais les remboursements sont limités</label>
+        <label class="q-option"><input type="radio" name="q5" value="0" onchange="updateProgress(5)" /> Non ou couverture basique seulement</label>
+      </div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="question-card">
+      <div class="q-num">Question 6 / 7</div>
+      <div class="q-text">Si vous avez un crédit professionnel, avez-vous vérifié les garanties de votre assurance emprunteur ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q6" value="2" onchange="updateProgress(6)" /> Oui, et j'ai comparé avec d'autres offres (délégation d'assurance)</label>
+        <label class="q-option"><input type="radio" name="q6" value="1" onchange="updateProgress(6)" /> J'ai celle proposée par ma banque, sans avoir comparé</label>
+        <label class="q-option"><input type="radio" name="q6" value="0" onchange="updateProgress(6)" /> Je n'ai pas de crédit professionnel (ou je ne sais pas)</label>
+      </div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="question-card">
+      <div class="q-num">Question 7 / 7</div>
+      <div class="q-text">Avez-vous revu l'ensemble de vos contrats d'assurance dans les 12 derniers mois ?</div>
+      <div class="q-options">
+        <label class="q-option"><input type="radio" name="q7" value="2" onchange="updateProgress(7)" /> Oui, avec un courtier spécialisé dans mon secteur</label>
+        <label class="q-option"><input type="radio" name="q7" value="1" onchange="updateProgress(7)" /> Non, mais je prévois de le faire prochainement</label>
+        <label class="q-option"><input type="radio" name="q7" value="0" onchange="updateProgress(7)" /> Non, pas depuis plusieurs années</label>
+      </div>
+    </div>
+
+    <div class="quiz-actions">
+      <button class="btn-quiz" id="submit-quiz" onclick="showResults()" disabled>
+        Voir mes résultats →
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="results">
+    <div class="result-card">
+      <div class="score-ring" id="score-ring">
+        <span id="score-pct-display">0%</span>
+        <span class="score-pct">couvert</span>
+      </div>
+      <div class="result-title" id="result-title"></div>
+      <div class="result-sub" id="result-sub"></div>
+    </div>
+
+    <div class="gaps-card">
+      <h3>📋 Analyse de votre couverture</h3>
+      <div id="gaps-list"></div>
+    </div>
+
+    <div class="lead-form-card">
+      <div id="lead-form-content">
+        <h3>Obtenez votre audit assurance gratuit</h3>
+        <p>Un courtier AssurAudio analyse vos résultats et vous propose un plan de couverture optimisé sous 48h.</p>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Prénom *</label>
+            <input type="text" id="lead-prenom" placeholder="Jean" required />
+          </div>
+          <div class="form-field">
+            <label>Nom *</label>
+            <input type="text" id="lead-nom" placeholder="Dupont" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Email *</label>
+            <input type="email" id="lead-email" placeholder="jean.dupont@moncentre.fr" required />
+          </div>
+          <div class="form-field">
+            <label>Téléphone *</label>
+            <input type="tel" id="lead-tel" placeholder="06 12 34 56 78" required />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Ville de votre centre</label>
+          <input type="text" id="lead-ville" placeholder="Paris" />
+        </div>
+        <button class="btn-lead" onclick="submitLead()">Recevoir mon audit gratuit →</button>
+        <p class="form-legal">En soumettant ce formulaire, vous acceptez d'être contacté par AssurAudio concernant votre audit assurance. Vos données sont protégées conformément au RGPD.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- CALENDLY -->
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<!-- FIREBASE -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  const app = initializeApp({
+    apiKey: "AIzaSyBlWYj-tOLHL_lAoY2ibXpx7QF2m4gvRfY",
+    authDomain: "gestion-assurances-parcs.firebaseapp.com",
+    projectId: "gestion-assurances-parcs",
+    storageBucket: "gestion-assurances-parcs.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+  }, 'assuraudio-quiz');
+
+  const db = getFirestore(app);
+
+  window.submitLead = async function() {
+    const prenom = document.getElementById('lead-prenom').value.trim();
+    const nom = document.getElementById('lead-nom').value.trim();
+    const email = document.getElementById('lead-email').value.trim();
+    const tel = document.getElementById('lead-tel').value.trim();
+    const ville = document.getElementById('lead-ville').value.trim();
+
+    if (!prenom || !nom || !email || !tel) {
+      alert('Merci de remplir tous les champs obligatoires.');
+      return;
+    }
+
+    const score = window._quizScore || 0;
+    const total = window._quizTotal || 14;
+
+    try {
+      await addDoc(collection(db, 'prospects_audio'), {
+        prenom, nom, email, telephone: tel, ville,
+        score_quiz: score,
+        score_total: total,
+        score_pct: Math.round((score / total) * 100),
+        source: 'site_assuraudio_quiz',
+        date: serverTimestamp()
+      });
+      document.getElementById('lead-form-content').innerHTML = `
+        <div class="success-msg">
+          <div class="icon">✅</div>
+          <h4>Demande envoyée !</h4>
+          <p>Un conseiller AssurAudio vous contacte sous 48h avec votre audit personnalisé.</p>
+          <button class="btn-calendly" onclick="Calendly.initPopupWidget({url:'https://calendly.com/assuraudio/bilan-decouverte-30min'})">
+            📅 Prendre rendez-vous maintenant
+          </button>
+        </div>
+      `;
+    } catch (err) {
+      console.error(err);
+      alert('Une erreur est survenue. Veuillez réessayer ou nous contacter par email.');
+    }
+  };
+</script>
+
+<script>
+  const sc = {};
+  const totalQ = 7;
+  let answered = 0;
+
+  function updateProgress(q) {
+    const radios = document.querySelectorAll(`input[name="q${q}"]`);
+    const wasAnswered = sc[q] !== undefined;
+    radios.forEach(r => {
+      if (r.checked) sc[q] = parseInt(r.value);
+    });
+    if (!wasAnswered) answered++;
+    document.getElementById('progress-label').textContent = `Question ${answered} / ${totalQ}`;
+    document.getElementById('progress-bar').style.width = `${(answered / totalQ) * 100}%`;
+    document.getElementById('submit-quiz').disabled = (answered < totalQ);
+
+    // highlight selected option
+    const card = document.querySelector(`input[name="q${q}"]`).closest('.question-card');
+    card.querySelectorAll('.q-option').forEach(opt => opt.classList.remove('selected'));
+    radios.forEach(r => { if (r.checked) r.closest('.q-option').classList.add('selected'); });
+  }
+
+  function showResults() {
+    const total = Object.values(sc).reduce((a, b) => a + b, 0);
+    const maxTotal = totalQ * 2;
+    const pct = Math.round((total / maxTotal) * 100);
+
+    window._quizScore = total;
+    window._quizTotal = maxTotal;
+
+    document.getElementById('quiz-section').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+
+    const ring = document.getElementById('score-ring');
+    const titleEl = document.getElementById('result-title');
+    const subEl = document.getElementById('result-sub');
+
+    document.getElementById('score-pct-display').textContent = pct + '%';
+
+    if (pct < 40) {
+      ring.className = 'score-ring bad';
+      titleEl.textContent = 'Votre couverture est insuffisante';
+      subEl.textContent = 'Vous avez des zones de risque importantes. Un audit s\'impose.';
+    } else if (pct < 70) {
+      ring.className = 'score-ring medium';
+      titleEl.textContent = 'Votre couverture est partielle';
+      subEl.textContent = 'Quelques points méritent d\'être renforcés pour être pleinement protégé.';
+    } else {
+      ring.className = 'score-ring good';
+      titleEl.textContent = 'Votre couverture est bonne';
+      subEl.textContent = 'Bravo ! Quelques optimisations peuvent encore améliorer votre protection.';
+    }
+
+    const gaps = [
+      { q: 'q1', label: 'Responsabilité Civile Professionnelle', hint: 'Couverture pour les dommages causés à vos patients ou tiers' },
+      { q: 'q2', label: 'Multirisque du centre', hint: 'Protection incendie, vol, dégâts des eaux et matériel' },
+      { q: 'q3', label: 'Prévoyance arrêt de travail', hint: 'Maintien de revenu en cas d\'incapacité temporaire' },
+      { q: 'q4', label: 'Perte d\'exploitation', hint: 'Couverture de vos charges fixes en cas de sinistre grave' },
+      { q: 'q5', label: 'Mutuelle santé professionnelle', hint: 'Remboursements renforcés adaptés à votre statut' },
+      { q: 'q6', label: 'Assurance emprunteur optimisée', hint: 'Délégation d\'assurance pour réduire le coût de votre crédit' },
+      { q: 'q7', label: 'Audit annuel des contrats', hint: 'Révision et optimisation de l\'ensemble de vos couvertures' },
+    ];
+
+    const gapsList = document.getElementById('gaps-list');
+    gapsList.innerHTML = '';
+    gaps.forEach((g, i) => {
+      const val = sc[`q${i + 1}`] ?? 0;
+      let iconClass, iconText;
+      if (val === 2) { iconClass = 'green'; iconText = '✓'; }
+      else if (val === 1) { iconClass = 'orange'; iconText = '!'; }
+      else { iconClass = 'red'; iconText = '✗'; }
+
+      gapsList.innerHTML += `
+        <div class="gap-item">
+          <div class="gap-icon ${iconClass}">${iconText}</div>
+          <div class="gap-text"><strong>${g.label}</strong><br>${g.hint}</div>
+        </div>
+      `;
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+<!-- CHATBOT -->
+<script src="chatbot.js"></script>
+
+</body>
+</html>

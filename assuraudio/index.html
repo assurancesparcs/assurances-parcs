@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AssurAudio – Assurance spécialisée audioprothésistes</title>
+  <meta name="description" content="AssurAudio, le cabinet de courtage 100% dédié aux audioprothésistes. Mutuelle santé, prévoyance, RC Pro, emprunteur. Devis gratuit." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1a73e8; --blue-dark: #1557b0; --teal: #00897b;
+      --gold: #f9a825; --dark: #1a1a2e; --gray: #f5f7fa;
+      --text: #333; --radius: 12px;
+    }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: #fff; }
+
+    nav {
+      background: #fff; border-bottom: 1px solid #e8ecf0;
+      position: sticky; top: 0; z-index: 100; padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .logo { font-size: 1.4rem; font-weight: 800; color: var(--blue); text-decoration: none; }
+    .logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--text); font-weight: 500; font-size: 0.9rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta { background: var(--blue); color: #fff !important; padding: 8px 18px; border-radius: 6px; }
+    .nav-cta:hover { background: var(--blue-dark) !important; }
+    .burger { display: none; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--dark); }
+    @media(max-width:768px) {
+      .burger { display: block; }
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: #fff; border-bottom: 1px solid #e8ecf0; padding: 16px 24px; gap: 16px; }
+      .nav-links.open { display: flex; }
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--dark) 0%, #16213e 50%, var(--blue-dark) 100%);
+      color: #fff; padding: 90px 24px 80px; text-align: center;
+    }
+    .hero-badge {
+      display: inline-block; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px; padding: 6px 18px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px;
+    }
+    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 18px; line-height: 1.15; }
+    .hero p { font-size: 1.15rem; opacity: 0.85; max-width: 620px; margin: 0 auto 36px; line-height: 1.7; }
+    .hero-cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-white { background: #fff; color: var(--blue); border: none; border-radius: 8px; padding: 14px 28px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.5); border-radius: 8px; padding: 14px 28px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: border-color .2s, background .2s; }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+    .stats-band { background: var(--blue); color: #fff; padding: 28px 24px; }
+    .stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
+    @media(max-width:600px) { .stats-inner { grid-template-columns: 1fr 1fr; } }
+    .stat-num { font-size: 2rem; font-weight: 800; }
+    .stat-label { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+
+    section { padding: 70px 24px; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .section-label { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--blue); margin-bottom: 10px; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: var(--dark); margin-bottom: 16px; }
+    .section-sub { color: #666; font-size: 1rem; margin-bottom: 48px; max-width: 600px; }
+
+    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    @media(max-width:768px) { .products-grid { grid-template-columns: 1fr; } }
+    .product-card {
+      background: #fff; border: 1.5px solid #e8ecf0; border-radius: 16px; padding: 28px 24px;
+      text-decoration: none; color: var(--text);
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+      display: block;
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.1); border-color: var(--blue); }
+    .product-icon { font-size: 2rem; margin-bottom: 14px; }
+    .product-card h3 { font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .product-card p { font-size: 0.88rem; color: #666; line-height: 1.7; margin-bottom: 16px; }
+    .product-link { color: var(--blue); font-weight: 600; font-size: 0.88rem; }
+
+    .why-section { background: var(--gray); }
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 40px; }
+    @media(max-width:768px) { .why-grid { grid-template-columns: 1fr; } }
+    .why-card { background: #fff; border-radius: var(--radius); padding: 28px 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .why-icon { font-size: 1.8rem; margin-bottom: 14px; }
+    .why-card h3 { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .why-card p { font-size: 0.87rem; color: #666; line-height: 1.7; }
+
+    .quiz-band {
+      background: linear-gradient(135deg, var(--teal), #00695c); color: #fff;
+      padding: 60px 24px; text-align: center;
+    }
+    .quiz-band h2 { color: #fff; margin-bottom: 10px; }
+    .quiz-band p { opacity: 0.85; margin-bottom: 28px; font-size: 1rem; }
+    .btn-quiz { background: #fff; color: var(--teal); border: none; border-radius: 8px; padding: 13px 28px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform .2s; text-decoration: none; display: inline-block; }
+    .btn-quiz:hover { transform: translateY(-2px); }
+
+    .form-section { background: var(--dark); color: #fff; }
+    .form-section h2 { color: #fff; }
+    .form-section .section-sub { color: rgba(255,255,255,0.7); }
+    .form-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    @media(max-width:768px) { .form-wrap { grid-template-columns: 1fr; } }
+    .form-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 32px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width:480px) { .form-row { grid-template-columns: 1fr; } }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 0.8rem; font-weight: 600; opacity: 0.8; margin-bottom: 5px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff;
+      font-family: inherit; font-size: 0.9rem; transition: border-color .2s;
+    }
+    .field input::placeholder { color: rgba(255,255,255,0.35); }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: rgba(255,255,255,0.6); }
+    .field select option { color: #333; background: #fff; }
+    .field textarea { resize: vertical; min-height: 90px; }
+    .btn-submit { width: 100%; background: linear-gradient(135deg, var(--blue), var(--teal)); color: #fff; border: none; border-radius: 10px; padding: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: transform .2s, box-shadow .2s; margin-top: 6px; }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,115,232,0.4); }
+    .form-legal { font-size: 0.73rem; opacity: 0.5; margin-top: 12px; line-height: 1.6; }
+    .success-box { display: none; text-align: center; padding: 40px 20px; }
+    .success-box .icon { font-size: 3rem; margin-bottom: 14px; }
+    .success-box h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; }
+    .success-box p { opacity: 0.8; margin-bottom: 20px; }
+    .btn-cal { background: linear-gradient(135deg, var(--blue), var(--teal)); color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 700; cursor: pointer; transition: transform .2s; }
+    .btn-cal:hover { transform: translateY(-2px); }
+
+    .form-info { color: rgba(255,255,255,0.85); }
+    .form-info h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; }
+    .info-item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+    .info-icon { font-size: 1.4rem; }
+    .info-text strong { display: block; font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; }
+    .info-text span { font-size: 0.85rem; opacity: 0.75; line-height: 1.5; }
+    .btn-calendly-info { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 8px; padding: 12px 22px; font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 8px; transition: background .2s; }
+    .btn-calendly-info:hover { background: rgba(255,255,255,0.2); }
+
+    footer { background: #0d1117; color: rgba(255,255,255,0.7); padding: 48px 24px 24px; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    @media(max-width:768px) { .footer-grid { grid-template-columns: 1fr; gap: 24px; } }
+    .footer-brand .logo { font-size: 1.3rem; margin-bottom: 10px; display: block; }
+    .footer-brand p { font-size: 0.85rem; line-height: 1.7; }
+    footer h4 { color: #fff; font-size: 0.9rem; font-weight: 700; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
+    footer ul { list-style: none; }
+    footer ul li { margin-bottom: 8px; }
+    footer ul a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.85rem; transition: color .2s; }
+    footer ul a:hover { color: #fff; }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.8rem; }
+
+    .phone-float {
+      position: fixed; bottom: 28px; right: 28px; background: var(--blue); color: #fff;
+      border: none; border-radius: 50px; padding: 14px 22px; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; box-shadow: 0 6px 24px rgba(26,115,232,0.4); z-index: 999;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .phone-float:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(26,115,232,0.5); }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">Assur<span>Audio</span></a>
+    <button class="burger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">☰</button>
+    <ul class="nav-links">
+      <li><a href="sante.html">Mutuelle santé</a></li>
+      <li><a href="prevoyance.html">Prévoyance</a></li>
+      <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+      <li><a href="emprunteur.html">Emprunteur</a></li>
+      <li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li>
+      <li><a href="contact.html" class="nav-cta">Devis gratuit</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🎧 Spécialiste audioprothésistes</div>
+  <h1>Votre assurance, pensée pour les audioprothésistes</h1>
+  <p>Le seul cabinet de courtage 100% dédié aux professionnels de l'audition. Mutuelle, prévoyance, RC Pro, emprunteur — des contrats négociés pour votre métier.</p>
+  <div class="hero-cta">
+    <button class="btn-white" onclick="document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">Devis gratuit</button>
+    <button class="btn-outline" onclick="openCalendly()">📅 Bilan découverte 30min</button>
+  </div>
+</section>
+
+<div class="stats-band">
+  <div class="stats-inner">
+    <div><div class="stat-num">500+</div><div class="stat-label">Audioprothésistes assurés</div></div>
+    <div><div class="stat-num">24h</div><div class="stat-label">Délai de réponse garanti</div></div>
+    <div><div class="stat-num">100%</div><div class="stat-label">Spécialisé audition</div></div>
+    <div><div class="stat-num">UNIM</div><div class="stat-label">Partenaire officiel</div></div>
+  </div>
+</div>
+
+<section>
+  <div class="container">
+    <div class="section-label">Nos offres</div>
+    <h2>Des contrats taillés pour votre métier</h2>
+    <p class="section-sub">Chaque offre est conçue et négociée spécifiquement pour les audioprothésistes, qu'ils soient indépendants, associés ou gérants de réseau.</p>
+    <div class="products-grid reveal">
+      <a class="product-card" href="sante.html">
+        <div class="product-icon">🩺</div>
+        <h3>Mutuelle santé professionnelle</h3>
+        <p>Remboursements renforcés hospitalisation, dentaire, optique. Réseau de soins étendu et tiers payant généralisé. Cotisations négociées via l'UNIM.</p>
+        <span class="product-link">Découvrir →</span>
+      </a>
+      <a class="product-card" href="prevoyance.html">
+        <div class="product-icon">🛡️</div>
+        <h3>Prévoyance</h3>
+        <p>Protection de votre revenu en cas d'arrêt maladie, invalidité ou décès. Indemnités journalières dès J8, prise en charge de vos charges fixes.</p>
+        <span class="product-link">Découvrir →</span>
+      </a>
+      <a class="product-card" href="multirisque.html">
+        <div class="product-icon">🏢</div>
+        <h3>Multirisque & RC Pro</h3>
+        <p>Votre centre couvert contre incendie, vol, dégâts des eaux. RC Pro pour les dommages causés à vos patients. Protection juridique incluse.</p>
+        <span class="product-link">Découvrir →</span>
+      </a>
+      <a class="product-card" href="emprunteur.html">
+        <div class="product-icon">🏠</div>
+        <h3>Assurance emprunteur</h3>
+        <p>Délégation d'assurance pour votre crédit professionnel. Rachat de centre, création de cabinet, achat de local — nous optimisons votre couverture.</p>
+        <span class="product-link">Découvrir →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="why-section">
+  <div class="container">
+    <div class="section-label" style="text-align:center">Pourquoi AssurAudio</div>
+    <h2 style="text-align:center">Ce qui nous différencie</h2>
+    <div class="why-grid reveal">
+      <div class="why-card">
+        <div class="why-icon">🎯</div>
+        <h3>Spécialiste exclusif</h3>
+        <p>Nous travaillons uniquement avec des audioprothésistes. Cette expertise nous permet de vous proposer les meilleures couvertures du marché, négociées pour votre secteur.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤝</div>
+        <h3>Partenaire UNIM</h3>
+        <p>Partenariat officiel avec l'UNIM (Union Nationale des Indépendants de la Mutualité), vous donnant accès à des contrats de niveau supérieur à des tarifs préférentiels.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <h3>Gestion sinistres en agence</h3>
+        <p>En cas de sinistre, un conseiller dédié chez AssurAudio traite votre dossier directement. Pas de hotline impersonnelle — une relation humaine et réactive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="quiz-band">
+  <div class="container">
+    <h2>Êtes-vous bien assuré ?</h2>
+    <p>Testez votre couverture en 2 minutes avec notre quiz gratuit et obtenez une analyse personnalisée.</p>
+    <a class="btn-quiz" href="quiz.html">Faire le quiz →</a>
+  </div>
+</div>
+
+<section class="form-section" id="contact-form">
+  <div class="container">
+    <div class="form-wrap">
+      <div>
+        <div class="section-label" style="color:rgba(255,255,255,0.6)">Devis gratuit</div>
+        <h2 style="color:#fff">Parlons de votre protection</h2>
+        <p class="section-sub">Remplissez le formulaire et un conseiller AssurAudio vous rappelle dans la journée.</p>
+        <div class="form-card">
+          <div id="form-content">
+            <div class="form-row">
+              <div class="field"><label>Prénom *</label><input type="text" id="prenom" placeholder="Jean" /></div>
+              <div class="field"><label>Nom *</label><input type="text" id="nom" placeholder="Dupont" /></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label>Email *</label><input type="email" id="email" placeholder="jean.dupont@moncentre.fr" /></div>
+              <div class="field"><label>Téléphone *</label><input type="tel" id="telephone" placeholder="06 12 34 56 78" /></div>
+            </div>
+            <div class="field">
+              <label>Sujet</label>
+              <select id="sujet">
+                <option value="">-- Votre besoin --</option>
+                <option value="mutuelle">Mutuelle santé</option>
+                <option value="prevoyance">Prévoyance</option>
+                <option value="multirisque">Multirisque & RC Pro</option>
+                <option value="emprunteur">Assurance emprunteur</option>
+                <option value="autre">Autre question</option>
+              </select>
+            </div>
+            <div class="field"><label>Message</label><textarea id="message" placeholder="Votre situation, vos besoins…"></textarea></div>
+            <button class="btn-submit" onclick="submitForm()">Envoyer ma demande →</button>
+            <p class="form-legal">Données protégées. Jamais revendues. Conformité RGPD.</p>
+          </div>
+          <div class="success-box" id="success-box">
+            <div class="icon">✅</div>
+            <h3>Demande envoyée !</h3>
+            <p>Un conseiller AssurAudio vous contacte sous 24h.</p>
+            <button class="btn-cal" onclick="openCalendly()">📅 Prendre rendez-vous maintenant</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-info">
+        <h3>Pourquoi nous contacter ?</h3>
+        <div class="info-item"><div class="info-icon">⚡</div><div class="info-text"><strong>Réponse sous 24h</strong><span>Un conseiller spécialisé audioprothésistes vous rappelle rapidement.</span></div></div>
+        <div class="info-item"><div class="info-icon">🎯</div><div class="info-text"><strong>Analyse personnalisée</strong><span>Étude de votre situation actuelle et identification des manques de couverture.</span></div></div>
+        <div class="info-item"><div class="info-icon">💰</div><div class="info-text"><strong>Devis comparatifs</strong><span>Plusieurs offres comparées pour vous garantir le meilleur rapport garanties/prix.</span></div></div>
+        <div class="info-item"><div class="info-icon">🔒</div><div class="info-text"><strong>Sans engagement</strong><span>Aucun engagement, aucun frais. Juste le meilleur conseil pour votre activité.</span></div></div>
+        <button class="btn-calendly-info" onclick="openCalendly()">📅 Bilan découverte gratuit 30min</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="index.html">Assur<span>Audio</span></a>
+        <p>Le cabinet de courtage spécialisé pour les audioprothésistes. Mutuelle, prévoyance, multirisque, RC Pro, emprunteur.</p>
+      </div>
+      <div>
+        <h4>Nos offres</h4>
+        <ul>
+          <li><a href="sante.html">Mutuelle santé</a></li>
+          <li><a href="prevoyance.html">Prévoyance</a></li>
+          <li><a href="multirisque.html">Multirisque & RC Pro</a></li>
+          <li><a href="emprunteur.html">Assurance emprunteur</a></li>
+          <li><a href="association.html">Associations</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="qui-sommes-nous.html">Qui sommes-nous</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="quiz.html">Quiz assurance</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="mentions-legales.html">Mentions légales</a></li>
+          <li><a href="confidentialite.html">Confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 AssurAudio – Courtier en assurances. ORIAS n° 24XXXXXX.</span>
+      <span>assuraudio@gmail.com</span>
+    </div>
+  </div>
+</footer>
+
+<button class="phone-float" onclick="openCalendly()">📅 Bilan découverte gratuit</button>
+
+<link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet" />
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+  function openCalendly() {
+    Calendly.initPopupWidget({ url: 'https://calendly.com/assuraudio/bilan-decouverte-30min' });
+  }
+</script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+  const app = initializeApp({
+    apiKey: "AIzaSyBlWYj-tOLHL_lAoY2ibXpx7QF2m4gvRfY",
+    authDomain: "gestion-assurances-parcs.firebaseapp.com",
+    projectId: "gestion-assurances-parcs",
+    storageBucket: "gestion-assurances-parcs.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdef"
+  }, 'assuraudio-index');
+  const db = getFirestore(app);
+  window.submitForm = async function() {
+    const prenom = document.getElementById('prenom').value.trim();
+    const nom = document.getElementById('nom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telephone = document.getElementById('telephone').value.trim();
+    if (!prenom || !nom || !email || !telephone) { alert('Merci de remplir tous les champs obligatoires.'); return; }
+    try {
+      await addDoc(collection(db, 'prospects_audio'), {
+        prenom, nom, email, telephone,
+        sujet: document.getElementById('sujet').value,
+        message: document.getElementById('message').value.trim(),
+        source: 'site_assuraudio_accueil',
+        date: serverTimestamp()
+      });
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('success-box').style.display = 'block';
+    } catch (err) { alert('Erreur. Écrivez-nous à assuraudio@gmail.com'); }
+  };
+</script>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((el, i) => { if (el.isIntersecting) setTimeout(() => el.target.classList.add('visible'), i * 80); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+<script src="chatbot.js"></script>
+</body>
+</html>

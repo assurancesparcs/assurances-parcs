@@ -267,14 +267,9 @@
     document.querySelector('nav').style.boxShadow = window.scrollY > 40 ? '0 4px 32px rgba(11,37,69,.12)' : '0 2px 24px rgba(11,37,69,.07)';
   });
 </script>
-<script type="text/javascript">
-(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.loaded = true; let script = d.createElement("script"); script.src = A; script.async = true; d.head.appendChild(script); } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-Cal("init", {origin:"https://cal.com"});
-</script>
 <script>
   function openCal() {
-    Cal("openModal", { calLink: "johann-lebas-cdagzu/bilan-decouverte" });
-    return false;
+    window.open('https://cal.com/johann-lebas-cdagzu/bilan-decouverte', '_blank');
   }
 </script>
 </body>

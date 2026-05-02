@@ -3,19 +3,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Cal.com sends a secret header for webhook verification
-  const calSecret = req.headers['cal-signature'] || req.headers['x-cal-signature-256'];
-  if (process.env.CAL_WEBHOOK_SECRET && calSecret) {
-    const crypto = await import('crypto');
-    const expected = crypto
-      .createHmac('sha256', process.env.CAL_WEBHOOK_SECRET)
-      .update(JSON.stringify(req.body))
-      .digest('hex');
-    if (calSecret !== `sha256=${expected}`) {
-      return res.status(401).json({ error: 'Invalid signature' });
-    }
-  }
-
   const { triggerEvent, payload } = req.body;
 
   // Only process booking confirmations

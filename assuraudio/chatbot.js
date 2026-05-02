@@ -65,8 +65,8 @@
       id: 'devis',
       keys: ['devis','prix','tarif','coût','combien','tarification','cotisation','prime','budget','offre'],
       answers: [
-        "Chaque cabinet est unique (surface, chiffre d'affaires, nombre de salariés, localisation…) donc les tarifs varient. Nous proposons un bilan découverte gratuit de 30 minutes pour analyser votre situation et vous faire une proposition personnalisée sans engagement.",
-        "Nous ne donnons pas de tarifs génériques car votre profil est spécifique. Le plus simple : un bilan visio gratuit de 30 min pour qu'on étudie votre situation ensemble et qu'on vous fasse une offre sur-mesure."
+        "Nos tarifs sont particulièrement attractifs car nous négocions en volume pour l'ensemble des audioprothésistes. Et bonne nouvelle : si vous souscrivez plusieurs contrats (multirisque + santé + prévoyance par exemple), vous bénéficiez de conditions encore plus compétitives. Un bilan de 30 min suffit pour vous faire une offre globale sur-mesure.",
+        "AssurAudio propose des cotisations très compétitives grâce à notre spécialisation. Mieux encore : plus vous regroupez vos contrats chez nous (local, santé, prévoyance, emprunteur), plus les tarifs sont avantageux. Réservez un bilan gratuit pour découvrir ce qu'on peut faire pour vous."
       ]
     },
     {

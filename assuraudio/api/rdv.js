@@ -1,13 +1,14 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   console.log('=== RDV WEBHOOK RECEIVED ===');
-  console.log('triggerEvent:', req.body?.triggerEvent);
+  console.log('triggerEvent:', req.body && req.body.triggerEvent);
   console.log('body keys:', Object.keys(req.body || {}));
 
-  const { triggerEvent, payload } = req.body;
+  const triggerEvent = req.body && req.body.triggerEvent;
+  const payload      = req.body && req.body.payload;
 
   if (!triggerEvent) {
     console.log('No triggerEvent — returning 200');
@@ -22,53 +23,59 @@ export default async function handler(req, res) {
   const booking = payload || {};
 
   const rdv = {
-    id_cal: booking.uid || booking.id || null,
-    prenom: booking.attendees?.[0]?.name?.split(' ')[0] || '',
-    nom: booking.attendees?.[0]?.name?.split(' ').slice(1).join(' ') || '',
-    email: booking.attendees?.[0]?.email || '',
-    telephone: booking.attendees?.[0]?.phoneNumber || booking.responses?.phone?.value || '',
-    date_rdv: booking.startTime || null,
-    date_fin: booking.endTime || null,
-    type: booking.type || 'bilan-decouverte',
-    statut: 'confirme',
-    notes: booking.description || '',
-    organizer_email: booking.organizer?.email || '',
-    created_at: new Date().toISOString(),
-    source: 'cal.com',
-    evenement: triggerEvent,
+    id_cal:          String(booking.uid || booking.id || ''),
+    prenom:          String((booking.attendees && booking.attendees[0] && booking.attendees[0].name || '').split(' ')[0]),
+    nom:             String((booking.attendees && booking.attendees[0] && booking.attendees[0].name || '').split(' ').slice(1).join(' ')),
+    email:           String(booking.attendees && booking.attendees[0] && booking.attendees[0].email || ''),
+    telephone:       String((booking.attendees && booking.attendees[0] && booking.attendees[0].phoneNumber) || (booking.responses && booking.responses.phone && booking.responses.phone.value) || ''),
+    date_rdv:        String(booking.startTime || ''),
+    date_fin:        String(booking.endTime || ''),
+    type:            String(booking.type || 'bilan-decouverte'),
+    statut:          'confirme',
+    notes:           String(booking.description || ''),
+    organizer_email: String(booking.organizer && booking.organizer.email || ''),
+    created_at:      new Date().toISOString(),
+    source:          'cal.com',
+    evenement:       triggerEvent,
   };
 
+  console.log('RDV object:', JSON.stringify(rdv));
+
   try {
+    const token = await getFirebaseToken();
+    console.log('Got Firebase token, writing to Firestore...');
+
     const firebaseRes = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${process.env.FIREBASE_PROJECT_ID}/databases/(default)/documents/rdv_audio`,
+      'https://firestore.googleapis.com/v1/projects/' + process.env.FIREBASE_PROJECT_ID + '/databases/(default)/documents/rdv_audio',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await getFirebaseToken()}`,
+          'Authorization': 'Bearer ' + token,
         },
         body: JSON.stringify(toFirestoreFields(rdv)),
       }
     );
 
+    const responseText = await firebaseRes.text();
     if (!firebaseRes.ok) {
-      const err = await firebaseRes.text();
-      console.error('Firestore error:', err);
-      return res.status(500).json({ error: 'Firestore write failed' });
+      console.error('Firestore error:', responseText);
+      return res.status(500).json({ error: 'Firestore write failed', detail: responseText });
     }
 
-    console.log('RDV saved:', rdv.email, rdv.date_rdv);
+    console.log('RDV saved successfully:', rdv.email, rdv.date_rdv);
     return res.status(200).json({ ok: true });
 
   } catch (err) {
-    console.error('Webhook error:', err);
-    return res.status(500).json({ error: 'Server error' });
+    console.error('Webhook error:', err.message);
+    return res.status(500).json({ error: err.message });
   }
-}
+};
 
 function toFirestoreFields(obj) {
   const fields = {};
-  for (const [key, value] of Object.entries(obj)) {
+  for (const key of Object.keys(obj)) {
+    const value = obj[key];
     if (value === null || value === undefined) {
       fields[key] = { nullValue: null };
     } else if (typeof value === 'boolean') {
@@ -89,7 +96,6 @@ function toBase64Url(str) {
 
 async function getFirebaseToken() {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-  // Fix escaped newlines in private key (common Vercel env var issue)
   const privateKey = serviceAccount.private_key.replace(/\\n/g, '\n');
   const now = Math.floor(Date.now() / 1000);
 
@@ -102,26 +108,26 @@ async function getFirebaseToken() {
     exp: now + 3600,
   }));
 
-  const { createSign } = await import('crypto');
-  const sign = createSign('RSA-SHA256');
-  sign.update(`${header}.${claimSet}`);
+  const crypto = require('crypto');
+  const sign   = crypto.createSign('RSA-SHA256');
+  sign.update(header + '.' + claimSet);
   const signature = sign.sign(privateKey, 'base64')
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
-  const jwt = `${header}.${claimSet}.${signature}`;
-  console.log('JWT client_email:', serviceAccount.client_email);
+  const jwt = header + '.' + claimSet + '.' + signature;
+  console.log('Requesting token for:', serviceAccount.client_email);
 
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `grant_type=urn:ietf:grants:jwt-bearer&assertion=${jwt}`,
+    body: 'grant_type=urn:ietf:grants:jwt-bearer&assertion=' + jwt,
   });
 
   const tokenData = await tokenRes.json();
   if (!tokenData.access_token) {
     console.error('Token error:', JSON.stringify(tokenData));
-    throw new Error('Failed to get Firebase token: ' + JSON.stringify(tokenData));
+    throw new Error('Firebase token failed: ' + JSON.stringify(tokenData));
   }
-  console.log('Firebase token OK');
+  console.log('Firebase token obtained OK');
   return tokenData.access_token;
 }

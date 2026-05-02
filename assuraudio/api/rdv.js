@@ -86,13 +86,17 @@ function toFirestoreFields(obj) {
   return { fields };
 }
 
+function toBase64Url(str) {
+  return Buffer.from(str).toString('base64')
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
 async function getFirebaseToken() {
-  // Use Firebase service account key stored as env var (JSON string)
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
   const now = Math.floor(Date.now() / 1000);
 
-  const header = btoa(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const claimSet = btoa(JSON.stringify({
+  const header    = toBase64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const claimSet  = toBase64Url(JSON.stringify({
     iss: serviceAccount.client_email,
     scope: 'https://www.googleapis.com/auth/datastore',
     aud: 'https://oauth2.googleapis.com/token',
@@ -115,5 +119,9 @@ async function getFirebaseToken() {
   });
 
   const tokenData = await tokenRes.json();
+  if (!tokenData.access_token) {
+    console.error('Token error:', JSON.stringify(tokenData));
+    throw new Error('Failed to get Firebase token');
+  }
   return tokenData.access_token;
 }

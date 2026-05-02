@@ -80,10 +80,12 @@ function toBase64Url(str) {
 
 async function getFirebaseToken() {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  // Fix escaped newlines in private key (common Vercel env var issue)
+  const privateKey = serviceAccount.private_key.replace(/\\n/g, '\n');
   const now = Math.floor(Date.now() / 1000);
 
-  const header    = toBase64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
-  const claimSet  = toBase64Url(JSON.stringify({
+  const header   = toBase64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const claimSet = toBase64Url(JSON.stringify({
     iss: serviceAccount.client_email,
     scope: 'https://www.googleapis.com/auth/datastore',
     aud: 'https://oauth2.googleapis.com/token',
@@ -94,10 +96,11 @@ async function getFirebaseToken() {
   const { createSign } = await import('crypto');
   const sign = createSign('RSA-SHA256');
   sign.update(`${header}.${claimSet}`);
-  const signature = sign.sign(serviceAccount.private_key, 'base64')
+  const signature = sign.sign(privateKey, 'base64')
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
   const jwt = `${header}.${claimSet}.${signature}`;
+  console.log('JWT client_email:', serviceAccount.client_email);
 
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -108,7 +111,8 @@ async function getFirebaseToken() {
   const tokenData = await tokenRes.json();
   if (!tokenData.access_token) {
     console.error('Token error:', JSON.stringify(tokenData));
-    throw new Error('Failed to get Firebase token');
+    throw new Error('Failed to get Firebase token: ' + JSON.stringify(tokenData));
   }
+  console.log('Firebase token OK');
   return tokenData.access_token;
 }

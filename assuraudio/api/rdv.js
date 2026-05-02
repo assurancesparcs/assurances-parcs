@@ -3,11 +3,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  console.log('=== RDV WEBHOOK RECEIVED ===');
+  console.log('triggerEvent:', req.body?.triggerEvent);
+  console.log('body keys:', Object.keys(req.body || {}));
+
   const { triggerEvent, payload } = req.body;
 
-  // Only process booking confirmations
+  if (!triggerEvent) {
+    console.log('No triggerEvent — returning 200');
+    return res.status(200).json({ ok: true, ignored: 'no_trigger' });
+  }
+
   if (triggerEvent !== 'BOOKING_CREATED' && triggerEvent !== 'BOOKING_RESCHEDULED') {
-    return res.status(200).json({ ok: true, ignored: true });
+    console.log('Ignored event:', triggerEvent);
+    return res.status(200).json({ ok: true, ignored: triggerEvent });
   }
 
   const booking = payload || {};

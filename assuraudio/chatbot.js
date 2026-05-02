@@ -5,35 +5,123 @@
   const LIGHT  = '#F4F8FC';
   const ICE    = '#EAF4FB';
 
-  const SYSTEM_PROMPT = `Tu es l'assistant virtuel d'AssurAudio, Cabinet PL, cabinet de courtage spécialisé exclusivement dans l'assurance pour audioprothésistes indépendants. Téléphone direct : 06 32 06 90 49.
+  // ── BASE DE CONNAISSANCES ─────────────────────────────────────────────────────
+  // Chaque entrée : mots-clés déclencheurs + réponse(s) (tirée aléatoirement)
+  const KB = [
+    {
+      id: 'multirisque',
+      keys: ['multirisque','local','cabinet','incendie','vol','dégât','dégats','matériel','bris','glace','vandalisme','locaux'],
+      answers: [
+        "Votre multirisque couvre l'incendie, les dégâts des eaux, le vol avec effraction, le vandalisme et le bris de matériel. Notre spécificité : la perte d'exploitation est indemnisée dès le 1er jour (franchise 0 jour), alors que les assureurs généralistes appliquent 3 à 4 jours de carence. La RC Pro est incluse.",
+        "Le contrat multirisque AssurAudio protège intégralement votre local : incendie, vol, dégâts des eaux, bris de matériel et de glace. Surtout, en cas de fermeture forcée, vous êtes indemnisé dès le 1er jour — une garantie rare chez les assureurs généralistes."
+      ]
+    },
+    {
+      id: 'rcpro',
+      keys: ['rc pro','rc professionnelle','responsabilité','patient','dommage','tiers','juridique','salarié','remplaçant','stagiaire'],
+      answers: [
+        "La RC Professionnelle est incluse dans votre multirisque. Elle couvre les dommages corporels, matériels et immatériels causés à vos patients et tiers, avec défense juridique incluse. Elle s'étend automatiquement à vos salariés, remplaçants et stagiaires.",
+      ]
+    },
+    {
+      id: 'perte_exploitation',
+      keys: ['perte exploitation','perte d\'exploitation','fermeture','arrêt activité','franchise','carence','premier jour'],
+      answers: [
+        "Notre contrat prévoit une franchise 0 jour sur la perte d'exploitation : vous êtes indemnisé dès le 1er jour de fermeture forcée (sinistre, travaux suite à dégât…). Les assureurs généralistes appliquent généralement 3 à 4 jours de carence — chez nous, pas d'attente.",
+      ]
+    },
+    {
+      id: 'sante',
+      keys: ['mutuelle','santé','complémentaire','optique','dentaire','hospitalisation','médecine','remboursement','famille','lunettes','soins'],
+      answers: [
+        "Nous proposons une complémentaire santé via notre partenaire UNIM, spécialisée dans les professions de santé libérales. Couverture : hospitalisation, dentaire, optique, médecine courante, médecines douces, avec possibilité d'extension famille.",
+        "La complémentaire santé AssurAudio (partenaire UNIM) est conçue pour les professionnels de santé. Elle rembourse l'hospitalisation, le dentaire, l'optique et la médecine courante, avec des niveaux de garantie adaptés à votre statut libéral."
+      ]
+    },
+    {
+      id: 'prevoyance',
+      keys: ['prévoyance','arrêt maladie','arrêt de travail','invalidité','décès','incapacité','charges fixes','loyer','salaire','absent','maladie','accident'],
+      answers: [
+        "La prévoyance vous protège si vous ne pouvez plus exercer : arrêt de travail, invalidité ou décès. Elle prend en charge vos charges fixes (loyer, salaires, crédits) pendant votre absence. Solution via notre partenaire UNIM, spécialisée pour les professionnels de santé.",
+        "En cas d'arrêt de travail ou d'invalidité, la prévoyance compense la perte de revenus et maintient vos charges fixes. Via UNIM, les garanties sont calibrées pour votre activité d'audioprothésiste indépendant."
+      ]
+    },
+    {
+      id: 'emprunteur',
+      keys: ['emprunteur','prêt','crédit','banque','délégation','immobilier','rachat','assurance prêt','ptia','assurance crédit'],
+      answers: [
+        "Vous pouvez déléguer votre assurance emprunteur à un assureur plus avantageux que votre banque. Via UNIM, nous couvrons le décès/PTIA, l'invalidité et l'arrêt de travail. La délégation est possible à tout moment (loi Lemoine) et peut générer une économie significative.",
+      ]
+    },
+    {
+      id: 'sinistres',
+      keys: ['sinistre','déclaration','remboursement','indemnisation','dégât','dossier','suivi','gérer','expert','assurance sinistre'],
+      answers: [
+        "Chez AssurAudio, c'est votre conseiller du Cabinet PL qui gère votre dossier sinistre de A à Z. Pas de numéro vert anonyme, pas de formulaire en ligne — un vrai interlocuteur dédié, de la déclaration jusqu'à l'indemnisation complète.",
+        "En cas de sinistre, vous appelez directement votre conseiller au 06 32 06 90 49. Il prend en charge le dossier, coordonne avec l'assureur et vous suit jusqu'au règlement. Aucun formulaire à remplir seul."
+      ]
+    },
+    {
+      id: 'devis',
+      keys: ['devis','prix','tarif','coût','combien','tarification','cotisation','prime','budget','offre'],
+      answers: [
+        "Chaque cabinet est unique (surface, chiffre d'affaires, nombre de salariés, localisation…) donc les tarifs varient. Nous proposons un bilan découverte gratuit de 30 minutes pour analyser votre situation et vous faire une proposition personnalisée sans engagement.",
+        "Nous ne donnons pas de tarifs génériques car votre profil est spécifique. Le plus simple : un bilan visio gratuit de 30 min pour qu'on étudie votre situation ensemble et qu'on vous fasse une offre sur-mesure."
+      ]
+    },
+    {
+      id: 'deja_assure',
+      keys: ['déjà assuré','contrat actuel','autre assureur','comparer','changer','renégocier','revoir','audit','analyse'],
+      answers: [
+        "Nous analysons votre contrat actuel gratuitement pour identifier les lacunes ou surprimes. Beaucoup d'audioprothésistes découvrent qu'ils paient trop cher ou ne sont pas couverts sur des points essentiels (perte d'exploitation, RC Pro…). Un audit sans engagement.",
+      ]
+    },
+    {
+      id: 'qui',
+      keys: ['qui êtes','cabinet','assuraudio','présentation','spécialisé','courtage','courtier','independant','indépendant'],
+      answers: [
+        "AssurAudio est un cabinet de courtage indépendant, spécialisé exclusivement pour les audioprothésistes en France. Nous négocions les meilleures conditions auprès des assureurs pour votre métier. Cabinet PL, joignable au 06 32 06 90 49.",
+      ]
+    },
+    {
+      id: 'contact',
+      keys: ['contact','appel','téléphone','rappel','conseiller','rappeler','joindre','numéro','parler','humain'],
+      answers: [
+        "Vous pouvez nous appeler directement au 06 32 06 90 49 du lundi au vendredi. Ou réservez un bilan découverte gratuit en visio — choisissez le créneau qui vous convient.",
+      ],
+      rdv: true
+    },
+    {
+      id: 'rdv',
+      keys: ['rendez-vous','rdv','visio','bilan','découverte','réserver','créneau','disponibilité','prendre rdv','cal.com'],
+      answers: [
+        "Parfait ! Choisissez votre créneau directement dans l'agenda du conseiller — c'est gratuit et sans engagement.",
+      ],
+      rdv: true
+    },
+    {
+      id: 'bonjour',
+      keys: ['bonjour','bonsoir','salut','hello','bonne journée','allô'],
+      answers: [
+        "Bonjour ! Je suis l'assistant AssurAudio. Je peux vous renseigner sur nos garanties multirisque, RC Pro, santé, prévoyance et emprunteur pour audioprothésistes. Par quoi puis-je commencer ?",
+      ]
+    },
+    {
+      id: 'merci',
+      keys: ['merci','parfait','super','excellent','très bien','top','nickel','cool'],
+      answers: [
+        "Avec plaisir ! N'hésitez pas si vous avez d'autres questions. Et si vous souhaitez aller plus loin, un bilan découverte de 30 min avec votre conseiller est offert.",
+        "Merci à vous ! Je reste disponible si besoin. Pour un conseil personnalisé, notre conseiller est joignable au 06 32 06 90 49.",
+      ]
+    },
+  ];
 
-Ton rôle : informer et qualifier le besoin de l'utilisateur, puis l'orienter vers le cabinet pour validation.
+  const DISCLAIMER = "\n\n⚠️ Ces informations sont indicatives. Pour une étude personnalisée, appelez le 06 32 06 90 49 ou réservez votre bilan gratuit.";
 
-RÈGLES ABSOLUES :
-- Réponds uniquement en français
-- Sois chaleureux, professionnel et concis (2-3 phrases max par réponse)
-- TOUJOURS terminer chaque réponse par cette phrase exacte : "⚠️ Ces informations sont données à titre indicatif. Pour une validation définitive, appelez directement le Cabinet PL au 06 32 06 90 49."
-- Ne donne jamais de tarifs précis
-- Ne cite jamais UNIM pour les garanties Multirisque, RC Pro ou Perte d'exploitation — UNIM est partenaire uniquement pour Santé, Prévoyance et Emprunteur
-- Après 2-3 échanges, propose un rendez-vous avec le conseiller
-
-CONNAISSANCE DES CONTRATS AssurAudio :
-Multirisque local :
-- Couvre : incendie, dégâts des eaux, vol avec effraction, vandalisme, bris de matériel, bris de glace
-- Perte d'exploitation : franchise 0 jour (contrairement aux assureurs généralistes qui appliquent 3 ou 4 jours) — indemnisation dès le 1er jour
-- RC Professionnelle incluse : dommages corporels, matériels et immatériels causés aux patients et tiers, défense juridique incluse, couvre salariés, remplaçants et stagiaires
-
-Santé & Prévoyance (partenaire UNIM) :
-- Complémentaire santé : hospitalisation, dentaire, optique, médecine courante, médecines douces, extension famille
-- Prévoyance : arrêt de travail, invalidité, décès, prise en charge charges fixes
-
-Emprunteur (partenaire UNIM) :
-- Décès/PTIA, invalidité, arrêt de travail, délégation possible
-
-GESTION DES SINISTRES :
-- Chez AssurAudio, c'est le conseiller du Cabinet PL qui gère votre dossier sinistre de A à Z
-- Pas de numéro vert anonyme, pas de formulaire en ligne — un vrai interlocuteur dédié
-- Suivi jusqu'à indemnisation complète`;
+  const FALLBACK = [
+    "Je ne suis pas sûr de bien comprendre votre question. Pouvez-vous préciser ? Vous pouvez aussi nous appeler directement au 06 32 06 90 49.",
+    "Je n'ai pas la réponse précise à cela, mais notre conseiller peut vous aider en 30 minutes. Voulez-vous réserver un bilan découverte gratuit ?",
+  ];
 
   const QUICK_BTNS = [
     { label: 'Multirisque & RC Pro', msg: 'Je voudrais en savoir plus sur le multirisque et la RC Pro' },
@@ -42,9 +130,36 @@ GESTION DES SINISTRES :
     { label: 'Devis gratuit',        msg: 'Je voudrais obtenir un devis gratuit' },
   ];
 
-  var history  = [];
+  var msgCount = 0;
   var isOpen   = false;
-  var isTyping = false;
+
+  // ── MOTEUR DE RÉPONSE ─────────────────────────────────────────────────────────
+  function findAnswer(text) {
+    var t = text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    var best = null;
+    var bestScore = 0;
+
+    KB.forEach(function (entry) {
+      var score = 0;
+      entry.keys.forEach(function (k) {
+        var kNorm = k.normalize('NFD').replace(/[̀-ͯ]/g, '');
+        if (t.includes(kNorm)) score++;
+      });
+      if (score > bestScore) { bestScore = score; best = entry; }
+    });
+
+    if (!best || bestScore === 0) {
+      return { text: pick(FALLBACK), rdv: msgCount >= 2 };
+    }
+
+    var addDisclaimer = !['bonjour','merci','contact','rdv','qui'].includes(best.id);
+    return {
+      text: pick(best.answers) + (addDisclaimer ? DISCLAIMER : ''),
+      rdv: best.rdv || msgCount >= 3
+    };
+  }
+
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
   // ── STYLES ───────────────────────────────────────────────────────────────────
   var style = document.createElement('style');
@@ -111,7 +226,6 @@ GESTION DES SINISTRES :
     .aa-input:focus{border-color:${ACCENT};background:white}
     .aa-send{width:38px;height:38px;border-radius:10px;border:none;background:linear-gradient(135deg,${BLUE},${ACCENT});color:white;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:transform .2s;flex-shrink:0}
     .aa-send:hover{transform:scale(1.1)}
-    .aa-send:disabled{opacity:.4;cursor:default;transform:none}
 
     .aa-rdv-card{background:linear-gradient(135deg,${NAVY},${BLUE});border-radius:14px;padding:16px;margin-top:4px;text-align:center}
     .aa-rdv-card p{color:rgba(255,255,255,.8);font-size:12.5px;margin-bottom:12px;font-family:"DM Sans",sans-serif;line-height:1.5}
@@ -163,7 +277,7 @@ GESTION DES SINISTRES :
     isOpen = true;
     box.classList.add('open');
     btn.innerHTML = '<span>✕</span> Fermer';
-    if (history.length === 0) setTimeout(botGreet, 400);
+    if (msgCount === 0) setTimeout(botGreet, 400);
   }
 
   function closeChat() {
@@ -173,8 +287,7 @@ GESTION DES SINISTRES :
   }
 
   function botGreet() {
-    addBotMsg('Bonjour ! Je suis l\'assistant AssurAudio. Je suis là pour vous aider à trouver la meilleure couverture pour votre cabinet d\'audioprothèse. Qu\'est-ce qui vous amène aujourd\'hui ?');
-    showQuickBtns();
+    addBotMsg("Bonjour ! Je suis l'assistant AssurAudio. Je suis là pour vous aider à trouver la meilleure couverture pour votre cabinet d'audioprothèse. Qu'est-ce qui vous amène aujourd'hui ?", false, true);
   }
 
   function showQuickBtns() {
@@ -189,17 +302,18 @@ GESTION DES SINISTRES :
     });
   }
 
-  function addBotMsg(text, showRdv) {
+  function addBotMsg(text, showRdv, withQuick) {
     var msgs = document.getElementById('aa-msgs');
     var div  = document.createElement('div');
     div.className = 'aa-msg bot';
     if (showRdv) {
-      div.innerHTML = '<div class="aa-rdv-card"><p>' + escHtml(text) + '</p><button class="aa-rdv-btn" onclick="openCal ? openCal() : window.open(\'https://cal.com/johann-lebas-cdagzu/bilan-decouverte\',\'_blank\')">📅 Prendre RDV gratuitement</button></div>';
+      div.innerHTML = '<div class="aa-rdv-card"><p>' + escHtml(text) + '</p><button class="aa-rdv-btn" onclick="openCal ? openCal() : window.open(\'https://cal.com/johann-lebas-cdagzu/bilan-decouverte\',\'_blank\')">📅 Réserver mon bilan gratuit</button></div>';
     } else {
       div.innerHTML = '<div class="aa-bubble">' + escHtml(text).replace(/\n/g, '<br>') + '</div>';
     }
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
+    if (withQuick) showQuickBtns();
   }
 
   function addUserMsg(text) {
@@ -229,7 +343,7 @@ GESTION DES SINISTRES :
   function sendMsg() {
     var input = document.getElementById('aa-input');
     var text  = input.value.trim();
-    if (!text || isTyping) return;
+    if (!text) return;
     input.value = '';
     sendUserMsg(text);
   }
@@ -237,41 +351,15 @@ GESTION DES SINISTRES :
   function sendUserMsg(text) {
     addUserMsg(text);
     document.getElementById('aa-quick').innerHTML = '';
-    history.push({ role: 'user', content: text });
-    callAPI();
-  }
+    msgCount++;
 
-  function callAPI() {
-    isTyping = true;
-    document.getElementById('aa-send').disabled = true;
+    var delay = 600 + Math.min(text.length * 8, 900);
     showTyping();
-
-    fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history, system: SYSTEM_PROMPT }),
-    })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        removeTyping();
-        isTyping = false;
-        document.getElementById('aa-send').disabled = false;
-
-        var reply = (data.content && data.content[0] && data.content[0].text)
-          ? data.content[0].text
-          : 'Désolé, une erreur est survenue. Contactez-nous directement au 06 32 06 90 49 !';
-
-        history.push({ role: 'assistant', content: reply });
-
-        var showRdv = /rendez-vous|rappeler|rappel|contact|prendre rdv/i.test(reply);
-        addBotMsg(reply, showRdv);
-      })
-      .catch(function () {
-        removeTyping();
-        isTyping = false;
-        document.getElementById('aa-send').disabled = false;
-        addBotMsg('Je rencontre une difficulté technique. N\'hésitez pas à nous appeler directement au 06 32 06 90 49 !');
-      });
+    setTimeout(function () {
+      removeTyping();
+      var result = findAnswer(text);
+      addBotMsg(result.text, result.rdv);
+    }, delay);
   }
 
   function escHtml(s) {

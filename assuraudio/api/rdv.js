@@ -16,31 +16,34 @@ module.exports = async function handler(req, res) {
   }
 
   const booking = payload || {};
+  const attendee = (booking.attendees && booking.attendees[0]) || {};
+  const startTime = booking.startTime ? new Date(booking.startTime) : null;
+  const dateStr   = startTime ? startTime.toISOString().split('T')[0] : '';
+  const timeStr   = startTime ? startTime.toISOString().split('T')[1].substring(0, 5) : '';
+  const nomComplet = attendee.name || '';
+
   const rdv = {
-    id_cal:          String(booking.uid || booking.id || ''),
-    prenom:          String(((booking.attendees && booking.attendees[0] && booking.attendees[0].name) || '').split(' ')[0]),
-    nom:             String(((booking.attendees && booking.attendees[0] && booking.attendees[0].name) || '').split(' ').slice(1).join(' ')),
-    email:           String((booking.attendees && booking.attendees[0] && booking.attendees[0].email) || ''),
-    telephone:       String((booking.attendees && booking.attendees[0] && booking.attendees[0].phoneNumber) || (booking.responses && booking.responses.phone && booking.responses.phone.value) || ''),
-    date_rdv:        String(booking.startTime || ''),
-    date_fin:        String(booking.endTime || ''),
-    type:            String(booking.type || 'bilan-decouverte'),
-    statut:          'confirme',
-    notes:           String(booking.description || ''),
-    organizer_email: String((booking.organizer && booking.organizer.email) || ''),
-    created_at:      new Date().toISOString(),
-    source:          'cal.com',
-    evenement:       triggerEvent,
+    title:      { stringValue: 'Bilan découverte — ' + nomComplet },
+    type:       { stringValue: 'rdv' },
+    status:     { stringValue: 'a_faire' },
+    priority:   { stringValue: 'normal' },
+    assignedTo: { stringValue: 'Johann' },
+    date:       startTime ? { timestampValue: startTime.toISOString() } : { nullValue: null },
+    time:       { stringValue: timeStr },
+    description:{ stringValue: attendee.email || '' },
+    notes:      { stringValue: 'Source: Cal.com — ' + nomComplet + (attendee.email ? ' — ' + attendee.email : '') },
+    source:     { stringValue: 'cal.com' },
+    createdAt:  { timestampValue: new Date().toISOString() },
   };
 
   try {
     const token = await getFirebaseToken();
     const firebaseRes = await fetch(
-      'https://firestore.googleapis.com/v1/projects/' + process.env.FIREBASE_PROJECT_ID + '/databases/(default)/documents/rdv_audio',
+      'https://firestore.googleapis.com/v1/projects/' + process.env.FIREBASE_PROJECT_ID + '/databases/(default)/documents/items',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-        body: JSON.stringify(toFirestoreFields(rdv)),
+        body: JSON.stringify({ fields: rdv }),
       }
     );
     const responseText = await firebaseRes.text();

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-export default function ClientsView({ clients, items, onAddClient, onEditClient, onDeleteClient }) {
+export default function ClientsView({ clients, items, onAddClient, onEditClient, onDeleteClient, onView360 }) {
   const [search, setSearch] = useState('');
   const filtered = useMemo(() => clients.filter(c => !search ||
     c.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -53,6 +53,7 @@ export default function ClientsView({ clients, items, onAddClient, onEditClient,
                   {s.urgent > 0 && <div className="client-stat"><div className="stat-value" style={{ color: '#f87171' }}>{s.urgent}</div><div className="stat-label">urgent</div></div>}
                 </div>
                 <div className="client-actions" onClick={e => e.stopPropagation()}>
+                  <button className="btn-icon" title="Vue 360°" onClick={() => onView360(client)}>👁️</button>
                   <button className="btn-icon delete" onClick={() => onDeleteClient(client.id)}>🗑️</button>
                 </div>
               </div>

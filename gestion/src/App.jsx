@@ -22,6 +22,7 @@ import ContractImportModal from './components/ContractImportModal';
 import SinistreModal from './components/SinistreModal';
 import RelanceModal from './components/RelanceModal';
 import MEDView from './components/MEDView';
+import Client360Modal from './components/Client360Modal';
 import MEDModal from './components/MEDModal';
 import MEDImportModal from './components/MEDImportModal';
 import MEDRelanceModal from './components/MEDRelanceModal';
@@ -47,6 +48,7 @@ export default function App() {
   const [sinistreMode, setSinistreMode] = useState('standard');
   const [relanceModal, setRelanceModal] = useState(null);
   const [relanceCollection, setRelanceCollection] = useState('sinistres');
+  const [client360, setClient360]       = useState(null);
   const [medModal, setMedModal]         = useState(null);
   const [medImportModal, setMedImportModal] = useState(false);
   const [medRelanceModal, setMedRelanceModal] = useState(null);
@@ -247,7 +249,7 @@ export default function App() {
         {view === 'calendrier' && <CalendarView items={items} onEdit={setTaskModal} userName={userName} />}
         {view === 'clients' && <ClientsView clients={clients} items={items}
           onAddClient={() => setClientModal({})} onEditClient={setClientModal}
-          onDeleteClient={deleteClient} />}
+          onDeleteClient={deleteClient} onView360={setClient360} />}
         {view === 'contrats' && <ContractsView contracts={contracts} clients={clients}
           onAdd={() => setContractModal({})} onEdit={setContractModal}
           onDelete={deleteContract} onTogglePaid={togglePaid} onImport={() => setImportModal(true)} />}
@@ -300,6 +302,12 @@ export default function App() {
         userName={userName} mode={sinistreMode}
         onSave={data => saveSinistre(data, currentSinistreCol)}
         onClose={() => setSinistreModal(null)} />}
+      {client360 && <Client360Modal
+        client={client360}
+        contracts={contracts} sinistres={sinistres}
+        sinistresChasse={sinistresChasse} medDossiers={medDossiers} items={items}
+        onClose={() => setClient360(null)}
+        onGoTo={v => { setClient360(null); setView(v); }} />}
       {medModal !== null && <MEDModal
         dossier={medModal}
         onSave={saveMED} onClose={() => setMedModal(null)} />}

@@ -4,7 +4,9 @@
 // ÉTAPE 3 : Activez Firestore Database (mode test) et Authentication > Anonymous
 
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import {
+  initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+} from 'firebase/firestore';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -22,7 +24,11 @@ let app, db, auth;
 
 if (isConfigured) {
   app  = initializeApp(firebaseConfig);
-  db   = getFirestore(app);
+  db   = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager(),
+    }),
+  });
   auth = getAuth(app);
 }
 

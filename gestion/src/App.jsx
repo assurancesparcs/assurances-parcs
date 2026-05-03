@@ -24,6 +24,7 @@ import RelanceModal from './components/RelanceModal';
 import MEDView from './components/MEDView';
 import Client360Modal from './components/Client360Modal';
 import GlobalSearch from './components/GlobalSearch';
+import ActivityLogView from './components/ActivityLogView';
 import MEDModal from './components/MEDModal';
 import MEDImportModal from './components/MEDImportModal';
 import MEDRelanceModal from './components/MEDRelanceModal';
@@ -51,6 +52,7 @@ export default function App() {
   const [relanceCollection, setRelanceCollection] = useState('sinistres');
   const [client360, setClient360]       = useState(null);
   const [globalSearch, setGlobalSearch] = useState(false);
+  const [activityLogs, setActivityLogs] = useState([]);
   const [medModal, setMedModal]         = useState(null);
   const [medImportModal, setMedImportModal] = useState(false);
   const [medRelanceModal, setMedRelanceModal] = useState(null);
@@ -74,7 +76,9 @@ export default function App() {
       s => setSinistresChasse(s.docs.map(d => ({ id: d.id, ...d.data() }))));
     const u6 = onSnapshot(collection(db, 'medDossiers'),
       s => setMedDossiers(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-    return () => { u1(); u2(); u3(); u4(); u5(); u6(); };
+    const u7 = onSnapshot(collection(db, 'activityLog'),
+      s => setActivityLogs(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+    return () => { u1(); u2(); u3(); u4(); u5(); u6(); u7(); };
   }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
@@ -90,19 +94,29 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
+  // ─── Activity log helper ───────────────────────────────────────────────────
+  const logActivity = (type, description, detail = '') => {
+    if (!isConfigured) return;
+    addDoc(collection(db, 'activityLog'), {
+      type, description, detail,
+      userName: userName || '?',
+      createdAt: serverTimestamp(),
+    }).catch(() => {});
+  };
+
   // ─── Items handlers ────────────────────────────────────────────────────────
   const saveItem = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
     try {
-      if (id) await updateDoc(doc(db, 'items', id), payload);
-      else await addDoc(collection(db, 'items'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+      if (id) { await updateDoc(doc(db, 'items', id), payload); logActivity('tache_terminee', rest.title || '', rest.clientName || ''); }
+      else { await addDoc(collection(db, 'items'), { ...payload, createdBy: userName, createdAt: serverTimestamp() }); logActivity('tache_creee', rest.title || '', rest.clientName || ''); }
     } catch (e) { alert('Erreur : ' + e.message); }
   };
   const deleteItem   = async (id) => { if (confirm('Supprimer ?')) await deleteDoc(doc(db, 'items', id)); };
   const updateStatus = async (id, status) => {
     const payload = { status, updatedAt: serverTimestamp() };
-    if (status === 'termine') payload.termineAt = serverTimestamp();
+    if (status === 'termine') { payload.termineAt = serverTimestamp(); const t = items.find(i => i.id === id); logActivity('tache_terminee', t?.title || '', t?.clientName || ''); }
     await updateDoc(doc(db, 'items', id), payload);
   };
 
@@ -110,8 +124,8 @@ export default function App() {
   const saveClient   = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
-    if (id) await updateDoc(doc(db, 'clients', id), payload);
-    else await addDoc(collection(db, 'clients'), { ...payload, createdAt: serverTimestamp() });
+    if (id) { await updateDoc(doc(db, 'clients', id), payload); logActivity('client_modifie', rest.name || ''); }
+    else { await addDoc(collection(db, 'clients'), { ...payload, createdAt: serverTimestamp() }); logActivity('client_cree', rest.name || ''); }
   };
   const deleteClient = async (id) => { if (confirm('Supprimer ce client ?')) await deleteDoc(doc(db, 'clients', id)); };
 
@@ -120,12 +134,15 @@ export default function App() {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
     try {
-      if (id) await updateDoc(doc(db, 'contrats', id), payload);
-      else await addDoc(collection(db, 'contrats'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+      if (id) { await updateDoc(doc(db, 'contrats', id), payload); logActivity('contrat_modifie', rest.clientName || '', rest.type || ''); }
+      else { await addDoc(collection(db, 'contrats'), { ...payload, createdBy: userName, createdAt: serverTimestamp() }); logActivity('contrat_cree', rest.clientName || '', rest.type || ''); }
     } catch (e) { alert('Erreur : ' + e.message); }
   };
   const deleteContract = async (id) => { if (confirm('Supprimer ce contrat ?')) await deleteDoc(doc(db, 'contrats', id)); };
-  const togglePaid     = async (id, primePayee) => updateDoc(doc(db, 'contrats', id), { primePayee, updatedAt: serverTimestamp() });
+  const togglePaid     = async (id, primePayee) => {
+    await updateDoc(doc(db, 'contrats', id), { primePayee, updatedAt: serverTimestamp() });
+    if (primePayee) { const c = contracts.find(x => x.id === id); logActivity('contrat_paye', c?.clientName || '', c?.type || ''); }
+  };
   const importContracts = async (rows) => {
     for (const r of rows) {
       try { await addDoc(collection(db, 'contrats'), { ...r, primePayee: false, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }); }
@@ -137,22 +154,29 @@ export default function App() {
   const saveSinistre = async (data, colName = 'sinistres') => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
+    const isChasse = colName === 'sinistresChasse';
     try {
-      if (id) await updateDoc(doc(db, colName, id), payload);
-      else await addDoc(collection(db, colName), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+      if (id) { await updateDoc(doc(db, colName, id), payload); logActivity(isChasse ? 'chasse_modifie' : 'sinistre_modifie', rest.clientName || '', rest.type || ''); }
+      else { await addDoc(collection(db, colName), { ...payload, createdBy: userName, createdAt: serverTimestamp() }); logActivity(isChasse ? 'chasse_cree' : 'sinistre_cree', rest.clientName || '', rest.type || ''); }
     } catch (e) { alert('Erreur : ' + e.message); }
   };
   const deleteSinistre = async (id, colName = 'sinistres') => {
-    if (confirm('Supprimer ce sinistre ?')) await deleteDoc(doc(db, colName, id));
+    if (confirm('Supprimer ce sinistre ?')) { await deleteDoc(doc(db, colName, id)); logActivity(colName === 'sinistresChasse' ? 'chasse_modifie' : 'sinistre_supprime', id); }
   };
   const updateSinistreStatus = async (id, status, colName = 'sinistres') => {
     await updateDoc(doc(db, colName, id), { status, lastActivityAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    const src = colName === 'sinistresChasse' ? sinistresChasse : sinistres;
+    const s = src.find(x => x.id === id);
+    logActivity(colName === 'sinistresChasse' ? 'chasse_statut' : 'sinistre_statut', s?.clientName || '', status);
   };
 
   // ─── Relance handler ───────────────────────────────────────────────────────
   const saveRelance = async (sinistreId, updateData, colName = 'sinistres') => {
     const payload = { ...updateData, updatedAt: serverTimestamp() };
     await updateDoc(doc(db, colName, sinistreId), payload);
+    const src = colName === 'sinistresChasse' ? sinistresChasse : sinistres;
+    const s = src.find(x => x.id === sinistreId);
+    logActivity(colName === 'sinistresChasse' ? 'chasse_relance' : 'sinistre_relance', s?.clientName || '', updateData.relances?.slice(-1)[0]?.template || '');
   };
 
   const openRelance = (sinistre, colName = 'sinistres') => {
@@ -165,18 +189,22 @@ export default function App() {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
     try {
-      if (id) await updateDoc(doc(db, 'medDossiers', id), payload);
-      else await addDoc(collection(db, 'medDossiers'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+      if (id) { await updateDoc(doc(db, 'medDossiers', id), payload); logActivity('med_modifie', rest.clientName || '', rest.typeContrat || ''); }
+      else { await addDoc(collection(db, 'medDossiers'), { ...payload, createdBy: userName, createdAt: serverTimestamp() }); logActivity('med_cree', rest.clientName || '', rest.typeContrat || ''); }
     } catch (e) { alert('Erreur : ' + e.message); }
   };
   const deleteMED = async (id) => {
-    if (confirm('Supprimer ce dossier MED ?')) await deleteDoc(doc(db, 'medDossiers', id));
+    if (confirm('Supprimer ce dossier MED ?')) { await deleteDoc(doc(db, 'medDossiers', id)); logActivity('med_supprime', id); }
   };
   const markMEDPaye = async (id) => {
     await updateDoc(doc(db, 'medDossiers', id), { status: 'paye', updatedAt: serverTimestamp() });
+    const d = medDossiers.find(x => x.id === id);
+    logActivity('med_paye', d?.clientName || '', d?.typeContrat || '');
   };
   const saveMEDRelance = async (id, updateData) => {
     await updateDoc(doc(db, 'medDossiers', id), { ...updateData, updatedAt: serverTimestamp() });
+    const d = medDossiers.find(x => x.id === id);
+    logActivity('med_relance', d?.clientName || '', updateData.relances?.slice(-1)[0]?.template || '');
   };
   const importMED = async (rows) => {
     for (const r of rows) {
@@ -187,6 +215,7 @@ export default function App() {
         });
       } catch (e) { console.error(e); }
     }
+    logActivity('med_importe', `${rows.length} dossier${rows.length > 1 ? 's' : ''} importé${rows.length > 1 ? 's' : ''}`);
   };
 
   const medAlertCount = useMemo(() =>
@@ -300,6 +329,7 @@ export default function App() {
             onMarkPaye={markMEDPaye}
             onImport={() => setMedImportModal(true)} />
         )}
+        {view === 'journal' && <ActivityLogView logs={activityLogs} />}
         {view === 'stats' && <StatsView items={items} clients={clients} sinistres={sinistres} sinistresChasse={sinistresChasse} />}
       </main>
 

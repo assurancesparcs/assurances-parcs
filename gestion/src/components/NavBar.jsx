@@ -7,6 +7,7 @@ const VIEWS = [
   { id: 'sinistres_chasse', icon: '🏹', label: 'Chasse' },
   { id: 'dashboard_sin',    icon: '☀️', label: 'Matin' },
   { id: 'med',              icon: '📬', label: 'MED' },
+  { id: 'journal',          icon: '📓', label: 'Journal' },
   { id: 'stats',            icon: '📊', label: 'Stats' },
 ];
 

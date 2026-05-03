@@ -1,9 +1,4 @@
 {
-  "outputDirectory": ".",
-  "functions": {
-    "api/chat.js": { "maxDuration": 10 },
-    "api/rdv.js": { "maxDuration": 10 }
-  },
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]

@@ -95,13 +95,13 @@ function toBase64Url(str) {
 }
 
 async function getFirebaseToken() {
-  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-  const privateKey = serviceAccount.private_key.replace(/\\n/g, '\n');
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKey  = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
   const now = Math.floor(Date.now() / 1000);
 
   const header   = toBase64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const claimSet = toBase64Url(JSON.stringify({
-    iss: serviceAccount.client_email,
+    iss: clientEmail,
     scope: 'https://www.googleapis.com/auth/datastore',
     aud: 'https://oauth2.googleapis.com/token',
     iat: now,
@@ -115,7 +115,7 @@ async function getFirebaseToken() {
     .replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 
   const jwt = header + '.' + claimSet + '.' + signature;
-  console.log('Requesting token for:', serviceAccount.client_email);
+  console.log('Requesting token for:', clientEmail);
 
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
@@ -128,6 +128,6 @@ async function getFirebaseToken() {
     console.error('Token error:', JSON.stringify(tokenData));
     throw new Error('Firebase token failed: ' + JSON.stringify(tokenData));
   }
-  console.log('Firebase token obtained OK');
+  console.log('Firebase token OK');
   return tokenData.access_token;
 }

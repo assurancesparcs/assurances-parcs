@@ -117,16 +117,24 @@ async function getFirebaseToken() {
   const jwt = header + '.' + claimSet + '.' + signature;
   console.log('Requesting token for:', clientEmail);
 
+  console.log('client_email set:', !!clientEmail);
+  console.log('private_key set:', !!privateKey);
+
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: 'grant_type=urn:ietf:grants:jwt-bearer&assertion=' + jwt,
   });
 
-  const tokenData = await tokenRes.json();
+  const rawText = await tokenRes.text();
+  console.log('OAuth response:', rawText.substring(0, 200));
+
+  let tokenData;
+  try { tokenData = JSON.parse(rawText); } catch(e) {
+    throw new Error('OAuth parse error: ' + rawText.substring(0, 300));
+  }
   if (!tokenData.access_token) {
-    console.error('Token error:', JSON.stringify(tokenData));
-    throw new Error('Firebase token failed: ' + JSON.stringify(tokenData));
+    throw new Error('No access_token: ' + JSON.stringify(tokenData));
   }
   console.log('Firebase token OK');
   return tokenData.access_token;

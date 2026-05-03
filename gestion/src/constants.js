@@ -288,3 +288,103 @@ export function daysUntil(ts) {
   d.setHours(0,0,0,0);
   return Math.round((d - today()) / 86400000);
 }
+
+// ─── MODULE MED (MISE EN DEMEURE) ─────────────────────────────────────────────
+
+export const MED_STATUSES = {
+  en_cours:        { label: 'En cours',      icon: '🔵', color: '#60a5fa',  bg: 'rgba(96,165,250,.15)' },
+  relance_1:       { label: 'Relance 1',     icon: '🟡', color: '#fbbf24',  bg: 'rgba(251,191,36,.15)' },
+  relance_2:       { label: 'Relance 2',     icon: '🟠', color: '#fb923c',  bg: 'rgba(251,146,60,.15)' },
+  mise_en_demeure: { label: 'MED envoyée',   icon: '🔴', color: '#f87171',  bg: 'rgba(248,113,113,.15)' },
+  paye:            { label: 'Payé',          icon: '✅', color: '#34d399',  bg: 'rgba(52,211,153,.15)' },
+  resiliation:     { label: 'Résilié',       icon: '⛔', color: '#6b7494',  bg: 'rgba(107,116,148,.15)' },
+};
+
+export const MED_TEMPLATES = {
+  relance_1_cb:    { label: 'Relance 1 + solutions paiement', icon: '💳' },
+  relance_2:       { label: 'Relance 2 — avant MED',          icon: '⚠️' },
+  med_officielle:  { label: 'Mise en demeure officielle',     icon: '🔴' },
+};
+
+const SIG_MED = `Cordialement,\nAmélie BLANCO\nCABINET PONCEY LEBAS — Agent Général Allianz\nTél : 02 31 92 81 31 — N° Orias : 07022305-12066667`;
+
+export function getMEDEmailTemplate(type, d) {
+  const montant  = d.montantDu ? Number(d.montantDu).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €' : '[MONTANT]';
+  const contrat  = d.numeroContrat || '[N° CONTRAT]';
+  const typeC    = d.typeContrat   || 'assurance';
+  const client   = d.clientName   || 'Madame, Monsieur';
+
+  switch (type) {
+    case 'relance_1_cb':
+      return {
+        objet: `Votre contrat ${typeC} n°${contrat} — Impayé ${montant} — Solutions de règlement`,
+        corps: `${client},
+
+Nous avons le regret de constater que la prime de votre contrat ${typeC} n°${contrat}, souscrit auprès d'Allianz, d'un montant de ${montant}, n'a pas été réglée à ce jour.
+
+Afin de régulariser votre situation dans les meilleurs délais, nous vous proposons plusieurs solutions :
+
+💳 Par carte bancaire en ligne :
+Vous pouvez régler directement et en toute sécurité via le lien suivant : [LIEN CB À COMPLÉTER]
+
+📅 Par mensualisation :
+Nous pouvons mettre en place un prélèvement mensuel automatique pour faciliter le règlement de vos primes futures. Contactez-nous pour en faire la demande.
+
+🏦 Par virement bancaire :
+IBAN : FR76 [À COMPLÉTER]
+BIC : [À COMPLÉTER]
+Référence obligatoire : ${contrat} / ${client}
+
+Nous vous remercions de bien vouloir régulariser cette situation dans un délai de 15 jours à compter de la réception du présent courrier.
+
+Pour toute question, notre équipe reste à votre disposition au 02 31 92 81 31.
+
+${SIG_MED}`,
+      };
+
+    case 'relance_2':
+      return {
+        objet: `URGENT — Contrat ${typeC} n°${contrat} — Dernière relance amiable avant mise en demeure`,
+        corps: `${client},
+
+Malgré notre précédent courrier, votre prime d'assurance ${typeC} n°${contrat} souscrit auprès d'Allianz, d'un montant de ${montant}, demeure impayée à ce jour.
+
+Sans règlement de votre part dans un délai de 10 jours à compter de la réception du présent courrier, nous nous verrons dans l'obligation :
+• D'engager la procédure de mise en demeure officielle conformément à l'article L. 113-3 du Code des assurances
+• De procéder à la résiliation de votre contrat pour non-paiement de prime
+
+Nous vous rappelons les modes de règlement disponibles :
+💳 CB en ligne : [LIEN CB À COMPLÉTER]
+🏦 Virement : IBAN FR76 [À COMPLÉTER] — Réf. ${contrat} / ${client}
+📞 Contact : 02 31 92 81 31
+
+Nous restons à votre disposition pour trouver ensemble une solution adaptée à votre situation.
+
+${SIG_MED}`,
+      };
+
+    case 'med_officielle':
+      return {
+        objet: `MISE EN DEMEURE — Contrat ${typeC} n°${contrat} — Résiliation pour non-paiement`,
+        corps: `${client},
+
+Par la présente, et conformément aux dispositions de l'article L. 113-3 du Code des assurances, nous vous adressons une MISE EN DEMEURE formelle de régler la prime échue de votre contrat ${typeC} n°${contrat} souscrit auprès de la compagnie Allianz, d'un montant de ${montant}.
+
+Sans règlement intégral de votre part dans un délai de 30 jours à compter de la réception de la présente mise en demeure, votre contrat d'assurance sera résilié de plein droit pour non-paiement de prime, en application de l'article L. 113-3 précité et des conditions générales de votre contrat.
+
+Cette résiliation entraînera la perte définitive de toutes vos garanties. Tout sinistre survenant après la date de résiliation ne pourra donner lieu à aucune indemnisation.
+
+Règlement à effectuer sans délai :
+🏦 Virement : IBAN FR76 [À COMPLÉTER] — Réf. ${contrat} / ${client}
+💳 CB en ligne : [LIEN CB À COMPLÉTER]
+📞 Contact : 02 31 92 81 31
+
+Veuillez agréer, ${client}, l'expression de nos salutations distinguées.
+
+${SIG_MED}`,
+      };
+
+    default:
+      return { objet: '', corps: '' };
+  }
+}

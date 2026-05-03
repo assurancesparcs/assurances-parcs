@@ -320,6 +320,26 @@ textarea.form-control{resize:vertical;min-height:72px}
 .dtable-client > span:first-child { font-size: 14px; }
 .dtable-assignee { font-size: 10px; color: var(--text-dim); }
 
+/* ─── MODULE MED ─── */
+.med-view { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.med-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.med-kpi { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 18px; }
+.med-kpi-value { font-size: 1.5rem; font-weight: 900; }
+.med-kpi-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.med-header { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+.med-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+.med-card { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid #f87171; border-radius: var(--r); padding: 16px; cursor: pointer; transition: border-color .2s, box-shadow .2s; }
+.med-card:hover { border-color: #f87171; box-shadow: 0 0 0 1px rgba(248,113,113,.3), var(--shadow); }
+.med-card-top { display: flex; gap: 12px; margin-bottom: 8px; }
+.med-client { font-size: 15px; font-weight: 800; color: var(--text); }
+.med-contrat { font-size: 12px; color: var(--text-muted); margin-top: 2px; display: flex; gap: 6px; align-items: center; }
+.med-num { background: var(--bg-input); border-radius: 4px; padding: 1px 6px; font-size: 11px; color: var(--text-dim); }
+.med-montant { font-size: 12px; color: #f87171; margin-top: 6px; }
+.med-status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.med-footer { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--border); }
+.btn-paye { background: rgba(52,211,153,.15); border: 1px solid rgba(52,211,153,.4); color: #34d399; border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .2s; }
+.btn-paye:hover { background: rgba(52,211,153,.25); }
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   .navbar{flex-wrap:wrap;height:auto;padding:8px 12px;gap:8px}

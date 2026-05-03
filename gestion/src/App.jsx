@@ -21,6 +21,10 @@ import ContractModal from './components/ContractModal';
 import ContractImportModal from './components/ContractImportModal';
 import SinistreModal from './components/SinistreModal';
 import RelanceModal from './components/RelanceModal';
+import MEDView from './components/MEDView';
+import MEDModal from './components/MEDModal';
+import MEDImportModal from './components/MEDImportModal';
+import MEDRelanceModal from './components/MEDRelanceModal';
 import { LoadingScreen, UserNameScreen, ConfigScreen, PinScreen } from './components/Screens';
 
 const ACTIVE_SIN = ['declare', 'en_instruction', 'attente_pieces', 'expertise'];
@@ -33,6 +37,7 @@ export default function App() {
   const [contracts, setContracts]       = useState([]);
   const [sinistres, setSinistres]       = useState([]);
   const [sinistresChasse, setSinistresChasse] = useState([]);
+  const [medDossiers, setMedDossiers]   = useState([]);
   const [view, setView]                 = useState('liste');
   const [taskModal, setTaskModal]       = useState(null);
   const [clientModal, setClientModal]   = useState(null);
@@ -42,6 +47,9 @@ export default function App() {
   const [sinistreMode, setSinistreMode] = useState('standard');
   const [relanceModal, setRelanceModal] = useState(null);
   const [relanceCollection, setRelanceCollection] = useState('sinistres');
+  const [medModal, setMedModal]         = useState(null);
+  const [medImportModal, setMedImportModal] = useState(false);
+  const [medRelanceModal, setMedRelanceModal] = useState(null);
   const [search, setSearch]             = useState('');
   const [filters, setFilters]           = useState({ type: '', priority: '', status: '', clientId: '' });
   const [loading, setLoading]           = useState(true);
@@ -60,7 +68,9 @@ export default function App() {
       s => setSinistres(s.docs.map(d => ({ id: d.id, ...d.data() }))));
     const u5 = onSnapshot(collection(db, 'sinistresChasse'),
       s => setSinistresChasse(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-    return () => { u1(); u2(); u3(); u4(); u5(); };
+    const u6 = onSnapshot(collection(db, 'medDossiers'),
+      s => setMedDossiers(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+    return () => { u1(); u2(); u3(); u4(); u5(); u6(); };
   }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
@@ -135,6 +145,39 @@ export default function App() {
     setRelanceModal(sinistre);
   };
 
+  // ─── MED handlers ──────────────────────────────────────────────────────────
+  const saveMED = async (data) => {
+    const { id, ...rest } = data;
+    const payload = { ...rest, updatedAt: serverTimestamp() };
+    try {
+      if (id) await updateDoc(doc(db, 'medDossiers', id), payload);
+      else await addDoc(collection(db, 'medDossiers'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+    } catch (e) { alert('Erreur : ' + e.message); }
+  };
+  const deleteMED = async (id) => {
+    if (confirm('Supprimer ce dossier MED ?')) await deleteDoc(doc(db, 'medDossiers', id));
+  };
+  const markMEDPaye = async (id) => {
+    await updateDoc(doc(db, 'medDossiers', id), { status: 'paye', updatedAt: serverTimestamp() });
+  };
+  const saveMEDRelance = async (id, updateData) => {
+    await updateDoc(doc(db, 'medDossiers', id), { ...updateData, updatedAt: serverTimestamp() });
+  };
+  const importMED = async (rows) => {
+    for (const r of rows) {
+      try {
+        await addDoc(collection(db, 'medDossiers'), {
+          ...r, createdBy: userName,
+          createdAt: serverTimestamp(), updatedAt: serverTimestamp(),
+        });
+      } catch (e) { console.error(e); }
+    }
+  };
+
+  const medAlertCount = useMemo(() =>
+    medDossiers.filter(d => ['en_cours', 'relance_1'].includes(d.status)).length,
+    [medDossiers]);
+
   // ─── Computed badges ───────────────────────────────────────────────────────
   const sinistresAlertCount = useMemo(() =>
     sinistres.filter(s => ACTIVE_SIN.includes(s.status) &&
@@ -191,7 +234,8 @@ export default function App() {
         onChangeUser={() => { localStorage.removeItem('userName'); setUserName(null); }}
         sinistresAlertCount={sinistresAlertCount}
         sinistresChassseAlertCount={sinistresChassseAlertCount}
-        sinistresRelanceCount={sinistresRelanceCount} />
+        sinistresRelanceCount={sinistresRelanceCount}
+        medAlertCount={medAlertCount} />
       {view === 'liste' && (
         <SearchFilters search={search} setSearch={setSearch}
           filters={filters} setFilters={setFilters} clients={clients} />
@@ -230,6 +274,16 @@ export default function App() {
             sinistres={sinistres} sinistresChasse={sinistresChasse}
             onRelance={(s, col) => openRelance(s, col)} />
         )}
+        {view === 'med' && (
+          <MEDView
+            dossiers={medDossiers}
+            onAdd={() => setMedModal({})}
+            onEdit={d => setMedModal(d)}
+            onDelete={deleteMED}
+            onRelance={d => setMedRelanceModal(d)}
+            onMarkPaye={markMEDPaye}
+            onImport={() => setMedImportModal(true)} />
+        )}
         {view === 'stats' && <StatsView items={items} clients={clients} sinistres={sinistres} sinistresChasse={sinistresChasse} />}
       </main>
 
@@ -246,6 +300,14 @@ export default function App() {
         userName={userName} mode={sinistreMode}
         onSave={data => saveSinistre(data, currentSinistreCol)}
         onClose={() => setSinistreModal(null)} />}
+      {medModal !== null && <MEDModal
+        dossier={medModal}
+        onSave={saveMED} onClose={() => setMedModal(null)} />}
+      {medImportModal && <MEDImportModal
+        onImport={importMED} onClose={() => setMedImportModal(false)} />}
+      {medRelanceModal !== null && <MEDRelanceModal
+        dossier={medRelanceModal}
+        onSave={saveMEDRelance} onClose={() => setMedRelanceModal(null)} />}
       {relanceModal !== null && <RelanceModal
         sinistre={relanceModal}
         mode={relanceCollection === 'sinistresChasse' ? 'chasse' : 'standard'}

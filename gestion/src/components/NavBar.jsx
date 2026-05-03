@@ -6,6 +6,7 @@ const VIEWS = [
   { id: 'sinistres',        icon: '🛡️', label: 'Sinistres' },
   { id: 'sinistres_chasse', icon: '🏹', label: 'Chasse' },
   { id: 'dashboard_sin',    icon: '☀️', label: 'Matin' },
+  { id: 'med',              icon: '📬', label: 'MED' },
   { id: 'stats',            icon: '📊', label: 'Stats' },
 ];
 
@@ -24,6 +25,7 @@ function Badge({ count, color = '#f87171' }) {
 export default function NavBar({
   view, setView, userName, onAdd, onChangeUser, count,
   sinistresAlertCount, sinistresRelanceCount, sinistresChassseAlertCount,
+  medAlertCount,
 }) {
   return (
     <nav className="navbar">
@@ -43,6 +45,7 @@ export default function NavBar({
             {v.id === 'sinistres'        && <Badge count={sinistresAlertCount} />}
             {v.id === 'sinistres_chasse' && <Badge count={sinistresChassseAlertCount} />}
             {v.id === 'dashboard_sin'    && <Badge count={sinistresRelanceCount} color="#fbbf24" />}
+            {v.id === 'med'              && <Badge count={medAlertCount} color="#f87171" />}
           </button>
         ))}
       </div>

@@ -1,11 +1,20 @@
 module.exports = async function handler(req, res) {
+  console.log('=== HANDLER START ===');
+  console.log('method:', req.method);
+  console.log('body type:', typeof req.body);
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   console.log('=== RDV WEBHOOK RECEIVED ===');
-  console.log('triggerEvent:', req.body && req.body.triggerEvent);
-  console.log('body keys:', Object.keys(req.body || {}));
+  try {
+    console.log('triggerEvent:', req.body && req.body.triggerEvent);
+    console.log('body keys:', Object.keys(req.body || {}));
+  } catch(e) {
+    console.error('Body parse error:', e.message);
+    return res.status(200).json({ ok: true, note: 'body_error' });
+  }
 
   const triggerEvent = req.body && req.body.triggerEvent;
   const payload      = req.body && req.body.payload;

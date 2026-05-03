@@ -3,6 +3,7 @@ const VIEWS = [
   { id: 'calendrier',       icon: '📅', label: 'Calendrier' },
   { id: 'clients',          icon: '👥', label: 'Clients' },
   { id: 'contrats',         icon: '📄', label: 'Contrats' },
+  { id: 'echeances',        icon: '🔔', label: 'Échéances' },
   { id: 'sinistres',        icon: '🛡️', label: 'Sinistres' },
   { id: 'sinistres_chasse', icon: '🏹', label: 'Chasse' },
   { id: 'dashboard_sin',    icon: '☀️', label: 'Matin' },
@@ -26,7 +27,7 @@ function Badge({ count, color = '#f87171' }) {
 export default function NavBar({
   view, setView, userName, onAdd, onChangeUser, count,
   sinistresAlertCount, sinistresRelanceCount, sinistresChassseAlertCount,
-  medAlertCount, onSearch,
+  medAlertCount, echeancesAlertCount, onSearch,
 }) {
   return (
     <nav className="navbar">
@@ -47,6 +48,7 @@ export default function NavBar({
             {v.id === 'sinistres_chasse' && <Badge count={sinistresChassseAlertCount} />}
             {v.id === 'dashboard_sin'    && <Badge count={sinistresRelanceCount} color="#fbbf24" />}
             {v.id === 'med'              && <Badge count={medAlertCount} color="#f87171" />}
+            {v.id === 'echeances'        && <Badge count={echeancesAlertCount} color="#fb923c" />}
           </button>
         ))}
       </div>

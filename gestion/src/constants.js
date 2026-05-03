@@ -384,7 +384,111 @@ Veuillez agréer, ${client}, l'expression de nos salutations distinguées.
 ${SIG_MED}`,
       };
 
-    default:
-      return { objet: '', corps: '' };
+    default: return { objet: '', corps: '' };
+  }
+}
+
+// ─── MODULE ÉCHÉANCES / RENOUVELLEMENTS ───────────────────────────────────────
+
+export const ECHEANCE_URGENCE = {
+  critique:  { label: '< 15 jours', color: '#f87171', bg: 'rgba(248,113,113,.15)', seuil: 15 },
+  urgent:    { label: '< 30 jours', color: '#fb923c', bg: 'rgba(251,146,60,.15)',  seuil: 30 },
+  attention: { label: '< 60 jours', color: '#fbbf24', bg: 'rgba(251,191,36,.15)',  seuil: 60 },
+  ok:        { label: '< 90 jours', color: '#60a5fa', bg: 'rgba(96,165,250,.15)',  seuil: 90 },
+};
+
+export function echeanceUrgence(jours) {
+  if (jours === null || jours === undefined) return null;
+  if (jours < 0)   return { ...ECHEANCE_URGENCE.critique, label: 'Échu', color: '#6b7494' };
+  if (jours <= 15) return ECHEANCE_URGENCE.critique;
+  if (jours <= 30) return ECHEANCE_URGENCE.urgent;
+  if (jours <= 60) return ECHEANCE_URGENCE.attention;
+  if (jours <= 90) return ECHEANCE_URGENCE.ok;
+  return null;
+}
+
+export const RENOUVELLEMENT_TEMPLATES = {
+  info_90j:    { label: 'Information 90 jours',          icon: '📅' },
+  relance_60j: { label: 'Relance 60 jours',              icon: '🔔' },
+  relance_30j: { label: 'Relance urgente 30 jours',      icon: '⚠️' },
+  confirmation:{ label: 'Confirmation renouvellement',   icon: '✅' },
+};
+
+const SIG_STD = `Cordialement,\nAmélie BLANCO\nCABINET PONCEY LEBAS\nTél : 02 31 92 81 31 — N° Orias : 07022305-12066667`;
+
+export function getRenouvellementTemplate(type, contrat) {
+  const client   = contrat.clientName || 'Madame, Monsieur';
+  const typeC    = contrat.type       || 'votre contrat';
+  const num      = contrat.numero     ? ` n°${contrat.numero}` : '';
+  const echeance = (() => {
+    if (!contrat.dateEcheance) return '[DATE ÉCHÉANCE]';
+    const d = contrat.dateEcheance.toDate ? contrat.dateEcheance.toDate() : new Date(contrat.dateEcheance);
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
+  })();
+  const jours    = daysUntil(contrat.dateEcheance);
+  const joursStr = jours !== null && jours > 0 ? `dans ${jours} jour${jours > 1 ? 's' : ''}` : 'prochainement';
+
+  switch (type) {
+    case 'info_90j':
+      return {
+        objet: `Votre contrat ${typeC}${num} — Échéance le ${echeance}`,
+        corps: `${client},
+
+Nous vous contactons afin de vous informer que votre contrat ${typeC}${num} arrive à échéance le ${echeance}, soit ${joursStr}.
+
+À l'approche de cette date, nous souhaitons prendre contact avec vous pour faire le point sur vos besoins et vous proposer les meilleures conditions de renouvellement.
+
+N'hésitez pas à nous contacter au 02 31 92 81 31 ou à répondre directement à ce mail pour convenir d'un rendez-vous.
+
+${SIG_STD}`,
+      };
+
+    case 'relance_60j':
+      return {
+        objet: `Renouvellement de votre contrat ${typeC}${num} — Échéance le ${echeance}`,
+        corps: `${client},
+
+Nous revenons vers vous concernant l'échéance de votre contrat ${typeC}${num} prévue le ${echeance} (${joursStr}).
+
+Afin de vous garantir une continuité de couverture sans interruption, nous vous invitons à nous contacter rapidement pour procéder au renouvellement dans les meilleures conditions.
+
+Nous restons à votre disposition pour répondre à toutes vos questions ou adapter votre couverture si vos besoins ont évolué.
+
+📞 02 31 92 81 31
+
+${SIG_STD}`,
+      };
+
+    case 'relance_30j':
+      return {
+        objet: `URGENT — Votre contrat ${typeC}${num} expire le ${echeance} — Action requise`,
+        corps: `${client},
+
+Nous vous rappelons en urgence que votre contrat ${typeC}${num} expire le ${echeance}, soit ${joursStr}.
+
+Sans renouvellement avant cette date, vous ne bénéficierez plus d'aucune garantie à compter du ${echeance}.
+
+Merci de nous contacter sans délai au 02 31 92 81 31 afin de régulariser le renouvellement de votre contrat.
+
+${SIG_STD}`,
+      };
+
+    case 'confirmation':
+      return {
+        objet: `Confirmation de renouvellement — Contrat ${typeC}${num}`,
+        corps: `${client},
+
+Nous avons le plaisir de vous confirmer le renouvellement de votre contrat ${typeC}${num}.
+
+Votre couverture est maintenue sans interruption. Vous recevrez prochainement votre avis d'échéance et les documents contractuels correspondants.
+
+Nous vous remercions de votre confiance renouvelée et restons à votre disposition pour toute question.
+
+📞 02 31 92 81 31
+
+${SIG_STD}`,
+      };
+
+    default: return { objet: '', corps: '' };
   }
 }

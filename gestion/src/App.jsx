@@ -23,6 +23,8 @@ import ContractImportModal from './components/ContractImportModal';
 import SinistreModal from './components/SinistreModal';
 import RelanceModal from './components/RelanceModal';
 import MEDView from './components/MEDView';
+import EcheancesView from './components/EcheancesView';
+import EcheanceRelanceModal from './components/EcheanceRelanceModal';
 import Client360Modal from './components/Client360Modal';
 import GlobalSearch from './components/GlobalSearch';
 import ActivityLogView from './components/ActivityLogView';
@@ -58,6 +60,7 @@ export default function App() {
   const [medModal, setMedModal]         = useState(null);
   const [medImportModal, setMedImportModal] = useState(false);
   const [medRelanceModal, setMedRelanceModal] = useState(null);
+  const [echeanceRelanceModal, setEcheanceRelanceModal] = useState(null);
   const [search, setSearch]             = useState('');
   const [filters, setFilters]           = useState({ type: '', priority: '', status: '', clientId: '' });
   const [loading, setLoading]           = useState(true);
@@ -231,6 +234,30 @@ export default function App() {
     medDossiers.filter(d => ['en_cours', 'relance_1'].includes(d.status)).length,
     [medDossiers]);
 
+  // ─── Échéances handlers ────────────────────────────────────────────────────
+  const saveEcheanceRelance = async (id, updateData) => {
+    await updateDoc(doc(db, 'contrats', id), { ...updateData, updatedAt: serverTimestamp() });
+    const c = contracts.find(x => x.id === id);
+    logActivity('contrat_modifie', c?.clientName || '', 'Relance renouvellement envoyée');
+  };
+  const markRenewed = async (contrat) => {
+    if (!confirm(`Marquer le contrat de ${contrat.clientName} comme renouvelé ?`)) return;
+    const annee = new Date().getFullYear();
+    const historique = [...(contrat.historique || []), { annee, montant: 0, payee: false, renouvele: true }];
+    await updateDoc(doc(db, 'contrats', contrat.id), {
+      historique, primePayee: false, updatedAt: serverTimestamp(),
+    });
+    logActivity('contrat_modifie', contrat.clientName || '', `Renouvelé ${annee}`);
+  };
+
+  const echeancesAlertCount = useMemo(() =>
+    contracts.filter(c => {
+      if (!c.dateEcheance) return false;
+      const j = Math.round(((c.dateEcheance.toDate ? c.dateEcheance.toDate() : new Date(c.dateEcheance)) - new Date()) / 86400000);
+      return j <= 30;
+    }).length,
+    [contracts]);
+
   // ─── Computed badges ───────────────────────────────────────────────────────
   const sinistresAlertCount = useMemo(() =>
     sinistres.filter(s => ACTIVE_SIN.includes(s.status) &&
@@ -289,6 +316,7 @@ export default function App() {
         sinistresChassseAlertCount={sinistresChassseAlertCount}
         sinistresRelanceCount={sinistresRelanceCount}
         medAlertCount={medAlertCount}
+        echeancesAlertCount={echeancesAlertCount}
         onSearch={() => setGlobalSearch(true)} />
       {view === 'liste' && (
         <SearchFilters search={search} setSearch={setSearch}
@@ -329,6 +357,12 @@ export default function App() {
             sinistres={sinistres} sinistresChasse={sinistresChasse}
             onRelance={(s, col) => openRelance(s, col)} />
         )}
+        {view === 'echeances' && (
+          <EcheancesView
+            contracts={contracts}
+            onRelance={c => setEcheanceRelanceModal(c)}
+            onRenew={markRenewed} />
+        )}
         {view === 'med' && (
           <MEDView
             dossiers={medDossiers}
@@ -345,6 +379,10 @@ export default function App() {
 
       {taskModal     && <TaskModal item={taskModal} clients={clients} userName={userName}
         onSave={saveItem} onClose={() => setTaskModal(null)} />}
+      {echeanceRelanceModal && <EcheanceRelanceModal
+        contrat={echeanceRelanceModal}
+        onSave={saveEcheanceRelance}
+        onClose={() => setEcheanceRelanceModal(null)} />}
       {clientImportModal && <ClientImportModal clients={clients}
         onImport={importClients} onClose={() => setClientImportModal(false)} />}
       {clientModal   && <ClientModal client={clientModal}

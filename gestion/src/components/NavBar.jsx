@@ -25,7 +25,7 @@ function Badge({ count, color = '#f87171' }) {
 export default function NavBar({
   view, setView, userName, onAdd, onChangeUser, count,
   sinistresAlertCount, sinistresRelanceCount, sinistresChassseAlertCount,
-  medAlertCount,
+  medAlertCount, onSearch,
 }) {
   return (
     <nav className="navbar">
@@ -50,6 +50,10 @@ export default function NavBar({
         ))}
       </div>
       <div className="nav-right">
+        <button className="btn-search" onClick={onSearch} title="Recherche globale (Ctrl+K)">
+          🔍 <span className="nav-tab-label">Recherche</span>
+          <span className="search-kbd">Ctrl+K</span>
+        </button>
         <button className="btn-add" onClick={onAdd}>+ Nouveau</button>
         <div className={`user-badge ${userName === 'Johann' ? 'patron' : 'assistante'}`}
           onClick={onChangeUser} title="Changer d'utilisateur" style={{ cursor: 'pointer' }}>

@@ -23,6 +23,7 @@ import SinistreModal from './components/SinistreModal';
 import RelanceModal from './components/RelanceModal';
 import MEDView from './components/MEDView';
 import Client360Modal from './components/Client360Modal';
+import GlobalSearch from './components/GlobalSearch';
 import MEDModal from './components/MEDModal';
 import MEDImportModal from './components/MEDImportModal';
 import MEDRelanceModal from './components/MEDRelanceModal';
@@ -49,6 +50,7 @@ export default function App() {
   const [relanceModal, setRelanceModal] = useState(null);
   const [relanceCollection, setRelanceCollection] = useState('sinistres');
   const [client360, setClient360]       = useState(null);
+  const [globalSearch, setGlobalSearch] = useState(false);
   const [medModal, setMedModal]         = useState(null);
   const [medImportModal, setMedImportModal] = useState(false);
   const [medRelanceModal, setMedRelanceModal] = useState(null);
@@ -76,6 +78,17 @@ export default function App() {
   }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setGlobalSearch(v => !v);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   // ─── Items handlers ────────────────────────────────────────────────────────
   const saveItem = async (data) => {
@@ -237,7 +250,8 @@ export default function App() {
         sinistresAlertCount={sinistresAlertCount}
         sinistresChassseAlertCount={sinistresChassseAlertCount}
         sinistresRelanceCount={sinistresRelanceCount}
-        medAlertCount={medAlertCount} />
+        medAlertCount={medAlertCount}
+        onSearch={() => setGlobalSearch(true)} />
       {view === 'liste' && (
         <SearchFilters search={search} setSearch={setSearch}
           filters={filters} setFilters={setFilters} clients={clients} />
@@ -302,6 +316,12 @@ export default function App() {
         userName={userName} mode={sinistreMode}
         onSave={data => saveSinistre(data, currentSinistreCol)}
         onClose={() => setSinistreModal(null)} />}
+      {globalSearch && <GlobalSearch
+        clients={clients} contracts={contracts}
+        sinistres={sinistres} sinistresChasse={sinistresChasse}
+        medDossiers={medDossiers} items={items}
+        onNavigate={v => { setView(v); setGlobalSearch(false); }}
+        onClose={() => setGlobalSearch(false)} />}
       {client360 && <Client360Modal
         client={client360}
         contracts={contracts} sinistres={sinistres}

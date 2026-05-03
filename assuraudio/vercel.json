@@ -1,8 +1,8 @@
 {
   "outputDirectory": ".",
   "functions": {
-    "api/chat.js": { "runtime": "nodejs18.x" },
-    "api/rdv.js": { "runtime": "nodejs18.x" }
+    "api/chat.js": { "maxDuration": 10 },
+    "api/rdv.js": { "maxDuration": 10 }
   },
   "rewrites": [
     { "source": "/((?!api/).*)", "destination": "/index.html" }

@@ -17,6 +17,7 @@ import SinistresDashboard from './components/SinistresDashboard';
 import StatsView from './components/StatsView';
 import TaskModal from './components/TaskModal';
 import ClientModal from './components/ClientModal';
+import ClientImportModal from './components/ClientImportModal';
 import ContractModal from './components/ContractModal';
 import ContractImportModal from './components/ContractImportModal';
 import SinistreModal from './components/SinistreModal';
@@ -44,6 +45,7 @@ export default function App() {
   const [view, setView]                 = useState('liste');
   const [taskModal, setTaskModal]       = useState(null);
   const [clientModal, setClientModal]   = useState(null);
+  const [clientImportModal, setClientImportModal] = useState(false);
   const [contractModal, setContractModal] = useState(null);
   const [importModal, setImportModal]   = useState(false);
   const [sinistreModal, setSinistreModal] = useState(null);
@@ -126,6 +128,13 @@ export default function App() {
     const payload = { ...rest, updatedAt: serverTimestamp() };
     if (id) { await updateDoc(doc(db, 'clients', id), payload); logActivity('client_modifie', rest.name || ''); }
     else { await addDoc(collection(db, 'clients'), { ...payload, createdAt: serverTimestamp() }); logActivity('client_cree', rest.name || ''); }
+  };
+  const importClients = async (rows) => {
+    for (const r of rows) {
+      try { await addDoc(collection(db, 'clients'), { ...r, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }); }
+      catch (e) { console.error(e); }
+    }
+    logActivity('client_cree', `${rows.length} client${rows.length > 1 ? 's' : ''} importé${rows.length > 1 ? 's' : ''}`);
   };
   const deleteClient = async (id) => { if (confirm('Supprimer ce client ?')) await deleteDoc(doc(db, 'clients', id)); };
 
@@ -292,7 +301,8 @@ export default function App() {
         {view === 'calendrier' && <CalendarView items={items} onEdit={setTaskModal} userName={userName} />}
         {view === 'clients' && <ClientsView clients={clients} items={items}
           onAddClient={() => setClientModal({})} onEditClient={setClientModal}
-          onDeleteClient={deleteClient} onView360={setClient360} />}
+          onDeleteClient={deleteClient} onView360={setClient360}
+          onImport={() => setClientImportModal(true)} />}
         {view === 'contrats' && <ContractsView contracts={contracts} clients={clients}
           onAdd={() => setContractModal({})} onEdit={setContractModal}
           onDelete={deleteContract} onTogglePaid={togglePaid} onImport={() => setImportModal(true)} />}
@@ -335,6 +345,8 @@ export default function App() {
 
       {taskModal     && <TaskModal item={taskModal} clients={clients} userName={userName}
         onSave={saveItem} onClose={() => setTaskModal(null)} />}
+      {clientImportModal && <ClientImportModal clients={clients}
+        onImport={importClients} onClose={() => setClientImportModal(false)} />}
       {clientModal   && <ClientModal client={clientModal}
         onSave={saveClient} onClose={() => setClientModal(null)} />}
       {contractModal && <ContractModal contract={contractModal} clients={clients}

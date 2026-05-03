@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 
-export default function ClientsView({ clients, items, onAddClient, onEditClient, onDeleteClient, onView360 }) {
+export default function ClientsView({ clients, items, onAddClient, onEditClient, onDeleteClient, onView360, onImport }) {
   const [search, setSearch] = useState('');
   const filtered = useMemo(() => clients.filter(c => !search ||
     c.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -25,6 +25,7 @@ export default function ClientsView({ clients, items, onAddClient, onEditClient,
           <input className="search-input" placeholder="Rechercher un client…"
             value={search} onChange={e => setSearch(e.target.value)} />
         </div>
+        <button className="btn-secondary" onClick={onImport}>📥 Import CSV</button>
         <button className="btn-primary" onClick={onAddClient}>+ Nouveau client</button>
       </div>
       {!filtered.length ? (

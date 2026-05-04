@@ -8,7 +8,7 @@ export default function TaskModal({ item, clients, onSave, onClose, userName }) 
     : '';
   const [form, setForm] = useState({
     title: '', type: 'tache', priority: 'normal', status: 'a_faire',
-    clientId: '', clientName: '', time: '', description: '', notes: '',
+    clientId: '', clientName: '', time: '', timeFin: '', description: '', notes: '',
     assignedTo: userName || '',
     ...item,
     date: initialDate,
@@ -84,8 +84,14 @@ export default function TaskModal({ item, clients, onSave, onClose, userName }) 
             </div>
             {form.type === 'rdv' && (
               <div className="form-group">
-                <label>Heure</label>
+                <label>Heure de début</label>
                 <input className="form-control" type="time" value={form.time} onChange={e => set('time', e.target.value)} />
+              </div>
+            )}
+            {form.type === 'rdv' && (
+              <div className="form-group">
+                <label>Heure de fin</label>
+                <input className="form-control" type="time" value={form.timeFin} onChange={e => set('timeFin', e.target.value)} />
               </div>
             )}
           </div>

@@ -30,7 +30,7 @@ export default function TaskCard({ item, onEdit, onDelete, onStatusChange }) {
           <span className="card-date" style={{ color: '#34d399' }}>✅ Clôturé le {fmtTimestamp(item.termineAt)}</span>
         ) : item.date ? (
           <span className={`card-date ${overdue ? 'overdue-text' : ''}`}>
-            📅 {fmtDate(item.date)}{item.type === 'rdv' && item.time ? ` · ${item.time}` : ''}
+            📅 {fmtDate(item.date)}{item.type === 'rdv' && item.time ? ` · ${item.time}${item.timeFin ? ` – ${item.timeFin}` : ''}` : ''}
           </span>
         ) : null}
         <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginLeft: 'auto' }}>

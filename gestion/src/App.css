@@ -116,16 +116,21 @@ button{font-family:inherit}
 .cal-today:hover{border-color:var(--orange)}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .cal-day-header{text-align:center;font-size:11px;font-weight:700;color:var(--text-dim);padding:8px 4px;letter-spacing:.5px}
-.cal-cell{min-height:90px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rs);padding:6px;overflow:hidden}
+.cal-cell{min-height:90px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--rs);padding:6px;overflow:hidden;transition:border-color .15s,background .15s}
+.cal-cell:not(.empty):hover{border-color:var(--orange);background:rgba(255,107,53,.04)}
 .cal-cell.empty{background:transparent;border-color:transparent}
 .cal-cell.past{opacity:.6}
 .cal-cell.today{border-color:var(--orange);background:rgba(255,107,53,.08)}
+.cal-cell.selected{border-color:var(--orange);background:rgba(255,107,53,.12);box-shadow:0 0 0 2px rgba(255,107,53,.25)}
 .cal-date{font-size:12px;font-weight:700;margin-bottom:4px}
 .cal-cell.today .cal-date{color:var(--orange)}
+.cal-cell.selected .cal-date{color:var(--orange)}
 .cal-items{display:flex;flex-direction:column;gap:2px}
-.cal-item{font-size:10px;padding:2px 5px;border-radius:4px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-item:hover{opacity:.8}
+.cal-item{font-size:10px;padding:2px 5px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cal-more{font-size:10px;color:var(--text-dim);padding:2px 4px}
+.cal-day-panel{width:280px;flex-shrink:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px;max-height:600px;overflow-y:auto;position:sticky;top:16px}
+.cal-day-panel-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.cal-day-item{background:var(--bg-input);border-radius:6px;padding:10px 12px;border-left:3px solid var(--orange)}
 
 /* ─── CLIENTS ─── */
 .clients-header{display:flex;gap:12px;margin-bottom:16px;align-items:center}

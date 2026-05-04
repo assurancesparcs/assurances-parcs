@@ -88,6 +88,27 @@ export default function App() {
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
 
+  // ─── Déconnexion automatique après 4h d'inactivité ────────────────────────
+  useEffect(() => {
+    if (!unlocked) return;
+    const TIMEOUT_MS = 4 * 60 * 60 * 1000; // 4 heures
+    let timer;
+    const reset = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        sessionStorage.removeItem('unlocked');
+        setUnlocked(false);
+      }, TIMEOUT_MS);
+    };
+    const events = ['mousedown', 'keydown', 'touchstart', 'scroll'];
+    events.forEach(e => window.addEventListener(e, reset, { passive: true }));
+    reset();
+    return () => {
+      clearTimeout(timer);
+      events.forEach(e => window.removeEventListener(e, reset));
+    };
+  }, [unlocked]);
+
   useEffect(() => {
     const handler = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {

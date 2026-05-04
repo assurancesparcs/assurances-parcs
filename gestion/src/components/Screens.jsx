@@ -56,11 +56,14 @@ export function LoadingScreen() {
 
 const TEAM = [
   { name: 'Johann',     icon: '👨‍💼', cls: 'patron' },
+  { name: 'E.Poncey',   icon: '👨‍💼', cls: 'patron' },
   { name: 'Ombeline',   icon: '👩‍💼', cls: 'assistante' },
   { name: 'Julie',      icon: '👩‍💼', cls: 'assistante' },
   { name: 'Priscillia', icon: '👩‍💼', cls: 'assistante' },
   { name: 'Amélie',     icon: '👩‍💼', cls: 'assistante' },
   { name: 'Justine',    icon: '👩‍💼', cls: 'assistante' },
+  { name: 'Wiam',       icon: '👩‍💼', cls: 'assistante' },
+  { name: 'Wendy',      icon: '👩‍💼', cls: 'assistante' },
 ];
 
 export function UserNameScreen({ onSelect }) {

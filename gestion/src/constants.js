@@ -22,7 +22,7 @@ export const CONTRACT_TYPES = [
   'Homme-Clé', 'RC Dirigeants', 'Pertes d\'Exploitation', 'Autre',
 ];
 
-export const USERS = ['Johann', 'Ombeline', 'Julie', 'Priscillia', 'Amélie', 'Justine'];
+export const USERS = ['Johann', 'E.Poncey', 'Ombeline', 'Julie', 'Priscillia', 'Amélie', 'Justine', 'Wiam', 'Wendy'];
 
 // ─── SINISTRES STANDARD ────────────────────────────────────────────────────────
 

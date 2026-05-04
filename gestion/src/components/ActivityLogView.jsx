@@ -28,11 +28,14 @@ const TYPE_META = {
 
 const USER_COLORS = {
   Johann:    '#a78bfa',
+  'E.Poncey':'#c084fc',
   Ombeline:  '#f472b6',
   Julie:     '#60a5fa',
   Priscillia:'#34d399',
   Amélie:    '#fb923c',
   Justine:   '#fbbf24',
+  Wiam:      '#38bdf8',
+  Wendy:     '#e879f9',
 };
 
 function fmtTime(ts) {

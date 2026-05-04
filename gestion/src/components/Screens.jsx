@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const SECRET = 'Cabinetpl';
+const SECRET = import.meta.env.VITE_APP_SECRET || 'Cabinetpl';
 
 export function PinScreen({ onUnlock }) {
   const [val, setVal] = useState('');

@@ -232,6 +232,16 @@ textarea.form-control{resize:vertical;min-height:72px}
 .btn-paid:not(.paid){background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)}
 .btn-paid:not(.paid):hover{background:rgba(251,191,36,.25)}
 .btn-paid.paid{background:rgba(52,211,153,.15);color:#34d399;border:1px solid rgba(52,211,153,.3)}
+/* ─── CONTRACTS TABLE VIEW ─── */
+.contracts-table-wrap{overflow-x:auto}
+.contracts-table{width:100%;border-collapse:collapse;font-size:13px}
+.contracts-table thead th{background:var(--bg-input);color:var(--text-muted);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid var(--border);white-space:nowrap}
+.sortable-th{cursor:pointer;user-select:none;transition:color .15s}
+.sortable-th:hover{color:var(--orange)}
+.sortable-th.active{color:var(--orange)}
+.contracts-table tbody td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.contracts-table-row{cursor:pointer;transition:background .15s}
+.contracts-table-row:hover td{background:rgba(255,107,53,.06)}
 .btn-paid.paid:hover{background:rgba(52,211,153,.25)}
 
 /* ─── SINISTRES ─── */

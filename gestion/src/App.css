@@ -7,8 +7,23 @@
   --r:12px;--rs:8px;--shadow:0 4px 24px rgba(0,0,0,.4);
 }
 html{font-size:14px}
-body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}
-button{font-family:inherit}
+body{
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-text-size-adjust:100%;
+  overscroll-behavior-y:none;
+  /* Safe areas iPhone (encoche + barre Home) */
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
+}
+button{font-family:inherit;-webkit-tap-highlight-color:transparent}
+/* Évite le zoom auto au focus sur iPhone (uniquement sur écrans mobiles) */
+@media (max-width:768px){
+  input,select,textarea{font-size:16px !important}
+}
 
 /* ─── LOADING & SCREENS ─── */
 .loading-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}

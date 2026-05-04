@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { tenant } from '../tenant/config';
 
 const HEADERS = ['Nom client', 'Email', 'Téléphone', 'Adresse', 'Type contrat', 'N° contrat', 'Montant dû (€)', 'Notes'];
 
@@ -61,7 +62,7 @@ export default function MEDImportModal({ onImport, onClose }) {
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="modal" style={{ maxWidth: 760 }}>
         <div className="modal-header">
-          <h2>📥 Import mensuel — Dossiers MED Allianz</h2>
+          <h2>📥 Import mensuel — Dossiers MED {tenant.primaryInsurer.name}</h2>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
 

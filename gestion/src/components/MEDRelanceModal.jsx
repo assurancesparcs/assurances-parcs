@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { getMEDEmailTemplate, MED_TEMPLATES, MED_STATUSES } from '../constants';
+import { tenant } from '../tenant/config';
 
 const TEMPLATE_ORDER = ['relance_1_cb', 'relance_2', 'med_officielle'];
 
@@ -55,7 +56,7 @@ export default function MEDRelanceModal({ dossier, onSave, onClose }) {
           <div>
             <h2>✉️ Courrier — {dossier.clientName || '—'}</h2>
             <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 2 }}>
-              {dossier.typeContrat} n°{dossier.numeroContrat || '—'} · Allianz ·{' '}
+              {dossier.typeContrat} n°{dossier.numeroContrat || '—'} · {tenant.primaryInsurer.name} ·{' '}
               {dossier.montantDu ? Number(dossier.montantDu).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €' : '—'}
             </div>
           </div>

@@ -1,16 +1,20 @@
-const VIEWS = [
-  { id: 'liste',            icon: '📋', label: 'Liste' },
-  { id: 'calendrier',       icon: '📅', label: 'Calendrier' },
-  { id: 'clients',          icon: '👥', label: 'Clients' },
-  { id: 'contrats',         icon: '📄', label: 'Contrats' },
-  { id: 'echeances',        icon: '🔔', label: 'Échéances' },
-  { id: 'sinistres',        icon: '🛡️', label: 'Sinistres' },
-  { id: 'sinistres_chasse', icon: '🏹', label: 'Chasse' },
-  { id: 'dashboard_sin',    icon: '☀️', label: 'Matin' },
-  { id: 'med',              icon: '📬', label: 'MED' },
-  { id: 'journal',          icon: '📓', label: 'Journal' },
-  { id: 'stats',            icon: '📊', label: 'Stats' },
+import { tenant } from '../tenant/config';
+
+const ALL_VIEWS = [
+  { id: 'liste',            icon: '📋', label: 'Liste',      module: null },
+  { id: 'calendrier',       icon: '📅', label: 'Calendrier', module: null },
+  { id: 'clients',          icon: '👥', label: 'Clients',    module: 'clients' },
+  { id: 'contrats',         icon: '📄', label: 'Contrats',   module: 'contracts' },
+  { id: 'echeances',        icon: '🔔', label: 'Échéances',  module: 'echeances' },
+  { id: 'sinistres',        icon: '🛡️', label: 'Sinistres',  module: 'sinistresStandard' },
+  { id: 'sinistres_chasse', icon: '🏹', label: 'Chasse',     module: 'sinistresChasse' },
+  { id: 'dashboard_sin',    icon: '☀️', label: 'Matin',      module: 'sinistresDashboard' },
+  { id: 'med',              icon: '📬', label: 'MED',        module: 'med' },
+  { id: 'journal',          icon: '📓', label: 'Journal',    module: 'activityLog' },
+  { id: 'stats',            icon: '📊', label: 'Stats',      module: 'stats' },
 ];
+
+const VIEWS = ALL_VIEWS.filter(v => !v.module || tenant.modules[v.module]);
 
 function Badge({ count, color = '#f87171' }) {
   if (!count) return null;
@@ -34,7 +38,7 @@ export default function NavBar({
       <div className="nav-brand">
         <span>⚡</span>
         <div>
-          <div className="nav-title">Mon Espace Pro</div>
+          <div className="nav-title">{tenant.shortName}</div>
           <div className="nav-sub">{count} élément{count !== 1 ? 's' : ''}</div>
         </div>
       </div>

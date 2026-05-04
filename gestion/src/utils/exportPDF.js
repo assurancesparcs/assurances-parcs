@@ -1,4 +1,5 @@
 import { SINISTRE_TYPES, SINISTRE_CHASSE_TYPES, SINISTRE_STATUSES, fmtDate } from '../constants';
+import { tenant } from '../tenant/config';
 
 const TEMPLATE_LABELS = {
   confirmation_reception: 'Confirmation de réception',
@@ -26,9 +27,23 @@ export function exportSinistrePDF(sinistre, mode = 'standard') {
   const tp       = types[sinistre.type] || { label: sinistre.type, icon: '📋' };
   const st       = SINISTRE_STATUSES[sinistre.status] || { label: sinistre.status };
 
-  const cabinet = isChasse
-    ? `Cabinet PONCEY Assurance Chasse<br>Tél : 0 800 014 033<br>97 rue de Bretagne — 14400 Bayeux<br>N° Orias : 07022305`
-    : `CABINET PONCEY LEBAS<br>Tél : 02 31 92 81 31<br>N° Orias : 07022305 - 12066667`;
+  const cabinetInfo = (isChasse && tenant.contactChasse) ? {
+    name: tenant.contactChasse.name,
+    phone: `${tenant.contactChasse.phone}${tenant.contactChasse.phoneCaption ? ' ' + tenant.contactChasse.phoneCaption : ''}`,
+    address: tenant.contactChasse.address,
+    orias: tenant.contactChasse.orias,
+  } : {
+    name: tenant.name,
+    phone: tenant.contact.phone,
+    address: tenant.contact.address,
+    orias: tenant.contact.orias,
+  };
+  const cabinet = [
+    cabinetInfo.name,
+    `Tél : ${cabinetInfo.phone}`,
+    cabinetInfo.address,
+    cabinetInfo.orias ? `N° Orias : ${cabinetInfo.orias}` : '',
+  ].filter(Boolean).join('<br>');
 
   const pieces = (sinistre.pieces || []);
   const piecesHtml = pieces.length
@@ -93,7 +108,7 @@ export function exportSinistrePDF(sinistre, mode = 'standard') {
       </div>
     </div>
     <div class="header-right">
-      <strong>Amélie BLANCO</strong><br>
+      <strong>${tenant.defaultSignatory.name}</strong><br>
       ${cabinet}
     </div>
   </div>
@@ -148,7 +163,7 @@ export function exportSinistrePDF(sinistre, mode = 'standard') {
 
   <div class="footer">
     <span>Dossier n° ${sinistre.numero || '—'} — ${sinistre.clientName || '—'}</span>
-    <span>Cabinet ${isChasse ? 'PONCEY Assurance Chasse' : 'PONCEY LEBAS'} — Document confidentiel</span>
+    <span>${cabinetInfo.name} — Document confidentiel</span>
   </div>
 
   <script>window.onload = () => { window.print(); }<\/script>

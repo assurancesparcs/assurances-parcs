@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { MED_STATUSES } from '../constants';
+import { tenant } from '../tenant/config';
+
+const INSURER = tenant.primaryInsurer.name;
 
 const TYPE_CONTRATS = [
   'Auto', 'Habitation', 'Multi-risques', 'RC Professionnelle',
@@ -35,7 +38,7 @@ export default function MEDModal({ dossier, onSave, onClose }) {
     <div className="modal-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
       <div className="modal" style={{ maxWidth: 620 }}>
         <div className="modal-header">
-          <h2>📬 {isEdit ? 'Modifier' : 'Nouveau'} dossier MED — Allianz</h2>
+          <h2>📬 {isEdit ? 'Modifier' : 'Nouveau'} dossier MED — {INSURER}</h2>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
 
@@ -79,7 +82,7 @@ export default function MEDModal({ dossier, onSave, onClose }) {
           </div>
 
           {/* Contrat */}
-          <div className="form-section-title" style={{ marginTop: 8 }}>Contrat Allianz</div>
+          <div className="form-section-title" style={{ marginTop: 8 }}>Contrat {INSURER}</div>
           <div className="form-row">
             <div className="form-group">
               <label>Type de contrat</label>
@@ -92,7 +95,7 @@ export default function MEDModal({ dossier, onSave, onClose }) {
               <label>N° de contrat</label>
               <input className="form-input" value={form.numeroContrat}
                 onChange={e => set('numeroContrat', e.target.value)}
-                placeholder="N° contrat Allianz" />
+                placeholder={`N° contrat ${INSURER}`} />
             </div>
           </div>
 

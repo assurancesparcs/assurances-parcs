@@ -1,3 +1,5 @@
+import { tenant, getEmailSignature, getMEDSignature, getRenouvellementSignature } from './tenant/config';
+
 export const TYPES = {
   rdv:   { label: 'RDV',   icon: '📅', color: '#a78bfa' },
   tache: { label: 'Tâche', icon: '✅', color: '#60a5fa' },
@@ -22,7 +24,7 @@ export const CONTRACT_TYPES = [
   'Homme-Clé', 'RC Dirigeants', 'Pertes d\'Exploitation', 'Autre',
 ];
 
-export const USERS = ['Johann', 'E.Poncey', 'Ombeline', 'Julie', 'Priscillia', 'Amélie', 'Justine', 'Wiam', 'Wendy'];
+export const USERS = tenant.team;
 
 // ─── SINISTRES STANDARD ────────────────────────────────────────────────────────
 
@@ -136,9 +138,7 @@ export function getEmailTemplate(type, sinistre, piecesMisquantes = [], mode = '
     ? piecesMisquantes.map(p => `  • ${p}`).join('\n')
     : '  • (aucune pièce manquante identifiée)';
 
-  const sigStandard = `\n\nCordialement,\n\nAmélie BLANCO\nCABINET PONCEY LEBAS\nTél : 02 31 92 81 31\nN° Orias : 07022305 - 12066667`;
-  const sigChasse   = `\n\nCordialement,\n\nAmélie BLANCO — Collaboratrice d'agence\nCabinet PONCEY Assurance Chasse\nTél : 0 800 014 033 (appel gratuit)\nSiège administratif : 97 rue de Bretagne — 14400 Bayeux`;
-  const signatures  = mode === 'chasse' ? sigChasse : sigStandard;
+  const signatures = getEmailSignature(mode);
 
   switch (type) {
     case 'confirmation_reception':
@@ -306,7 +306,7 @@ export const MED_TEMPLATES = {
   med_officielle:  { label: 'Mise en demeure officielle',     icon: '🔴' },
 };
 
-const SIG_MED = `Cordialement,\nAmélie BLANCO\nCABINET PONCEY LEBAS — Agent Général Allianz\nTél : 02 31 92 81 31 — N° Orias : 07022305-12066667`;
+const SIG_MED = getMEDSignature();
 
 export function getMEDEmailTemplate(type, d) {
   const montant  = d.montantDu ? Number(d.montantDu).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €' : '[MONTANT]';
@@ -320,7 +320,7 @@ export function getMEDEmailTemplate(type, d) {
         objet: `Votre contrat ${typeC} n°${contrat} — Impayé ${montant} — Solutions de règlement`,
         corps: `${client},
 
-Nous avons le regret de constater que la prime de votre contrat ${typeC} n°${contrat}, souscrit auprès d'Allianz, d'un montant de ${montant}, n'a pas été réglée à ce jour.
+Nous avons le regret de constater que la prime de votre contrat ${typeC} n°${contrat}, souscrit auprès de ${tenant.primaryInsurer.name}, d'un montant de ${montant}, n'a pas été réglée à ce jour.
 
 Afin de régulariser votre situation dans les meilleurs délais, nous vous proposons plusieurs solutions :
 
@@ -337,7 +337,7 @@ Référence obligatoire : ${contrat} / ${client}
 
 Nous vous remercions de bien vouloir régulariser cette situation dans un délai de 15 jours à compter de la réception du présent courrier.
 
-Pour toute question, notre équipe reste à votre disposition au 02 31 92 81 31.
+Pour toute question, notre équipe reste à votre disposition au ${tenant.contact.phone}.
 
 ${SIG_MED}`,
       };
@@ -347,7 +347,7 @@ ${SIG_MED}`,
         objet: `URGENT — Contrat ${typeC} n°${contrat} — Dernière relance amiable avant mise en demeure`,
         corps: `${client},
 
-Malgré notre précédent courrier, votre prime d'assurance ${typeC} n°${contrat} souscrit auprès d'Allianz, d'un montant de ${montant}, demeure impayée à ce jour.
+Malgré notre précédent courrier, votre prime d'assurance ${typeC} n°${contrat} souscrit auprès de ${tenant.primaryInsurer.name}, d'un montant de ${montant}, demeure impayée à ce jour.
 
 Sans règlement de votre part dans un délai de 10 jours à compter de la réception du présent courrier, nous nous verrons dans l'obligation :
 • D'engager la procédure de mise en demeure officielle conformément à l'article L. 113-3 du Code des assurances
@@ -356,7 +356,7 @@ Sans règlement de votre part dans un délai de 10 jours à compter de la récep
 Nous vous rappelons les modes de règlement disponibles :
 💳 CB en ligne : [LIEN CB À COMPLÉTER]
 🏦 Virement : IBAN FR76 [À COMPLÉTER] — Réf. ${contrat} / ${client}
-📞 Contact : 02 31 92 81 31
+📞 Contact : ${tenant.contact.phone}
 
 Nous restons à votre disposition pour trouver ensemble une solution adaptée à votre situation.
 
@@ -368,7 +368,7 @@ ${SIG_MED}`,
         objet: `MISE EN DEMEURE — Contrat ${typeC} n°${contrat} — Résiliation pour non-paiement`,
         corps: `${client},
 
-Par la présente, et conformément aux dispositions de l'article L. 113-3 du Code des assurances, nous vous adressons une MISE EN DEMEURE formelle de régler la prime échue de votre contrat ${typeC} n°${contrat} souscrit auprès de la compagnie Allianz, d'un montant de ${montant}.
+Par la présente, et conformément aux dispositions de l'article L. 113-3 du Code des assurances, nous vous adressons une MISE EN DEMEURE formelle de régler la prime échue de votre contrat ${typeC} n°${contrat} souscrit auprès de la compagnie ${tenant.primaryInsurer.name}, d'un montant de ${montant}.
 
 Sans règlement intégral de votre part dans un délai de 30 jours à compter de la réception de la présente mise en demeure, votre contrat d'assurance sera résilié de plein droit pour non-paiement de prime, en application de l'article L. 113-3 précité et des conditions générales de votre contrat.
 
@@ -377,7 +377,7 @@ Cette résiliation entraînera la perte définitive de toutes vos garanties. Tou
 Règlement à effectuer sans délai :
 🏦 Virement : IBAN FR76 [À COMPLÉTER] — Réf. ${contrat} / ${client}
 💳 CB en ligne : [LIEN CB À COMPLÉTER]
-📞 Contact : 02 31 92 81 31
+📞 Contact : ${tenant.contact.phone}
 
 Veuillez agréer, ${client}, l'expression de nos salutations distinguées.
 
@@ -414,7 +414,7 @@ export const RENOUVELLEMENT_TEMPLATES = {
   confirmation:{ label: 'Confirmation renouvellement',   icon: '✅' },
 };
 
-const SIG_STD = `Cordialement,\nAmélie BLANCO\nCABINET PONCEY LEBAS\nTél : 02 31 92 81 31 — N° Orias : 07022305-12066667`;
+const SIG_STD = getRenouvellementSignature();
 
 export function getRenouvellementTemplate(type, contrat) {
   const client   = contrat.clientName || 'Madame, Monsieur';
@@ -438,7 +438,7 @@ Nous vous contactons afin de vous informer que votre contrat ${typeC}${num} arri
 
 À l'approche de cette date, nous souhaitons prendre contact avec vous pour faire le point sur vos besoins et vous proposer les meilleures conditions de renouvellement.
 
-N'hésitez pas à nous contacter au 02 31 92 81 31 ou à répondre directement à ce mail pour convenir d'un rendez-vous.
+N'hésitez pas à nous contacter au ${tenant.contact.phone} ou à répondre directement à ce mail pour convenir d'un rendez-vous.
 
 ${SIG_STD}`,
       };
@@ -454,7 +454,7 @@ Afin de vous garantir une continuité de couverture sans interruption, nous vous
 
 Nous restons à votre disposition pour répondre à toutes vos questions ou adapter votre couverture si vos besoins ont évolué.
 
-📞 02 31 92 81 31
+📞 ${tenant.contact.phone}
 
 ${SIG_STD}`,
       };
@@ -468,7 +468,7 @@ Nous vous rappelons en urgence que votre contrat ${typeC}${num} expire le ${eche
 
 Sans renouvellement avant cette date, vous ne bénéficierez plus d'aucune garantie à compter du ${echeance}.
 
-Merci de nous contacter sans délai au 02 31 92 81 31 afin de régulariser le renouvellement de votre contrat.
+Merci de nous contacter sans délai au ${tenant.contact.phone} afin de régulariser le renouvellement de votre contrat.
 
 ${SIG_STD}`,
       };
@@ -484,7 +484,7 @@ Votre couverture est maintenue sans interruption. Vous recevrez prochainement vo
 
 Nous vous remercions de votre confiance renouvelée et restons à votre disposition pour toute question.
 
-📞 02 31 92 81 31
+📞 ${tenant.contact.phone}
 
 ${SIG_STD}`,
       };

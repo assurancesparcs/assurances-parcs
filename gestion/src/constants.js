@@ -22,6 +22,18 @@ export const CONTRACT_TYPES = [
   'Homme-Clé', 'RC Dirigeants', 'Pertes d\'Exploitation', 'Autre',
 ];
 
+export const CONTRACT_TYPES_PARCS = [
+  'Multirisque Parc',
+  'RC Professionnelle',
+  'Prévoyance Dirigeant',
+  'Santé Dirigeant',
+  'RC Dirigeants',
+  'Protection Juridique',
+  'Prévoyance Salariés',
+  'Pertes d\'Exploitation',
+  'Autre',
+];
+
 export const USERS = ['Johann', 'Ombeline', 'Julie', 'Priscillia', 'Amélie', 'Justine'];
 
 // ─── SINISTRES STANDARD ────────────────────────────────────────────────────────

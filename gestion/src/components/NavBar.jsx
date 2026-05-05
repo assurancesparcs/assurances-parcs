@@ -1,4 +1,4 @@
-const VIEWS = [
+const VIEWS_AUDIO = [
   { id: 'liste',            icon: '📋', label: 'Liste' },
   { id: 'calendrier',       icon: '📅', label: 'Calendrier' },
   { id: 'clients',          icon: '👥', label: 'Clients' },
@@ -7,6 +7,16 @@ const VIEWS = [
   { id: 'sinistres_chasse', icon: '🏹', label: 'Chasse' },
   { id: 'dashboard_sin',    icon: '☀️', label: 'Matin' },
   { id: 'stats',            icon: '📊', label: 'Stats' },
+];
+
+const VIEWS_PARCS = [
+  { id: 'liste',         icon: '📋', label: 'Liste' },
+  { id: 'calendrier',    icon: '📅', label: 'Calendrier' },
+  { id: 'clients',       icon: '👥', label: 'Clients' },
+  { id: 'contrats',      icon: '📄', label: 'Contrats' },
+  { id: 'sinistres',     icon: '🛡️', label: 'Sinistres' },
+  { id: 'dashboard_sin', icon: '☀️', label: 'Matin' },
+  { id: 'stats',         icon: '📊', label: 'Stats' },
 ];
 
 function Badge({ count, color = '#f87171' }) {
@@ -24,13 +34,29 @@ function Badge({ count, color = '#f87171' }) {
 export default function NavBar({
   view, setView, userName, onAdd, onChangeUser, count,
   sinistresAlertCount, sinistresRelanceCount, sinistresChassseAlertCount,
+  module, setModule,
 }) {
+  const VIEWS = module === 'parcs' ? VIEWS_PARCS : VIEWS_AUDIO;
   return (
     <nav className="navbar">
       <div className="nav-brand">
-        <span>⚡</span>
-        <div>
-          <div className="nav-title">Mon Espace Pro</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <button
+              onClick={() => setModule('audio')}
+              style={{
+                padding: '2px 8px', borderRadius: 6, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                background: module === 'audio' ? '#6366f1' : '#e5e7eb',
+                color: module === 'audio' ? '#fff' : '#374151',
+              }}>🎧 Audio</button>
+            <button
+              onClick={() => setModule('parcs')}
+              style={{
+                padding: '2px 8px', borderRadius: 6, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                background: module === 'parcs' ? '#10b981' : '#e5e7eb',
+                color: module === 'parcs' ? '#fff' : '#374151',
+              }}>🎡 Parcs</button>
+          </div>
           <div className="nav-sub">{count} élément{count !== 1 ? 's' : ''}</div>
         </div>
       </div>

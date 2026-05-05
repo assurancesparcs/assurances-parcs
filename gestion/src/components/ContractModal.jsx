@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { CONTRACT_TYPES } from '../constants';
+import { CONTRACT_TYPES, CONTRACT_TYPES_PARCS } from '../constants';
 
-export default function ContractModal({ contract, clients, onSave, onClose }) {
+export default function ContractModal({ contract, clients, module, onSave, onClose }) {
+  const types = module === 'parcs' ? CONTRACT_TYPES_PARCS : CONTRACT_TYPES;
   const isEdit = !!contract?.id;
   const initialDate = contract?.dateEcheance
     ? (contract.dateEcheance.toDate ? contract.dateEcheance.toDate() : new Date(contract.dateEcheance)).toISOString().split('T')[0]
     : '';
 
   const [form, setForm] = useState({
-    clientId: '', clientName: '', type: CONTRACT_TYPES[0], numero: '',
+    clientId: '', clientName: '', type: types[0], numero: '',
     dateEcheance: '', primePayee: false, notes: '',
     historique: [],
     ...contract, dateEcheance: initialDate,
@@ -70,7 +71,7 @@ export default function ContractModal({ contract, clients, onSave, onClose }) {
             <div className="form-group">
               <label>Type de contrat</label>
               <select className="form-control" value={form.type} onChange={e => set('type', e.target.value)}>
-                {CONTRACT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                {types.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
           </div>

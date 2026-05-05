@@ -4,7 +4,7 @@ import {
   collection, onSnapshot, addDoc, updateDoc, deleteDoc,
   doc, serverTimestamp,
 } from 'firebase/firestore';
-import { TYPES, PRIORITIES, STATUSES, INACTIVITE_ALERTE_JOURS, joursDepuisRelance, daysSince } from './constants';
+import { TYPES, PRIORITIES, STATUSES, INACTIVITE_ALERTE_JOURS, joursDepuisRelance, daysSince, CONTRACT_TYPES_PARCS } from './constants';
 import AlertBanner from './components/AlertBanner';
 import NavBar from './components/NavBar';
 import SearchFilters from './components/SearchFilters';
@@ -28,6 +28,7 @@ const ACTIVE_SIN = ['declare', 'en_instruction', 'attente_pieces', 'expertise'];
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('unlocked') === '1');
   const [userName, setUserName] = useState(() => localStorage.getItem('userName'));
+  const [module, setModule]             = useState(() => localStorage.getItem('module') || 'audio');
   const [items, setItems]               = useState([]);
   const [clients, setClients]           = useState([]);
   const [contracts, setContracts]       = useState([]);
@@ -47,63 +48,76 @@ export default function App() {
   const [loading, setLoading]           = useState(true);
   const [globalView, setGlobalView]     = useState(false);
 
+  const COLS = useMemo(() => module === 'audio'
+    ? { items: 'items', clients: 'clients', contrats: 'contrats', sinistres: 'sinistres', sinistresChasse: 'sinistresChasse' }
+    : { items: 'items_parcs', clients: 'clients_parcs', contrats: 'contrats_parcs', sinistres: 'sinistres_parcs', sinistresChasse: null },
+    [module]);
+
   useEffect(() => {
     if (!isConfigured) { setLoading(false); return; }
-    const u1 = onSnapshot(collection(db, 'items'),
+    setLoading(true);
+    const u1 = onSnapshot(collection(db, COLS.items),
       s => { setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))); setLoading(false); },
       e => { alert('Erreur Firestore items: ' + e.message); setLoading(false); });
-    const u2 = onSnapshot(collection(db, 'clients'),
+    const u2 = onSnapshot(collection(db, COLS.clients),
       s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-    const u3 = onSnapshot(collection(db, 'contrats'),
+    const u3 = onSnapshot(collection(db, COLS.contrats),
       s => setContracts(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-    const u4 = onSnapshot(collection(db, 'sinistres'),
+    const u4 = onSnapshot(collection(db, COLS.sinistres),
       s => setSinistres(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-    const u5 = onSnapshot(collection(db, 'sinistresChasse'),
-      s => setSinistresChasse(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-    return () => { u1(); u2(); u3(); u4(); u5(); };
-  }, []);
+    const unsubs = [u1, u2, u3, u4];
+    if (COLS.sinistresChasse) {
+      const u5 = onSnapshot(collection(db, COLS.sinistresChasse),
+        s => setSinistresChasse(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+      unsubs.push(u5);
+    } else {
+      setSinistresChasse([]);
+    }
+    return () => unsubs.forEach(u => u());
+  }, [COLS]);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
+  useEffect(() => { localStorage.setItem('module', module); }, [module]);
 
   // ─── Items handlers ────────────────────────────────────────────────────────
   const saveItem = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
     try {
-      if (id) await updateDoc(doc(db, 'items', id), payload);
-      else await addDoc(collection(db, 'items'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+      if (id) await updateDoc(doc(db, COLS.items, id), payload);
+      else await addDoc(collection(db, COLS.items), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
     } catch (e) { alert('Erreur : ' + e.message); }
   };
-  const deleteItem   = async (id) => { if (confirm('Supprimer ?')) await deleteDoc(doc(db, 'items', id)); };
+  const deleteItem   = async (id) => { if (confirm('Supprimer ?')) await deleteDoc(doc(db, COLS.items, id)); };
   const updateStatus = async (id, status) => {
     const payload = { status, updatedAt: serverTimestamp() };
     if (status === 'termine') payload.termineAt = serverTimestamp();
-    await updateDoc(doc(db, 'items', id), payload);
+    await updateDoc(doc(db, COLS.items, id), payload);
   };
 
   // ─── Clients handlers ──────────────────────────────────────────────────────
   const saveClient   = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
-    if (id) await updateDoc(doc(db, 'clients', id), payload);
-    else await addDoc(collection(db, 'clients'), { ...payload, createdAt: serverTimestamp() });
+    if (id) await updateDoc(doc(db, COLS.clients, id), payload);
+    else await addDoc(collection(db, COLS.clients), { ...payload, createdAt: serverTimestamp() });
   };
-  const deleteClient = async (id) => { if (confirm('Supprimer ce client ?')) await deleteDoc(doc(db, 'clients', id)); };
+  const deleteClient = async (id) => { if (confirm('Supprimer ce client ?')) await deleteDoc(doc(db, COLS.clients, id)); };
 
   // ─── Contracts handlers ────────────────────────────────────────────────────
   const saveContract = async (data) => {
     const { id, ...rest } = data;
     const payload = { ...rest, updatedAt: serverTimestamp() };
     try {
-      if (id) await updateDoc(doc(db, 'contrats', id), payload);
-      else await addDoc(collection(db, 'contrats'), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
+      if (id) await updateDoc(doc(db, COLS.contrats, id), payload);
+      else await addDoc(collection(db, COLS.contrats), { ...payload, createdBy: userName, createdAt: serverTimestamp() });
     } catch (e) { alert('Erreur : ' + e.message); }
   };
-  const deleteContract = async (id) => { if (confirm('Supprimer ce contrat ?')) await deleteDoc(doc(db, 'contrats', id)); };
-  const togglePaid     = async (id, primePayee) => updateDoc(doc(db, 'contrats', id), { primePayee, updatedAt: serverTimestamp() });
+  const deleteContract = async (id) => { if (confirm('Supprimer ce contrat ?')) await deleteDoc(doc(db, COLS.contrats, id)); };
+  const togglePaid     = async (id, primePayee) => updateDoc(doc(db, COLS.contrats, id), { primePayee, updatedAt: serverTimestamp() });
   const importContracts = async (rows) => {
     for (const r of rows) {
-      try { await addDoc(collection(db, 'contrats'), { ...r, primePayee: false, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }); }
+      try { await addDoc(collection(db, COLS.contrats), { ...r, primePayee: false, createdAt: serverTimestamp(), updatedAt: serverTimestamp() }); }
       catch (e) { console.error(e); }
     }
   };
@@ -191,7 +205,8 @@ export default function App() {
         onChangeUser={() => { localStorage.removeItem('userName'); setUserName(null); }}
         sinistresAlertCount={sinistresAlertCount}
         sinistresChassseAlertCount={sinistresChassseAlertCount}
-        sinistresRelanceCount={sinistresRelanceCount} />
+        sinistresRelanceCount={sinistresRelanceCount}
+        module={module} setModule={m => { setModule(m); setView('liste'); }} />
       {view === 'liste' && (
         <SearchFilters search={search} setSearch={setSearch}
           filters={filters} setFilters={setFilters} clients={clients} />
@@ -212,11 +227,11 @@ export default function App() {
             mode="standard"
             onAdd={() => { setSinistreMode('standard'); setSinistreModal({}); }}
             onEdit={s  => { setSinistreMode('standard'); setSinistreModal(s); }}
-            onDelete={id => deleteSinistre(id, 'sinistres')}
-            onStatusChange={(id, st) => updateSinistreStatus(id, st, 'sinistres')}
-            onRelance={s => openRelance(s, 'sinistres')} />
+            onDelete={id => deleteSinistre(id, COLS.sinistres)}
+            onStatusChange={(id, st) => updateSinistreStatus(id, st, COLS.sinistres)}
+            onRelance={s => openRelance(s, COLS.sinistres)} />
         )}
-        {view === 'sinistres_chasse' && (
+        {view === 'sinistres_chasse' && module === 'audio' && (
           <SinistresView sinistres={sinistresChasse} clients={clients} contracts={contracts}
             mode="chasse"
             onAdd={() => { setSinistreMode('chasse'); setSinistreModal({}); }}
@@ -227,7 +242,8 @@ export default function App() {
         )}
         {view === 'dashboard_sin' && (
           <SinistresDashboard
-            sinistres={sinistres} sinistresChasse={sinistresChasse}
+            sinistres={sinistres}
+            sinistresChasse={module === 'audio' ? sinistresChasse : []}
             onRelance={(s, col) => openRelance(s, col)} />
         )}
         {view === 'stats' && <StatsView items={items} clients={clients} sinistres={sinistres} sinistresChasse={sinistresChasse} />}
@@ -238,6 +254,7 @@ export default function App() {
       {clientModal   && <ClientModal client={clientModal}
         onSave={saveClient} onClose={() => setClientModal(null)} />}
       {contractModal && <ContractModal contract={contractModal} clients={clients}
+        module={module}
         onSave={saveContract} onClose={() => setContractModal(null)} />}
       {importModal   && <ContractImportModal clients={clients}
         onImport={importContracts} onClose={() => setImportModal(false)} />}

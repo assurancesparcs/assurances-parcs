@@ -38,6 +38,11 @@ const ACTIVE_SIN = ['declare', 'en_instruction', 'attente_pieces', 'expertise'];
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem('unlocked') === '1');
   const [userName, setUserName] = useState(() => localStorage.getItem('userName'));
+  const [theme, setTheme] = useState(() => {
+    const t = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+    return t;
+  });
   const [items, setItems]               = useState([]);
   const [clients, setClients]           = useState([]);
   const [contracts, setContracts]       = useState([]);
@@ -87,6 +92,13 @@ export default function App() {
   }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
   // ─── Déconnexion automatique après 4h d'inactivité ────────────────────────
   useEffect(() => {
@@ -338,7 +350,8 @@ export default function App() {
         sinistresRelanceCount={sinistresRelanceCount}
         medAlertCount={medAlertCount}
         echeancesAlertCount={echeancesAlertCount}
-        onSearch={() => setGlobalSearch(true)} />
+        onSearch={() => setGlobalSearch(true)}
+        theme={theme} onToggleTheme={toggleTheme} />
       {view === 'liste' && (
         <SearchFilters search={search} setSearch={setSearch}
           filters={filters} setFilters={setFilters} clients={clients} />

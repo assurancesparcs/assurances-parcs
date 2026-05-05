@@ -27,7 +27,7 @@ function Badge({ count, color = '#f87171' }) {
 export default function NavBar({
   view, setView, userName, onAdd, onChangeUser, count,
   sinistresAlertCount, sinistresRelanceCount, sinistresChassseAlertCount,
-  medAlertCount, echeancesAlertCount, onSearch,
+  medAlertCount, echeancesAlertCount, onSearch, theme, onToggleTheme,
 }) {
   return (
     <nav className="navbar">
@@ -53,6 +53,9 @@ export default function NavBar({
         ))}
       </div>
       <div className="nav-right">
+        <button className="btn-theme" onClick={onToggleTheme} title={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
         <button className="btn-search" onClick={onSearch} title="Recherche globale (Ctrl+K)">
           🔍 <span className="nav-tab-label">Recherche</span>
           <span className="search-kbd">Ctrl+K</span>

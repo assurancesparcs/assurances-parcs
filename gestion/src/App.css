@@ -6,6 +6,13 @@
   --text:#e2e8ff;--text-muted:#9ca3c0;--text-dim:#6b7494;
   --r:12px;--rs:8px;--shadow:0 4px 24px rgba(0,0,0,.4);
 }
+[data-theme="light"]{
+  --bg:#f0f2f7;--bg-card:#ffffff;--bg-input:#e8ecf4;--border:#d1d9e8;
+  --orange:#e85d20;--purple:#7c3aed;--green:#059669;--blue:#2563eb;
+  --pink:#db2777;--yellow:#d97706;--red:#dc2626;
+  --text:#1a1f36;--text-muted:#4b5563;--text-dim:#6b7280;
+  --shadow:0 4px 24px rgba(0,0,0,.10);
+}
 html{font-size:14px}
 body{
   font-family:system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -191,6 +198,22 @@ button{font-family:inherit;-webkit-tap-highlight-color:transparent}
 .donut-label{font-size:12px;color:var(--text-dim);font-weight:600}
 
 /* ─── MODAL ─── */
+[data-theme="light"] .modal-overlay{background:rgba(0,0,0,.4)}
+[data-theme="light"] .modal{box-shadow:0 20px 60px rgba(0,0,0,.15)}
+[data-theme="light"] .contracts-table-row:hover td{background:rgba(232,93,32,.06)}
+[data-theme="light"] .cal-cell:not(.empty):hover{background:rgba(232,93,32,.04)}
+[data-theme="light"] .cal-cell.today{background:rgba(232,93,32,.06)}
+[data-theme="light"] .cal-cell.selected{background:rgba(232,93,32,.10)}
+[data-theme="light"] .task-card.overdue{background:rgba(220,38,38,.04)}
+[data-theme="light"] .dtable-head{background:rgba(0,0,0,.02)}
+[data-theme="light"] .nav-tab.active{color:#fff}
+[data-theme="light"] .btn-add{color:#fff}
+[data-theme="light"] .btn-primary{color:#fff}
+[data-theme="light"] .gsearch-overlay{background:rgba(0,0,0,.35)}
+[data-theme="light"] .gsearch-box{box-shadow:0 24px 64px rgba(0,0,0,.2)}
+/* toggle bouton thème */
+.btn-theme{background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:15px;cursor:pointer;transition:all .2s;line-height:1;display:flex;align-items:center}
+.btn-theme:hover{border-color:var(--orange)}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}
 .modal{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:mi .2s ease}
 .modal-sm{max-width:440px}

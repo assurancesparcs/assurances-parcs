@@ -4,17 +4,15 @@ import { MED_STATUSES, fmtDate } from '../constants';
 const ACTIVE_STATUSES = ['en_cours', 'relance_1', 'relance_2', 'mise_en_demeure'];
 const CLOSED_STATUSES = ['paye', 'resiliation'];
 
+function fmtTs(ts) {
+  if (!ts) return '';
+  const date = ts.toDate ? ts.toDate() : new Date(ts);
+  return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' });
+}
+
 function MEDCard({ d, onEdit, onDelete, onRelance, onMarkPaye }) {
   const st = MED_STATUSES[d.status] || MED_STATUSES.en_cours;
-  const lastRelance = d.relances?.length
-    ? d.relances[d.relances.length - 1]
-    : null;
-
-  const fmtTs = (ts) => {
-    if (!ts) return '';
-    const date = ts.toDate ? ts.toDate() : new Date(ts);
-    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' });
-  };
+  const lastRelance = d.relances?.length ? d.relances[d.relances.length - 1] : null;
 
   return (
     <div className="med-card" onClick={() => onEdit(d)}>
@@ -26,9 +24,7 @@ function MEDCard({ d, onEdit, onDelete, onRelance, onMarkPaye }) {
             {d.numeroContrat && <span className="med-num">n°{d.numeroContrat}</span>}
           </div>
           {d.moisImport && (
-            <div style={{ fontSize: 10, color: 'var(--text-dim)', marginTop: 2 }}>
-              📅 Import {d.moisImport}
-            </div>
+            <div style={{ fontSize: 10, color: 'var(--text-dim)', marginTop: 2 }}>📅 Import {d.moisImport}</div>
           )}
         </div>
         <div style={{ textAlign: 'right', flexShrink: 0 }}>
@@ -40,36 +36,28 @@ function MEDCard({ d, onEdit, onDelete, onRelance, onMarkPaye }) {
           </div>
         </div>
       </div>
-
       {d.clientEmail && (
         <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 4 }}>
           ✉️ {d.clientEmail}
           {d.clientPhone && <span style={{ marginLeft: 10 }}>📞 {d.clientPhone}</span>}
         </div>
       )}
-
       {lastRelance && (
         <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
           <span style={{ color: '#34d399' }}>✅</span>
           Dernière relance : {fmtTs(lastRelance.date)}
           {lastRelance.template && (
-            <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>— {lastRelance.template === 'relance_1_cb' ? 'Relance 1' : lastRelance.template === 'relance_2' ? 'Relance 2' : 'MED'}</span>
+            <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>
+              — {lastRelance.template === 'relance_1_cb' ? 'Relance 1' : lastRelance.template === 'relance_2' ? 'Relance 2' : 'MED'}
+            </span>
           )}
-          {d.relances.length > 1 && (
-            <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>({d.relances.length} courriers)</span>
-          )}
+          {d.relances.length > 1 && <span style={{ fontSize: 10, color: 'var(--text-dim)' }}>({d.relances.length} courriers)</span>}
         </div>
       )}
-
-      {d.notes && (
-        <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 6, fontStyle: 'italic' }}>{d.notes}</div>
-      )}
-
+      {d.notes && <div style={{ fontSize: 11, color: 'var(--text-dim)', marginTop: 6, fontStyle: 'italic' }}>{d.notes}</div>}
       <div className="med-footer" onClick={e => e.stopPropagation()}>
         {!CLOSED_STATUSES.includes(d.status) && (
-          <button className="btn-paye" onClick={() => onMarkPaye(d.id)}>
-            ✅ Marquer payé
-          </button>
+          <button className="btn-paye" onClick={() => onMarkPaye(d.id)}>✅ Marquer payé</button>
         )}
         <button className="btn-icon" title="Courrier / Relance" onClick={() => onRelance(d)}>✉️</button>
         <button className="btn-icon delete" title="Supprimer" onClick={() => onDelete(d.id)}>🗑️</button>
@@ -78,10 +66,55 @@ function MEDCard({ d, onEdit, onDelete, onRelance, onMarkPaye }) {
   );
 }
 
+function MEDRow({ d, onEdit, onDelete, onRelance, onMarkPaye }) {
+  const st = MED_STATUSES[d.status] || MED_STATUSES.en_cours;
+  const lastRelance = d.relances?.length ? d.relances[d.relances.length - 1] : null;
+
+  return (
+    <tr className="contracts-table-row" onClick={() => onEdit(d)}>
+      <td style={{ fontWeight: 700 }}>{d.clientName || '—'}</td>
+      <td style={{ fontSize: 12, color: 'var(--purple)', fontWeight: 600 }}>{d.typeContrat || '—'}</td>
+      <td style={{ fontSize: 12, color: 'var(--text-dim)' }}>{d.numeroContrat ? `n°${d.numeroContrat}` : '—'}</td>
+      <td style={{ fontWeight: 700, color: '#f87171' }}>
+        {d.montantDu ? Number(d.montantDu).toLocaleString('fr-FR', { minimumFractionDigits: 2 }) + ' €' : '—'}
+      </td>
+      <td>
+        <span style={{ padding: '2px 8px', borderRadius: 10, fontSize: 11, fontWeight: 700,
+          background: st.bg, color: st.color }}>
+          {st.icon} {st.label}
+        </span>
+      </td>
+      <td style={{ fontSize: 11, color: 'var(--text-dim)' }}>
+        {lastRelance ? (
+          <>
+            {fmtTs(lastRelance.date)}
+            <span style={{ marginLeft: 4, fontSize: 10 }}>
+              ({d.relances.length} courrier{d.relances.length > 1 ? 's' : ''})
+            </span>
+          </>
+        ) : '—'}
+      </td>
+      <td onClick={e => e.stopPropagation()}>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {!CLOSED_STATUSES.includes(d.status) && (
+            <button style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, border: 'none',
+              cursor: 'pointer', fontWeight: 700,
+              background: 'rgba(52,211,153,.15)', color: '#34d399' }}
+              onClick={() => onMarkPaye(d.id)}>✅ Payé</button>
+          )}
+          <button className="btn-icon" title="Courrier" onClick={() => onRelance(d)}>✉️</button>
+          <button className="btn-icon delete" title="Supprimer" onClick={() => onDelete(d.id)}>🗑️</button>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
 export default function MEDView({ dossiers, onAdd, onEdit, onDelete, onRelance, onMarkPaye, onImport }) {
-  const [tab, setTab]           = useState('actifs');
-  const [search, setSearch]     = useState('');
+  const [tab, setTab]             = useState('actifs');
+  const [search, setSearch]       = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [viewMode, setViewMode]   = useState('vignette');
 
   const filtered = useMemo(() => {
     let list = tab === 'actifs'
@@ -89,7 +122,6 @@ export default function MEDView({ dossiers, onAdd, onEdit, onDelete, onRelance, 
       : tab === 'clotures'
         ? dossiers.filter(d => CLOSED_STATUSES.includes(d.status))
         : dossiers;
-
     if (statusFilter) list = list.filter(d => d.status === statusFilter);
     if (search) {
       const q = search.toLowerCase();
@@ -124,10 +156,10 @@ export default function MEDView({ dossiers, onAdd, onEdit, onDelete, onRelance, 
       {/* KPIs */}
       <div className="med-kpis">
         {[
-          { label: 'Dossiers actifs',    value: counts.actifs,    color: '#60a5fa' },
-          { label: 'À relancer',         value: counts.aRelancer, color: counts.aRelancer > 0 ? '#fbbf24' : 'var(--text-dim)' },
-          { label: 'Clos / Total',       value: `${counts.clotures}/${dossiers.length}`, color: 'var(--text-muted)' },
-          { label: 'Encours impayés',    value: fmtEur(counts.montantTotal), color: '#f87171' },
+          { label: 'Dossiers actifs',  value: counts.actifs,    color: '#60a5fa' },
+          { label: 'À relancer',       value: counts.aRelancer, color: counts.aRelancer > 0 ? '#fbbf24' : 'var(--text-dim)' },
+          { label: 'Clos / Total',     value: `${counts.clotures}/${dossiers.length}`, color: 'var(--text-muted)' },
+          { label: 'Encours impayés',  value: fmtEur(counts.montantTotal), color: '#f87171' },
         ].map(k => (
           <div key={k.label} className="med-kpi">
             <div className="med-kpi-value" style={{ color: k.color }}>{k.value}</div>
@@ -170,6 +202,24 @@ export default function MEDView({ dossiers, onAdd, onEdit, onDelete, onRelance, 
           ))}
         </select>
 
+        {/* Toggle vignette / liste */}
+        <div style={{ display: 'flex', gap: 2, background: 'var(--bg-input)', borderRadius: 8, padding: 3 }}>
+          {[
+            { mode: 'vignette', icon: '⊞', title: 'Vue vignettes' },
+            { mode: 'liste',    icon: '☰', title: 'Vue liste' },
+          ].map(v => (
+            <button key={v.mode} title={v.title} onClick={() => setViewMode(v.mode)}
+              style={{
+                background: viewMode === v.mode ? '#f87171' : 'transparent',
+                border: 'none', borderRadius: 6, padding: '5px 10px',
+                color: viewMode === v.mode ? '#fff' : 'var(--text-muted)',
+                fontSize: 16, cursor: 'pointer', lineHeight: 1,
+              }}>
+              {v.icon}
+            </button>
+          ))}
+        </div>
+
         <button className="btn-secondary" onClick={onImport} style={{ fontSize: 12, padding: '6px 14px' }}>
           📥 Import mensuel
         </button>
@@ -178,25 +228,44 @@ export default function MEDView({ dossiers, onAdd, onEdit, onDelete, onRelance, 
         </button>
       </div>
 
-      {/* Liste */}
+      {/* Contenu */}
       {!filtered.length ? (
         <div className="empty-state">
           <div style={{ fontSize: 64 }}>📬</div>
           <h3>Aucun dossier{tab !== 'tous' ? ' dans cet onglet' : ''}</h3>
-          <p>
-            {tab === 'actifs'
-              ? 'Tous les dossiers sont clôturés ou aucun n\'a été ajouté.'
-              : 'Aucun résultat pour ces filtres.'}
-          </p>
+          <p>{tab === 'actifs' ? "Tous les dossiers sont clôturés ou aucun n'a été ajouté." : 'Aucun résultat pour ces filtres.'}</p>
           <button className="btn-primary" style={{ background: '#f87171' }} onClick={onAdd}>+ Ajouter un dossier</button>
         </div>
-      ) : (
+      ) : viewMode === 'vignette' ? (
         <div className="med-grid">
           {filtered.map(d => (
-            <MEDCard key={d.id} d={d}
-              onEdit={onEdit} onDelete={onDelete}
-              onRelance={onRelance} onMarkPaye={onMarkPaye} />
+            <MEDCard key={d.id} d={d} onEdit={onEdit} onDelete={onDelete} onRelance={onRelance} onMarkPaye={onMarkPaye} />
           ))}
+        </div>
+      ) : (
+        <div style={{ overflowX: 'auto' }}>
+          <table className="contracts-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Type contrat</th>
+                <th>N° contrat</th>
+                <th>Montant dû</th>
+                <th>Statut</th>
+                <th>Dernière relance</th>
+                <th style={{ width: 140 }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(d => (
+                <MEDRow key={d.id} d={d} onEdit={onEdit} onDelete={onDelete} onRelance={onRelance} onMarkPaye={onMarkPaye} />
+              ))}
+            </tbody>
+          </table>
+          <div style={{ fontSize: 12, color: 'var(--text-dim)', padding: '8px 4px' }}>
+            {filtered.length} dossier{filtered.length > 1 ? 's' : ''}
+            {' — cliquer sur une ligne pour modifier'}
+          </div>
         </div>
       )}
     </div>

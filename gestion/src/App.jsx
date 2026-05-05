@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { db, isConfigured, signInAnon, onAuthStateChanged, auth } from './firebase';
+import { db, isConfigured, onAuthStateChanged, auth } from './firebase';
 import {
   collection, onSnapshot, addDoc, updateDoc, deleteDoc,
   doc, serverTimestamp,
@@ -69,36 +69,38 @@ export default function App() {
   useEffect(() => {
     if (!isConfigured) { setLoading(false); return; }
 
-    // On attend d'abord que Firebase Auth soit prêt (connexion anonyme)
-    const unsubAuth = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        // Pas encore authentifié → on se connecte anonymement
-        try { await signInAnon(); } catch (e) { setLoading(false); }
-        return;
-      }
-      // Authentifié → on peut accéder à Firestore
-      const u1 = onSnapshot(collection(db, 'items'),
-        s => { setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))); setLoading(false); },
-        () => setLoading(false));
-      const u2 = onSnapshot(collection(db, 'clients'),
-        s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-      const u3 = onSnapshot(collection(db, 'contrats'),
-        s => setContracts(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-      const u4 = onSnapshot(collection(db, 'sinistres'),
-        s => setSinistres(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-      const u5 = onSnapshot(collection(db, 'sinistresChasse'),
-        s => setSinistresChasse(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-      const u6 = onSnapshot(collection(db, 'medDossiers'),
-        s => setMedDossiers(s.docs.map(d => ({ id: d.id, ...d.data() }))));
-      const u7 = onSnapshot(collection(db, 'activityLog'),
-        s => setActivityLogs(s.docs.map(d => ({ id: d.id, ...d.data() }))));
+    let firestoreUnsubs = [];
 
-      // Nettoyage des listeners Firestore quand le composant se démonte
-      unsubAuth(); // on arrête d'écouter les changements d'auth
-      return () => { u1(); u2(); u3(); u4(); u5(); u6(); u7(); };
+    // On attend que la connexion anonyme soit établie avant d'accéder à Firestore
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
+      if (!user) return; // pas encore prêt, on attend
+
+      // Auth établie → on démarre les listeners Firestore
+      firestoreUnsubs = [
+        onSnapshot(collection(db, 'items'),
+          s => { setItems(s.docs.map(d => ({ id: d.id, ...d.data() }))); setLoading(false); },
+          () => setLoading(false)),
+        onSnapshot(collection(db, 'clients'),
+          s => setClients(s.docs.map(d => ({ id: d.id, ...d.data() })))),
+        onSnapshot(collection(db, 'contrats'),
+          s => setContracts(s.docs.map(d => ({ id: d.id, ...d.data() })))),
+        onSnapshot(collection(db, 'sinistres'),
+          s => setSinistres(s.docs.map(d => ({ id: d.id, ...d.data() })))),
+        onSnapshot(collection(db, 'sinistresChasse'),
+          s => setSinistresChasse(s.docs.map(d => ({ id: d.id, ...d.data() })))),
+        onSnapshot(collection(db, 'medDossiers'),
+          s => setMedDossiers(s.docs.map(d => ({ id: d.id, ...d.data() })))),
+        onSnapshot(collection(db, 'activityLog'),
+          s => setActivityLogs(s.docs.map(d => ({ id: d.id, ...d.data() })))),
+      ];
+
+      unsubAuth(); // auth établie, plus besoin d'écouter les changements
     });
 
-    return () => unsubAuth();
+    return () => {
+      unsubAuth();
+      firestoreUnsubs.forEach(u => u());
+    };
   }, []);
 
   useEffect(() => { if (userName) localStorage.setItem('userName', userName); }, [userName]);

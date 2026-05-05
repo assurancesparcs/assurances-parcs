@@ -30,6 +30,8 @@ if (isConfigured) {
     }),
   });
   auth = getAuth(app);
+  // Connexion anonyme déclenchée immédiatement au démarrage
+  signInAnonymously(auth).catch(() => {});
 }
 
 export { db, auth };
